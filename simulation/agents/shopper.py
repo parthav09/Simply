@@ -6,6 +6,7 @@ from agents.state import (
     FinishedState,
     TrajectoryStep,
 )
+from agents.schema import DECISION_JSON_EXAMPLE, format_allowed_actions
 from agents.steps import MOVES, STEP_DESCRIPTIONS
 
 
@@ -255,9 +256,6 @@ class Shopper:
         if not shelves:
             shelves.append("- no shelves in view")
         cart = ", ".join(getattr(item, "name", str(item)) for item in obs.cart) or "empty"
-        steps = "\n".join(
-            f"- {step}: {STEP_DESCRIPTIONS[step]}" for step in obs.allowed_steps
-        )
         return "\n".join([
             profile.build_persona_summary(),
             "",
@@ -269,6 +267,6 @@ class Shopper:
             "Nearby shelves:",
             *shelves,
             "Choose one step:",
-            steps,
-            'Reply with JSON only: {"step": "move_right", "product_id": "", "reason": ""}',
+            format_allowed_actions(obs.allowed_steps),
+            f"Reply with JSON only: {DECISION_JSON_EXAMPLE}",
         ])

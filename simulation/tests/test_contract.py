@@ -11,6 +11,7 @@ if str(SIMULATION_DIR) not in sys.path:
     sys.path.insert(0, str(SIMULATION_DIR))
 
 from agents import Agent, CustomerProfile, Decision
+from agents.base import ProposalResult
 from agents.llm import (
     MissingGeminiApiKeyError,
     act,
@@ -105,11 +106,20 @@ class SimulationContractTests(unittest.TestCase):
     def test_prompt_adapter_parses_gemini_response_with_injected_transport(self):
         allowed = ("move_left", "grab")
 
-        with patch("agents.llm.ask_gemini", return_value='{"step": "grab", "reason": "nearby"}') as ask:
-            decision = decide_prompt_with_gemini("choose a step", allowed)
+        with patch(
+            "agents.llm.ask_gemini",
+            return_value='{"step": "grab", "reason": "nearby"}',
+        ) as ask:
+            proposal = decide_prompt_with_gemini("choose a step", allowed)
 
-        ask.assert_called_once_with("choose a step")
-        self.assertEqual(decision, Decision("grab", reason="nearby"))
+        ask.assert_called_once_with("choose a step", allowed)
+        self.assertEqual(
+            proposal,
+            ProposalResult(
+                raw_response='{"step": "grab", "reason": "nearby"}',
+                decision=Decision("grab", reason="nearby"),
+            ),
+        )
 
     def test_ask_gemini_raises_a_distinct_missing_key_error(self):
         with patch("agents.llm.load_env_file", return_value={}):
@@ -304,6 +314,46 @@ class SimulationContractTests(unittest.TestCase):
             with self.subTest(max_workers=max_workers):
                 with self.assertRaises(ValueError):
                     RoundCoordinator(lambda *_: None, max_workers=max_workers)
+
+    def test_round_records_raw_response_for_invalid_json(self):
+        def decide(prompt, allowed_steps):
+            return ProposalResult(raw_response="not json", decision=None)
+
+        outcome = RoundCoordinator(decide).run(self.grid, [self.shopper])[0]
+
+        self.assertEqual(outcome.failure, "invalid decision")
+        self.assertEqual(outcome.raw_response, "not json")
+        self.assertEqual(self.shopper.decision_history[-1].raw_response, "not json")
+
+    def test_propose_only_records_without_grid_mutation_or_turn_use(self):
+        start = (self.shopper.state.x, self.shopper.state.y)
+        apply_calls = []
+        original_apply = self.grid.apply
+
+        def record_apply(shopper, decision):
+            apply_calls.append((shopper, decision))
+            return original_apply(shopper, decision)
+
+        def decide(prompt, allowed_steps):
+            return ProposalResult(
+                raw_response='{"step": "' + allowed_steps[0] + '", "reason": "test"}',
+                decision=Decision(allowed_steps[0], reason="test"),
+            )
+
+        self.grid.apply = record_apply
+        outcome = RoundCoordinator(decide).run(
+            self.grid,
+            [self.shopper],
+            apply_decisions=False,
+        )[0]
+
+        self.assertEqual(outcome.decision.step, self.grid.observe(self.shopper).allowed_steps[0])
+        self.assertIsNone(outcome.applied)
+        self.assertEqual(apply_calls, [])
+        self.assertEqual((self.shopper.state.x, self.shopper.state.y), start)
+        self.assertEqual(self.shopper.trajectory, [])
+        self.assertEqual(self.shopper.turns_used, 0)
+        self.assertEqual(len(self.shopper.decision_history), 1)
 
     def test_round_coordinator_uses_configured_worker_limit(self):
         shoppers = self.grid.spawn(instantiate_agents(count=5))

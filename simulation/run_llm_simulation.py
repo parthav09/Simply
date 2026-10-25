@@ -22,7 +22,14 @@ def positive_int(value):
     return number
 
 
-def run(layout_name, shopper_count, max_rounds, turn_budget=120, concurrency=4):
+def run(
+    layout_name,
+    shopper_count,
+    max_rounds,
+    turn_budget=120,
+    concurrency=4,
+    propose_only=False,
+):
     grid = build_store(layout_name)
     shoppers = grid.spawn(
         instantiate_agents(count=shopper_count, turn_budget=turn_budget)
@@ -42,11 +49,17 @@ def run(layout_name, shopper_count, max_rounds, turn_budget=120, concurrency=4):
         if not active:
             break
         rounds_run = round_number
-        print(f"Round {round_number}: requesting decisions for {len(active)} active shoppers")
-        outcomes = coordinator.run(grid, active)
+        mode = "proposals" if propose_only else "decisions"
+        print(f"Round {round_number}: requesting {mode} for {len(active)} active shoppers")
+        outcomes = coordinator.run(grid, active, apply_decisions=not propose_only)
         for outcome in outcomes:
             if outcome.failure:
                 print(f"  {outcome.shopper_id}: failed ({outcome.failure})")
+            elif propose_only:
+                print(
+                    f"  {outcome.shopper_id}: proposed {outcome.decision.step} "
+                    f"({outcome.decision.reason})"
+                )
             else:
                 result = "applied" if outcome.applied else "not applied"
                 print(f"  {outcome.shopper_id}: {outcome.decision.step} {result}")
@@ -75,6 +88,11 @@ if __name__ == "__main__":
     parser.add_argument("--turn-budget", type=positive_int, default=120)
     parser.add_argument("--max-rounds", type=positive_int, default=120)
     parser.add_argument("--concurrency", type=positive_int, default=4)
+    parser.add_argument(
+        "--propose-only",
+        action="store_true",
+        help="Record validated LLM proposals without applying them to the grid.",
+    )
     args = parser.parse_args()
     try:
         run(
@@ -83,6 +101,7 @@ if __name__ == "__main__":
             args.max_rounds,
             turn_budget=args.turn_budget,
             concurrency=args.concurrency,
+            propose_only=args.propose_only,
         )
     except MissingGeminiApiKeyError as error:
         print(f"Gemini configuration error: {error}", file=sys.stderr)

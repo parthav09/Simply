@@ -1,7 +1,8 @@
 import json
 import urllib.request
 
-from agents.base import Decision
+from agents.base import Decision, ProposalResult
+from agents.schema import gemini_response_schema
 from core.env import load_env_file
 
 MODEL = "gemini-2.5-flash"
@@ -11,9 +12,10 @@ class MissingGeminiApiKeyError(RuntimeError):
     """Gemini cannot run until its API key is configured."""
 
 
-def decide_prompt_with_gemini(prompt: str, allowed_steps: tuple[str, ...]):
-    """Return Gemini's allowed decision for one immutable round snapshot."""
-    return parse_decision(ask_gemini(prompt), allowed_steps)
+def decide_prompt_with_gemini(prompt: str, allowed_steps: tuple[str, ...]) -> ProposalResult:
+    """Return Gemini's raw text and a validated decision for one immutable round snapshot."""
+    raw = ask_gemini(prompt, allowed_steps)
+    return ProposalResult(raw_response=raw, decision=parse_decision(raw, allowed_steps))
 
 
 def decide_with_llm(shopper, observation=None):
@@ -21,7 +23,7 @@ def decide_with_llm(shopper, observation=None):
     allowed = tuple(obs.allowed_steps)
     if not allowed:
         return None
-    return decide_prompt_with_gemini(shopper.prompt(obs), allowed)
+    return decide_prompt_with_gemini(shopper.prompt(obs), allowed).decision
 
 
 def act(shopper, observation=None, use_llm=True):
@@ -40,17 +42,25 @@ def parse_decision(raw, allowed_steps):
         data = json.loads(text)
     except json.JSONDecodeError:
         return None
+    if not isinstance(data, dict):
+        return None
     step = data.get("step")
     if step not in allowed_steps:
         return None
+    product_id = data.get("product_id")
+    if product_id is not None and not isinstance(product_id, str):
+        return None
+    reason = data.get("reason")
+    if reason is not None and not isinstance(reason, str):
+        return None
     return Decision(
         step=step,
-        product_id=data.get("product_id") or None,
-        reason=data.get("reason") or "",
+        product_id=product_id or None,
+        reason=reason or "",
     )
 
 
-def ask_gemini(prompt):
+def ask_gemini(prompt, allowed_steps=()):
     key = load_env_file().get("GEMINI_API_KEY", "")
     if not key:
         raise MissingGeminiApiKeyError("GEMINI_API_KEY is missing from .env")
@@ -60,6 +70,11 @@ def ask_gemini(prompt):
         f"{MODEL}:generateContent"
     )
     body = {"contents": [{"parts": [{"text": prompt}]}]}
+    if allowed_steps:
+        body["generationConfig"] = {
+            "responseMimeType": "application/json",
+            "responseSchema": gemini_response_schema(allowed_steps),
+        }
     request = urllib.request.Request(
         url,
         data=json.dumps(body).encode("utf-8"),

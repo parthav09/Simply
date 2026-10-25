@@ -29,6 +29,14 @@ class Decision:
 
 
 @dataclass(frozen=True)
+class ProposalResult:
+    """Gemini text plus the parsed decision, if the response passed validation."""
+
+    raw_response: str
+    decision: Decision | None = None
+
+
+@dataclass(frozen=True)
 class DecisionSnapshot:
     prompt: str
     allowed_steps: tuple[str, ...]
@@ -40,6 +48,7 @@ class RoundOutcome:
     decision: Decision | None = None
     failure: str | None = None
     applied: bool | None = None
+    raw_response: str | None = None
 
 
 @dataclass
