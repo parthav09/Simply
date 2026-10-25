@@ -1,0 +1,252 @@
+id,product_name,product_type,company,selling_price,procurement_cost,discount_percent,margin_percent,department,aisle,pack_size,barcode_upc,discounted_price,margin_after_discount_percent,stock_quantity,reorder_level,shelf_life_days,storage_type,dietary_tags,allergens,country_of_origin,is_private_label,is_perishable,age_restricted,popularity_score
+P0001,Bananas,Fresh Fruit,Dole,0.69,0.46,0,33.33,Produce,Aisle 1 - Produce,1 lb,033218196001,0.69,33.33,165,41,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,1.9
+P0002,Gala Apples,Fresh Fruit,Local Farms,3.99,2.73,0,31.58,Produce,Aisle 1 - Produce,3 lb bag,086379402654,3.99,31.58,126,31,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,1.6
+P0003,Organic Fuji Apples,Fresh Fruit,Earthbound Farm,5.49,3.43,0,37.52,Produce,Aisle 1 - Produce,2 lb bag,061559407816,5.49,37.52,72,18,7,chilled,vegan;vegetarian;gluten_free;organic,none,USA,no,yes,no,1.3
+P0004,Navel Oranges,Fresh Fruit,Sunkist,4.99,3.55,0,28.86,Produce,Aisle 1 - Produce,4 lb bag,093103413164,4.99,28.86,210,52,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.8
+P0005,Strawberries,Fresh Fruit,Driscoll's,4.49,2.88,0,35.86,Produce,Aisle 1 - Produce,1 lb,034192832764,4.49,35.86,206,51,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,5.0
+P0006,Blueberries,Fresh Fruit,Driscoll's,3.99,2.66,0,33.33,Produce,Aisle 1 - Produce,6 oz,050305641395,3.99,33.33,375,93,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,1.9
+P0007,Seedless Red Grapes,Fresh Fruit,Local Farms,3.49,2.39,30,31.52,Produce,Aisle 1 - Produce,per lb,024238849696,2.44,2.05,259,64,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.4
+P0008,Lemons,Fresh Fruit,Sunkist,0.79,0.49,0,37.97,Produce,Aisle 1 - Produce,each,010122691669,0.79,37.97,277,69,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,5.0
+P0009,Hass Avocados,Fresh Fruit,Mission Produce,1.29,0.88,5,31.78,Produce,Aisle 1 - Produce,each,018451462704,1.23,28.46,373,93,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,4.9
+P0010,Seedless Watermelon,Fresh Fruit,Local Farms,5.99,3.90,0,34.89,Produce,Aisle 1 - Produce,each,048932528809,5.99,34.89,79,19,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.3
+P0011,Pineapple,Fresh Fruit,Dole,3.99,2.98,15,25.31,Produce,Aisle 1 - Produce,each,003911718227,3.39,12.09,147,36,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,4.8
+P0012,Mangoes,Fresh Fruit,Mission Produce,1.49,1.09,0,26.85,Produce,Aisle 1 - Produce,each,063834657871,1.49,26.85,335,83,7,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.0
+P0013,Roma Tomatoes,Fresh Vegetables,Local Farms,1.99,1.48,0,25.63,Produce,Aisle 1 - Produce,per lb,039301031051,1.99,25.63,308,77,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,3.1
+P0014,Yellow Onions,Fresh Vegetables,Local Farms,3.49,2.49,0,28.65,Produce,Aisle 1 - Produce,3 lb bag,029973763116,3.49,28.65,301,75,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.4
+P0015,Russet Potatoes,Fresh Vegetables,Idaho Spuds,4.99,3.48,5,30.26,Produce,Aisle 1 - Produce,5 lb bag,010651333872,4.74,26.58,369,92,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.7
+P0016,Baby Carrots,Fresh Vegetables,Grimmway Farms,1.99,1.42,0,28.64,Produce,Aisle 1 - Produce,1 lb bag,078108013267,1.99,28.64,63,15,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.9
+P0017,Broccoli Crowns,Fresh Vegetables,Local Farms,2.29,1.46,10,36.24,Produce,Aisle 1 - Produce,per lb,006474687234,2.06,29.13,219,54,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,1.9
+P0018,Baby Spinach,Fresh Vegetables,Earthbound Farm,3.99,2.96,5,25.81,Produce,Aisle 1 - Produce,5 oz,000978820812,3.79,21.9,185,46,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,1.3
+P0019,Organic Baby Spinach,Fresh Vegetables,Earthbound Farm,4.99,3.70,20,25.85,Produce,Aisle 1 - Produce,5 oz,093990916998,3.99,7.27,86,21,8,chilled,vegan;vegetarian;gluten_free;organic,none,USA,no,yes,no,2.3
+P0020,Romaine Hearts,Fresh Vegetables,Taylor Farms,3.79,2.71,15,28.5,Produce,Aisle 1 - Produce,3 ct,046247510799,3.22,15.84,147,36,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,5.0
+P0021,Red Bell Peppers,Fresh Vegetables,Local Farms,1.49,1.10,0,26.17,Produce,Aisle 1 - Produce,each,025135427849,1.49,26.17,160,40,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,4.9
+P0022,English Cucumber,Fresh Vegetables,Local Farms,1.29,0.83,0,35.66,Produce,Aisle 1 - Produce,each,084124118244,1.29,35.66,366,91,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,3.4
+P0023,Garlic Bulbs,Fresh Vegetables,Christopher Ranch,0.79,0.52,0,34.18,Produce,Aisle 1 - Produce,each,048740164005,0.79,34.18,349,87,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,4.1
+P0024,Sweet Potatoes,Fresh Vegetables,Local Farms,1.49,0.99,0,33.56,Produce,Aisle 1 - Produce,per lb,086801128059,1.49,33.56,251,62,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,3.2
+P0025,Zucchini,Fresh Vegetables,Local Farms,1.69,1.17,0,30.77,Produce,Aisle 1 - Produce,per lb,005331586923,1.69,30.77,211,52,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,4.5
+P0026,White Mushrooms,Fresh Vegetables,Monterey Mushrooms,2.99,1.86,20,37.79,Produce,Aisle 1 - Produce,8 oz,025634216073,2.39,22.18,37,10,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,1.8
+P0027,Fresh Cilantro,Fresh Vegetables,Local Farms,0.99,0.62,0,37.37,Produce,Aisle 1 - Produce,bunch,030365414586,0.99,37.37,141,35,8,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,3.7
+P0028,Whole Milk,Milk & Cream,Horizon,4.79,3.43,0,28.39,Dairy & Eggs,Aisle 2 - Dairy,1 gal,014294019655,4.79,28.39,39,10,14,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,2.7
+P0029,2% Reduced Fat Milk,Milk & Cream,FreshMart,3.49,2.20,0,36.96,Dairy & Eggs,Aisle 2 - Dairy,1 gal,034060883561,3.49,36.96,320,80,14,chilled,vegetarian;gluten_free,milk,USA,yes,yes,no,4.8
+P0030,Skim Milk,Milk & Cream,FreshMart,3.39,2.16,0,36.28,Dairy & Eggs,Aisle 2 - Dairy,1 gal,014846564823,3.39,36.28,364,91,14,chilled,vegetarian;gluten_free,milk,USA,yes,yes,no,2.7
+P0031,Organic Whole Milk,Milk & Cream,Horizon,5.99,4.23,10,29.38,Dairy & Eggs,Aisle 2 - Dairy,0.5 gal,094680443699,5.39,21.52,340,85,14,chilled,vegetarian;gluten_free;organic,milk,USA,no,yes,no,3.6
+P0032,Lactose-Free Milk,Milk & Cream,Lactaid,4.99,3.76,0,24.65,Dairy & Eggs,Aisle 2 - Dairy,0.5 gal,087214895134,4.99,24.65,134,33,14,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,1.9
+P0033,Heavy Whipping Cream,Milk & Cream,Land O'Lakes,3.99,3.11,0,22.06,Dairy & Eggs,Aisle 2 - Dairy,16 oz,079176936763,3.99,22.06,150,37,14,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,1.6
+P0034,Half & Half,Milk & Cream,Land O'Lakes,2.79,2.04,5,26.88,Dairy & Eggs,Aisle 2 - Dairy,16 oz,032870831727,2.65,23.02,242,60,14,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,3.7
+P0035,Large Eggs,Eggs,Eggland's Best,4.29,3.09,0,27.97,Dairy & Eggs,Aisle 2 - Dairy,12 ct,098687277434,4.29,27.97,251,62,28,chilled,vegetarian;gluten_free,egg,USA,no,yes,no,4.1
+P0036,Large Eggs Value Pack,Eggs,FreshMart,5.99,4.18,0,30.22,Dairy & Eggs,Aisle 2 - Dairy,18 ct,071434558122,5.99,30.22,165,41,28,chilled,vegetarian;gluten_free,egg,USA,yes,yes,no,1.9
+P0037,Organic Free-Range Eggs,Eggs,Vital Farms,6.99,5.25,5,24.89,Dairy & Eggs,Aisle 2 - Dairy,12 ct,065876036690,6.64,20.93,237,59,28,chilled,vegetarian;gluten_free;organic,egg,USA,no,yes,no,4.4
+P0038,Plain Greek Yogurt,Yogurt,Chobani,5.49,3.86,0,29.69,Dairy & Eggs,Aisle 2 - Dairy,32 oz,054668893734,5.49,29.69,28,10,21,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,2.7
+P0039,Strawberry Yogurt,Yogurt,Yoplait,0.79,0.61,0,22.78,Dairy & Eggs,Aisle 2 - Dairy,6 oz,062729806990,0.79,22.78,372,93,21,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,1.3
+P0040,Vanilla Low-Fat Yogurt,Yogurt,Dannon,1.09,0.80,10,26.61,Dairy & Eggs,Aisle 2 - Dairy,5.3 oz,046537556464,0.98,18.37,50,12,21,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,4.3
+P0041,Coconut Milk Yogurt,Yogurt,So Delicious,1.99,1.46,5,26.63,Dairy & Eggs,Aisle 2 - Dairy,5.3 oz,031003309232,1.89,22.75,204,51,21,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.9
+P0042,Salted Butter,Cheese & Butter,Land O'Lakes,4.99,3.84,20,23.05,Dairy & Eggs,Aisle 2 - Dairy,1 lb,045299124190,3.99,3.76,383,95,60,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,4.7
+P0043,Sharp Cheddar Block,Cheese & Butter,Tillamook,5.49,3.97,20,27.69,Dairy & Eggs,Aisle 2 - Dairy,8 oz,031931491905,4.39,9.57,228,57,60,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,3.1
+P0044,Shredded Mozzarella,Cheese & Butter,Kraft,3.99,2.85,0,28.57,Dairy & Eggs,Aisle 2 - Dairy,8 oz,050671657262,3.99,28.57,356,89,60,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,3.9
+P0045,Cream Cheese,Cheese & Butter,Philadelphia,3.29,2.25,0,31.61,Dairy & Eggs,Aisle 2 - Dairy,8 oz,077694531473,3.29,31.61,300,75,60,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,4.0
+P0046,Sliced Swiss Cheese,Cheese & Butter,Sargento,3.99,2.88,15,27.82,Dairy & Eggs,Aisle 2 - Dairy,8 oz,075273545494,3.39,15.04,39,10,60,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,3.2
+P0047,Sour Cream,Cheese & Butter,Daisy,2.49,1.81,0,27.31,Dairy & Eggs,Aisle 2 - Dairy,16 oz,067837770143,2.49,27.31,148,37,60,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,2.6
+P0048,Cottage Cheese,Cheese & Butter,Breakstone's,3.19,2.41,15,24.45,Dairy & Eggs,Aisle 2 - Dairy,16 oz,088568557444,2.71,11.07,267,66,60,chilled,vegetarian;gluten_free,milk,USA,no,yes,no,1.9
+P0049,Boneless Skinless Chicken Breast,Poultry,Tyson,6.99,5.39,0,22.89,Meat & Seafood,Aisle 3 - Meat,per lb,023374989413,6.99,22.89,299,74,5,chilled,gluten_free,none,USA,no,yes,no,2.2
+P0050,Chicken Thighs Bone-In,Poultry,Perdue,3.49,2.83,0,18.91,Meat & Seafood,Aisle 3 - Meat,per lb,082400842710,3.49,18.91,387,96,5,chilled,gluten_free,none,USA,no,yes,no,3.3
+P0051,Whole Chicken,Poultry,FreshMart,8.99,6.55,0,27.14,Meat & Seafood,Aisle 3 - Meat,4 lb avg,004711671902,8.99,27.14,119,29,5,chilled,gluten_free,none,USA,yes,yes,no,1.6
+P0052,Ground Turkey 93% Lean,Poultry,Jennie-O,5.99,4.72,0,21.2,Meat & Seafood,Aisle 3 - Meat,1 lb,018699938677,5.99,21.2,152,38,5,chilled,gluten_free,none,USA,no,yes,no,2.2
+P0053,Halal Chicken Breast,Poultry,Crescent Foods,8.49,6.67,0,21.44,Meat & Seafood,Aisle 3 - Meat,per lb,090913341232,8.49,21.44,316,79,5,chilled,gluten_free;halal,none,USA,no,yes,no,3.2
+P0054,Halal Chicken Thighs,Poultry,Crescent Foods,5.49,4.57,0,16.76,Meat & Seafood,Aisle 3 - Meat,per lb,097403447134,5.49,16.76,377,94,5,chilled,gluten_free;halal,none,USA,no,yes,no,4.2
+P0055,Ground Beef 80/20,Beef & Pork,FreshMart,5.99,4.26,10,28.88,Meat & Seafood,Aisle 3 - Meat,1 lb,018324210249,5.39,20.96,242,60,5,chilled,gluten_free,none,USA,yes,yes,no,4.0
+P0056,Ribeye Steak,Beef & Pork,Angus Select,14.99,11.80,0,21.28,Meat & Seafood,Aisle 3 - Meat,per lb,074648877190,14.99,21.28,88,22,5,chilled,gluten_free,none,USA,no,yes,no,4.6
+P0057,Bacon,Beef & Pork,Oscar Mayer,6.99,5.38,0,23.03,Meat & Seafood,Aisle 3 - Meat,12 oz,013990490278,6.99,23.03,38,10,5,chilled,gluten_free;contains_pork,none,USA,no,yes,no,3.6
+P0058,Pork Chops Center Cut,Beef & Pork,Smithfield,4.49,3.36,0,25.17,Meat & Seafood,Aisle 3 - Meat,per lb,067175655125,4.49,25.17,324,81,5,chilled,gluten_free;contains_pork,none,USA,no,yes,no,2.6
+P0059,Italian Sausage,Beef & Pork,Johnsonville,5.99,4.77,20,20.37,Meat & Seafood,Aisle 3 - Meat,19 oz,007154516808,4.79,0.42,306,76,5,chilled,contains_pork,none,USA,no,yes,no,2.8
+P0060,Beef Hot Dogs,Beef & Pork,Hebrew National,6.49,5.48,0,15.56,Meat & Seafood,Aisle 3 - Meat,8 ct,077034824771,6.49,15.56,343,85,5,chilled,,wheat/gluten,USA,no,yes,no,1.1
+P0061,Halal Ground Beef,Beef & Pork,Crescent Foods,7.99,6.24,30,21.9,Meat & Seafood,Aisle 3 - Meat,1 lb,048086131712,5.59,-11.63,106,26,5,chilled,gluten_free;halal,none,USA,no,yes,no,3.0
+P0062,Halal Lamb Chops,Beef & Pork,Crescent Foods,16.99,13.10,0,22.9,Meat & Seafood,Aisle 3 - Meat,per lb,067737826398,16.99,22.9,164,41,5,chilled,gluten_free;halal,none,USA,no,yes,no,4.0
+P0063,Oven Roasted Turkey Breast,Deli Meats,Boar's Head,8.99,6.89,0,23.36,Meat & Seafood,Aisle 3 - Meat,8 oz,058404499727,8.99,23.36,237,59,14,chilled,gluten_free,none,USA,no,yes,no,3.2
+P0064,Black Forest Ham,Deli Meats,Oscar Mayer,4.99,3.72,0,25.45,Meat & Seafood,Aisle 3 - Meat,9 oz,067533963605,4.99,25.45,303,75,14,chilled,gluten_free;contains_pork,none,USA,no,yes,no,4.0
+P0065,Atlantic Salmon Fillet,Fresh & Frozen Seafood,FreshMart,11.99,8.42,20,29.77,Meat & Seafood,Aisle 4 - Seafood,per lb,027028951718,9.59,12.2,364,91,3,chilled,pescatarian;gluten_free,fish,USA,yes,yes,no,4.6
+P0066,Large Raw Shrimp,Fresh & Frozen Seafood,Gorton's,9.99,8.47,0,15.22,Meat & Seafood,Aisle 4 - Seafood,12 oz,021745961586,9.99,15.22,360,90,3,chilled,pescatarian;gluten_free,shellfish,USA,no,yes,no,4.8
+P0067,Tilapia Fillets,Fresh & Frozen Seafood,FreshMart,6.99,4.97,20,28.9,Meat & Seafood,Aisle 4 - Seafood,per lb,009134316117,5.59,11.09,302,75,3,chilled,pescatarian;gluten_free,fish,USA,yes,yes,no,1.7
+P0068,Cod Fillet,Fresh & Frozen Seafood,FreshMart,10.99,8.21,0,25.3,Meat & Seafood,Aisle 4 - Seafood,per lb,004556238692,10.99,25.3,191,47,3,chilled,pescatarian;gluten_free,fish,USA,yes,yes,no,1.7
+P0069,White Sandwich Bread,Bread,Wonder,2.99,2.12,25,29.1,Bakery,Aisle 5 - Bakery,20 oz,037923747407,2.24,5.36,374,93,7,ambient,vegan;vegetarian,wheat/gluten,USA,no,yes,no,4.6
+P0070,100% Whole Wheat Bread,Bread,Nature's Own,3.79,2.42,0,36.15,Bakery,Aisle 5 - Bakery,20 oz,059464743671,3.79,36.15,251,62,7,ambient,vegan;vegetarian,wheat/gluten,USA,no,yes,no,1.9
+P0071,Gluten-Free White Bread,Bread,Udi's,6.49,4.23,0,34.82,Bakery,Aisle 5 - Bakery,12 oz,040640909743,6.49,34.82,383,95,7,ambient,vegetarian;gluten_free,egg,USA,no,yes,no,3.4
+P0072,Sourdough Loaf,Bread,FreshMart Bakery,4.99,3.03,0,39.28,Bakery,Aisle 5 - Bakery,24 oz,042104709521,4.99,39.28,342,85,7,ambient,vegan;vegetarian,wheat/gluten,USA,yes,yes,no,4.6
+P0073,Plain Bagels,Bread,Thomas',3.99,2.72,0,31.83,Bakery,Aisle 5 - Bakery,6 ct,028588424745,3.99,31.83,127,31,7,ambient,vegan;vegetarian,wheat/gluten,USA,no,yes,no,4.2
+P0074,Hamburger Buns,Bread,Arnold,3.49,2.32,0,33.52,Bakery,Aisle 5 - Bakery,8 ct,068516048175,3.49,33.52,140,35,7,ambient,vegan;vegetarian,wheat/gluten,USA,no,yes,no,3.7
+P0075,Hot Dog Buns,Bread,Arnold,3.29,2.10,0,36.17,Bakery,Aisle 5 - Bakery,8 ct,051370985931,3.29,36.17,351,87,7,ambient,vegan;vegetarian,wheat/gluten,USA,no,yes,no,3.5
+P0076,Butter Croissants,Bread,FreshMart Bakery,5.99,3.56,30,40.57,Bakery,Aisle 5 - Bakery,6 ct,012004711382,4.19,15.04,234,58,7,ambient,vegetarian,milk;egg;wheat/gluten,USA,yes,yes,no,2.6
+P0077,Blueberry Muffins,Bread,FreshMart Bakery,4.99,3.02,30,39.48,Bakery,Aisle 5 - Bakery,4 ct,069261796405,3.49,13.47,301,75,7,ambient,vegetarian,milk;egg;wheat/gluten,USA,yes,yes,no,1.9
+P0078,Flour Tortillas,Bread,Mission,3.29,2.19,0,33.43,Bakery,Aisle 5 - Bakery,10 ct,015850643171,3.29,33.43,210,52,7,ambient,vegan;vegetarian,wheat/gluten,USA,no,yes,no,3.7
+P0079,Corn Tortillas,Bread,Mission,2.79,1.79,0,35.84,Bakery,Aisle 5 - Bakery,30 ct,005329318393,2.79,35.84,35,10,7,ambient,vegan;vegetarian;gluten_free,none,USA,no,yes,no,4.3
+P0080,Long Grain White Rice,Rice & Pasta,Uncle Ben's,5.99,4.28,25,28.55,Pantry,Aisle 6 - Dry Goods,5 lb,042284210205,4.49,4.68,26,10,540,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.2
+P0081,Basmati Rice,Rice & Pasta,Tilda,8.99,6.42,0,28.59,Pantry,Aisle 6 - Dry Goods,4.4 lb,040268117758,8.99,28.59,114,28,540,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.4
+P0082,Brown Rice,Rice & Pasta,Lundberg,4.49,3.06,0,31.85,Pantry,Aisle 6 - Dry Goods,2 lb,008470076617,4.49,31.85,339,84,540,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.8
+P0083,Spaghetti,Rice & Pasta,Barilla,1.79,1.22,15,31.84,Pantry,Aisle 6 - Dry Goods,16 oz,021249985698,1.52,19.74,336,84,540,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,2.2
+P0084,Penne Rigate,Rice & Pasta,Barilla,1.79,1.21,0,32.4,Pantry,Aisle 6 - Dry Goods,16 oz,018367365766,1.79,32.4,384,96,540,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,3.9
+P0085,Gluten-Free Penne,Rice & Pasta,Barilla,3.49,2.45,0,29.8,Pantry,Aisle 6 - Dry Goods,12 oz,052711116152,3.49,29.8,155,38,540,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.2
+P0086,Egg Noodles,Rice & Pasta,No Yolks,2.29,1.52,0,33.62,Pantry,Aisle 6 - Dry Goods,12 oz,016560494519,2.29,33.62,193,48,540,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,3.0
+P0087,All-Purpose Flour,Baking & Staples,King Arthur,4.99,3.63,0,27.25,Pantry,Aisle 6 - Dry Goods,5 lb,058514936899,4.99,27.25,80,20,540,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,3.7
+P0088,Granulated Sugar,Baking & Staples,Domino,3.99,2.66,0,33.33,Pantry,Aisle 6 - Dry Goods,4 lb,040244550229,3.99,33.33,361,90,540,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.6
+P0089,Brown Sugar,Baking & Staples,Domino,2.99,2.21,5,26.09,Pantry,Aisle 6 - Dry Goods,2 lb,083667525459,2.84,22.18,71,17,540,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.4
+P0090,Rolled Oats,Baking & Staples,Quaker,4.49,2.77,0,38.31,Pantry,Aisle 6 - Dry Goods,42 oz,001476797643,4.49,38.31,341,85,540,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,4.0
+P0091,Pancake Mix,Baking & Staples,Bisquick,3.99,2.92,0,26.82,Pantry,Aisle 6 - Dry Goods,40 oz,097840369003,3.99,26.82,170,42,540,ambient,vegetarian,milk;egg;wheat/gluten,USA,no,no,no,2.2
+P0092,Dried Green Lentils,Baking & Staples,Goya,2.29,1.64,0,28.38,Pantry,Aisle 6 - Dry Goods,16 oz,045107622683,2.29,28.38,155,38,540,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.0
+P0093,Dried Black Beans,Baking & Staples,Goya,2.19,1.37,5,37.44,Pantry,Aisle 6 - Dry Goods,16 oz,006071596966,2.08,34.13,228,57,540,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.2
+P0094,Extra Virgin Olive Oil,"Oils, Spices & Sweeteners",Bertolli,9.99,6.39,10,36.04,Pantry,Aisle 7 - Oils & Spices,17 oz,075161369681,8.99,28.92,341,85,720,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,2.6
+P0095,Vegetable Oil,"Oils, Spices & Sweeteners",Wesson,4.99,3.26,0,34.67,Pantry,Aisle 7 - Oils & Spices,48 oz,021818835523,4.99,34.67,195,48,720,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,1.4
+P0096,Coconut Oil,"Oils, Spices & Sweeteners",Nutiva,8.49,5.62,0,33.8,Pantry,Aisle 7 - Oils & Spices,15 oz,012779979955,8.49,33.8,103,25,720,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,1.6
+P0097,Iodized Table Salt,"Oils, Spices & Sweeteners",Morton,1.29,0.89,0,31.01,Pantry,Aisle 7 - Oils & Spices,26 oz,049058147700,1.29,31.01,180,45,720,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,2.5
+P0098,Ground Black Pepper,"Oils, Spices & Sweeteners",McCormick,4.49,2.95,0,34.3,Pantry,Aisle 7 - Oils & Spices,3 oz,099867980793,4.49,34.3,71,17,720,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,2.3
+P0099,Ground Cinnamon,"Oils, Spices & Sweeteners",McCormick,3.99,2.51,0,37.09,Pantry,Aisle 7 - Oils & Spices,2.37 oz,071518203778,3.99,37.09,56,14,720,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,3.1
+P0100,Pure Honey,"Oils, Spices & Sweeteners",Nature Nate's,7.49,5.06,0,32.44,Pantry,Aisle 7 - Oils & Spices,16 oz,066590515186,7.49,32.44,169,42,720,ambient,vegetarian;gluten_free,none,Various,no,no,no,2.1
+P0101,Pure Maple Syrup,"Oils, Spices & Sweeteners",Kirkland Farms,9.99,5.91,25,40.84,Pantry,Aisle 7 - Oils & Spices,12 oz,051925462914,7.49,21.09,101,25,720,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,3.2
+P0102,Creamy Peanut Butter,Spreads & Jams,Jif,3.99,2.51,0,37.09,Pantry,Aisle 7 - Oils & Spices,16 oz,081685054235,3.99,37.09,90,22,365,ambient,vegan;vegetarian;gluten_free,tree nuts/peanuts,USA,no,no,no,4.8
+P0103,Almond Butter,Spreads & Jams,Justin's,9.99,6.51,0,34.83,Pantry,Aisle 7 - Oils & Spices,16 oz,021418880592,9.99,34.83,95,23,365,ambient,vegan;vegetarian;gluten_free,tree nuts/peanuts,USA,no,no,no,3.4
+P0104,Strawberry Jam,Spreads & Jams,Smucker's,3.49,2.44,0,30.09,Pantry,Aisle 7 - Oils & Spices,18 oz,092706537947,3.49,30.09,379,94,365,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,1.9
+P0105,Chocolate Hazelnut Spread,Spreads & Jams,Nutella,4.99,3.43,20,31.26,Pantry,Aisle 7 - Oils & Spices,13 oz,059774688623,3.99,14.04,124,31,365,ambient,vegetarian,milk;tree nuts/peanuts,USA,no,no,no,4.2
+P0106,Diced Tomatoes,Canned & Jarred Goods,Hunt's,1.49,1.09,0,26.85,Pantry,Aisle 8 - Canned,14.5 oz,075818141247,1.49,26.85,353,88,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.6
+P0107,Tomato Sauce,Canned & Jarred Goods,Hunt's,1.29,0.94,0,27.13,Pantry,Aisle 8 - Canned,15 oz,075060685361,1.29,27.13,138,34,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.5
+P0108,Marinara Pasta Sauce,Canned & Jarred Goods,Prego,3.29,2.45,30,25.53,Pantry,Aisle 8 - Canned,24 oz,052204727790,2.30,-6.52,357,89,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.6
+P0109,Chicken Noodle Soup,Canned & Jarred Goods,Campbell's,2.19,1.64,0,25.11,Pantry,Aisle 8 - Canned,10.75 oz,089861434103,2.19,25.11,101,25,900,ambient,,wheat/gluten,USA,no,no,no,2.7
+P0110,Tomato Soup,Canned & Jarred Goods,Campbell's,1.99,1.26,0,36.68,Pantry,Aisle 8 - Canned,10.75 oz,079808932460,1.99,36.68,81,20,900,ambient,vegetarian,milk;wheat/gluten,USA,no,no,no,3.5
+P0111,Canned Black Beans,Canned & Jarred Goods,Goya,1.39,0.99,0,28.78,Pantry,Aisle 8 - Canned,15.5 oz,018518888806,1.39,28.78,365,91,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.5
+P0112,Canned Chickpeas,Canned & Jarred Goods,Goya,1.49,1.11,0,25.5,Pantry,Aisle 8 - Canned,15.5 oz,040515319520,1.49,25.5,216,54,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.4
+P0113,Sweet Corn,Canned & Jarred Goods,Del Monte,1.29,0.90,0,30.23,Pantry,Aisle 8 - Canned,15.25 oz,077221704303,1.29,30.23,375,93,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.5
+P0114,Coconut Milk,Canned & Jarred Goods,Thai Kitchen,2.79,1.96,0,29.75,Pantry,Aisle 8 - Canned,13.66 oz,087403450541,2.79,29.75,228,57,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.2
+P0115,Chicken Broth,Canned & Jarred Goods,Swanson,2.49,1.70,0,31.73,Pantry,Aisle 8 - Canned,32 oz,065277584161,2.49,31.73,250,62,900,ambient,gluten_free,none,USA,no,no,no,2.7
+P0116,Vegetable Broth,Canned & Jarred Goods,Pacific Foods,3.29,1.98,0,39.82,Pantry,Aisle 8 - Canned,32 oz,051154479627,3.29,39.82,175,43,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.4
+P0117,Chunk Light Tuna in Water,Canned & Jarred Goods,StarKist,1.59,1.18,15,25.79,Pantry,Aisle 8 - Canned,5 oz,064016582029,1.35,12.59,339,84,900,ambient,pescatarian;gluten_free,fish,USA,no,no,no,3.7
+P0118,Canned Peaches in Juice,Canned & Jarred Goods,Del Monte,2.19,1.50,0,31.51,Pantry,Aisle 8 - Canned,15 oz,055690927557,2.19,31.51,145,36,900,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.1
+P0119,Cheerios,Breakfast Cereal,General Mills,5.29,3.38,0,36.11,Pantry,Aisle 9 - Breakfast,18 oz,054310278681,5.29,36.11,228,57,270,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.0
+P0120,Frosted Flakes,Breakfast Cereal,Kellogg's,4.99,3.41,0,31.66,Pantry,Aisle 9 - Breakfast,19 oz,047312172715,4.99,31.66,338,84,270,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,3.7
+P0121,Raisin Bran,Breakfast Cereal,Kellogg's,4.79,2.97,0,38.0,Pantry,Aisle 9 - Breakfast,20 oz,042258313237,4.79,38.0,173,43,270,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,1.1
+P0122,Corn Flakes,Breakfast Cereal,Kellogg's,4.29,2.76,0,35.66,Pantry,Aisle 9 - Breakfast,18 oz,029114678669,4.29,35.66,307,76,270,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,1.3
+P0123,Honey Nut Oat Rings,Breakfast Cereal,FreshMart,3.29,1.69,0,48.63,Pantry,Aisle 9 - Breakfast,15 oz,078528922680,3.29,48.63,255,63,270,ambient,vegan;vegetarian,wheat/gluten,USA,yes,no,no,4.3
+P0124,Crunchy Granola,Breakfast Cereal,Nature Valley,4.99,3.23,0,35.27,Pantry,Aisle 9 - Breakfast,11 oz,053584143842,4.99,35.27,107,26,270,ambient,vegan;vegetarian,wheat/gluten;tree nuts/peanuts,USA,no,no,no,3.5
+P0125,Instant Oatmeal Maple,Breakfast Cereal,Quaker,4.49,2.85,0,36.53,Pantry,Aisle 9 - Breakfast,10 ct,029922995900,4.49,36.53,353,88,270,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,1.3
+P0126,Classic Potato Chips,Chips & Crackers,Lay's,4.99,2.78,15,44.29,Snacks,Aisle 10 - Snacks,8 oz,039690784473,4.24,34.43,358,89,120,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.2
+P0127,Nacho Cheese Tortilla Chips,Chips & Crackers,Doritos,4.99,2.98,0,40.28,Snacks,Aisle 10 - Snacks,9.25 oz,002767735925,4.99,40.28,62,15,120,ambient,vegetarian,milk;wheat/gluten,USA,no,no,no,4.4
+P0128,Original Pringles,Chips & Crackers,Pringles,2.49,1.62,15,34.94,Snacks,Aisle 10 - Snacks,5.5 oz,025881537147,2.12,23.58,229,57,120,ambient,vegan;vegetarian,none,USA,no,no,no,2.0
+P0129,Tortilla Chips,Chips & Crackers,Tostitos,4.49,3.08,0,31.4,Snacks,Aisle 10 - Snacks,13 oz,096325953278,4.49,31.4,221,55,120,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.9
+P0130,Soft Pretzels Twists,Chips & Crackers,Rold Gold,3.29,1.87,0,43.16,Snacks,Aisle 10 - Snacks,16 oz,068733950047,3.29,43.16,71,17,120,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,3.4
+P0131,Butter Crackers,Chips & Crackers,Ritz,4.19,2.40,15,42.72,Snacks,Aisle 10 - Snacks,13.7 oz,001624565060,3.56,32.58,299,74,120,ambient,vegetarian,milk;wheat/gluten,USA,no,no,no,3.3
+P0132,Cheddar Goldfish,Chips & Crackers,Pepperidge Farm,4.49,3.01,0,32.96,Snacks,Aisle 10 - Snacks,6.6 oz,068784991216,4.49,32.96,62,15,120,ambient,vegetarian,milk;wheat/gluten,USA,no,no,no,2.5
+P0133,Butter Popcorn Microwave,Chips & Crackers,Orville Redenbacher,4.99,2.75,0,44.89,Snacks,Aisle 10 - Snacks,6 ct,023986800025,4.99,44.89,212,53,120,ambient,vegetarian;gluten_free,milk,USA,no,no,no,4.2
+P0134,Brown Rice Cakes,Chips & Crackers,Quaker,2.99,1.86,0,37.79,Snacks,Aisle 10 - Snacks,4.47 oz,025952694958,2.99,37.79,288,72,120,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.3
+P0135,Oreo Cookies,"Cookies, Candy & Sweets",Oreo,4.79,2.89,15,39.67,Snacks,Aisle 11 - Sweets,13.29 oz,005516940974,4.07,28.99,268,67,270,ambient,vegan;vegetarian,wheat/gluten;soy,USA,no,no,no,4.9
+P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Chips Ahoy,4.49,2.51,25,44.1,Snacks,Aisle 11 - Sweets,13 oz,009728962309,3.37,25.52,141,35,270,ambient,vegetarian,milk;egg;wheat/gluten;soy,USA,no,no,no,4.8
+P0137,Dark Chocolate Bar 70%,"Cookies, Candy & Sweets",Lindt,3.99,2.71,0,32.08,Snacks,Aisle 11 - Sweets,3.5 oz,062636897028,3.99,32.08,185,46,270,ambient,vegan;vegetarian,soy,USA,no,no,no,1.8
+P0138,Milk Chocolate Bar,"Cookies, Candy & Sweets",Hershey's,1.79,1.15,25,35.75,Snacks,Aisle 11 - Sweets,1.55 oz,052785854973,1.34,14.18,217,54,270,ambient,vegetarian,milk;soy,USA,no,no,no,4.8
+P0139,Gummy Bears,"Cookies, Candy & Sweets",Haribo,2.49,1.62,0,34.94,Snacks,Aisle 11 - Sweets,5 oz,043757584419,2.49,34.94,177,44,270,ambient,vegetarian;gluten_free,none,USA,no,no,no,3.7
+P0140,Fruit Snacks,"Cookies, Candy & Sweets",Welch's,3.49,2.20,15,36.96,Snacks,Aisle 11 - Sweets,10 ct,040415747338,2.97,25.93,99,24,270,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.1
+P0141,Peanut Butter Cups,"Cookies, Candy & Sweets",Reese's,1.99,1.19,0,40.2,Snacks,Aisle 11 - Sweets,1.5 oz,099330833016,1.99,40.2,80,20,270,ambient,vegetarian,milk;tree nuts/peanuts;soy,USA,no,no,no,2.3
+P0142,Mixed Nuts,Nuts & Healthy Snacks,Planters,8.99,5.88,10,34.59,Snacks,Aisle 10 - Snacks,15 oz,082677345401,8.09,27.32,27,10,240,ambient,vegan;vegetarian;gluten_free,tree nuts/peanuts,USA,no,no,no,3.6
+P0143,Raw Almonds,Nuts & Healthy Snacks,Blue Diamond,8.49,5.84,5,31.21,Snacks,Aisle 10 - Snacks,16 oz,062067240049,8.07,27.63,114,28,240,ambient,vegan;vegetarian;gluten_free,tree nuts/peanuts,USA,no,no,no,3.4
+P0144,Fruit & Nut Bar,Nuts & Healthy Snacks,Kind,1.79,1.06,0,40.78,Snacks,Aisle 10 - Snacks,1.4 oz,088728743152,1.79,40.78,257,64,240,ambient,vegan;vegetarian;gluten_free,tree nuts/peanuts,USA,no,no,no,3.9
+P0145,Trail Mix,Nuts & Healthy Snacks,Nature's Garden,6.49,4.08,5,37.13,Snacks,Aisle 10 - Snacks,16 oz,049329668516,6.17,33.87,197,49,240,ambient,vegan;vegetarian;gluten_free,tree nuts/peanuts,USA,no,no,no,3.7
+P0146,Chewy Granola Bars,Nuts & Healthy Snacks,Nature Valley,4.29,2.98,0,30.54,Snacks,Aisle 10 - Snacks,12 ct,030463745499,4.29,30.54,190,47,240,ambient,vegan;vegetarian,wheat/gluten,USA,no,no,no,1.0
+P0147,Sea Salt Roasted Seaweed,Nuts & Healthy Snacks,Annie Chun's,2.49,1.56,5,37.35,Snacks,Aisle 10 - Snacks,0.17 oz,017426841459,2.37,34.18,366,91,240,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,1.9
+P0148,Coca-Cola Cans,Soft Drinks & Water,Coca-Cola,8.99,5.89,0,34.48,Beverages,Aisle 12 - Beverages,12 x 12 oz,095687833918,8.99,34.48,257,64,270,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.8
+P0149,Diet Coke Cans,Soft Drinks & Water,Coca-Cola,8.99,6.19,0,31.15,Beverages,Aisle 12 - Beverages,12 x 12 oz,010883982258,8.99,31.15,313,78,270,ambient,vegan;vegetarian;gluten_free;sugar_free,none,USA,no,no,no,2.8
+P0150,Pepsi Cans,Soft Drinks & Water,PepsiCo,8.49,5.87,20,30.86,Beverages,Aisle 12 - Beverages,12 x 12 oz,087072867908,6.79,13.55,71,17,270,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.8
+P0151,Sprite Bottle,Soft Drinks & Water,Coca-Cola,2.99,2.02,20,32.44,Beverages,Aisle 12 - Beverages,2 L,003910651801,2.39,15.48,155,38,270,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.9
+P0152,Purified Water 24 Pack,Soft Drinks & Water,Dasani,5.99,4.30,0,28.21,Beverages,Aisle 12 - Beverages,24 x 16.9 oz,026567661825,5.99,28.21,117,29,270,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,1.5
+P0153,Spring Water 24 Pack,Soft Drinks & Water,FreshMart,4.49,2.61,0,41.87,Beverages,Aisle 12 - Beverages,24 x 16.9 oz,030047868633,4.49,41.87,90,22,270,ambient,vegan;vegetarian;gluten_free,none,USA,yes,no,no,2.8
+P0154,Lime Sparkling Water,Soft Drinks & Water,LaCroix,5.49,4.17,0,24.04,Beverages,Aisle 12 - Beverages,12 x 12 oz,010690331190,5.49,24.04,396,99,270,ambient,vegan;vegetarian;gluten_free;sugar_free,none,USA,no,no,no,2.8
+P0155,Sports Drink Fruit Punch,Soft Drinks & Water,Gatorade,1.99,1.38,10,30.65,Beverages,Aisle 12 - Beverages,28 oz,067383028439,1.79,22.91,47,11,270,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.3
+P0156,Energy Drink,Soft Drinks & Water,Red Bull,2.99,2.10,15,29.77,Beverages,Aisle 12 - Beverages,8.4 oz,042836440892,2.54,17.32,146,36,270,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.5
+P0157,Orange Juice No Pulp,Juice & Tea,Tropicana,4.99,3.54,0,29.06,Beverages,Aisle 12 - Beverages,52 oz,068566246287,4.99,29.06,201,50,45,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.0
+P0158,Apple Juice,Juice & Tea,Mott's,3.49,2.56,10,26.65,Beverages,Aisle 12 - Beverages,64 oz,008668826343,3.14,18.47,262,65,45,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.3
+P0159,Unsweetened Green Tea,Juice & Tea,Pure Leaf,1.99,1.49,0,25.13,Beverages,Aisle 12 - Beverages,18.5 oz,018304699013,1.99,25.13,214,53,45,chilled,vegan;vegetarian;gluten_free;sugar_free,none,USA,no,yes,no,4.2
+P0160,Kombucha Ginger,Juice & Tea,GT's,3.99,2.75,10,31.08,Beverages,Aisle 12 - Beverages,16 oz,035403317393,3.59,23.4,270,67,45,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,2.6
+P0161,Black Tea Bags,Juice & Tea,Lipton,4.49,3.28,0,26.95,Beverages,Aisle 12 - Beverages,100 ct,067854458771,4.49,26.95,169,42,45,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,4.2
+P0162,English Breakfast Tea,Juice & Tea,Twinings,4.99,3.36,15,32.67,Beverages,Aisle 12 - Beverages,20 ct,055609320489,4.24,20.75,129,32,45,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,3.3
+P0163,Classic Roast Ground Coffee,Coffee,Folgers,9.99,6.95,0,30.43,Beverages,Aisle 13 - Coffee & Tea,25.9 oz,036937854777,9.99,30.43,193,48,300,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,1.7
+P0164,Whole Bean House Blend,Coffee,Starbucks,11.99,7.75,0,35.36,Beverages,Aisle 13 - Coffee & Tea,12 oz,087280801006,11.99,35.36,393,98,300,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,1.5
+P0165,Coffee Pods Variety,Coffee,Keurig,14.99,10.01,0,33.22,Beverages,Aisle 13 - Coffee & Tea,24 ct,003875099770,14.99,33.22,102,25,300,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,1.0
+P0166,Instant Coffee,Coffee,Nescafé,8.49,5.76,0,32.16,Beverages,Aisle 13 - Coffee & Tea,7 oz,048408621182,8.49,32.16,296,74,300,ambient,vegan;vegetarian;gluten_free,none,Various,no,no,no,2.0
+P0167,American Lager 12 Pack,Beer & Wine,Budweiser,15.99,11.60,0,27.45,Beverages,Aisle 14 - Beer & Wine,12 x 12 oz,046156793341,15.99,27.45,206,51,365,ambient,vegetarian;alcohol_21plus,wheat/gluten,Various,no,no,yes,3.6
+P0168,Pale Ale 6 Pack,Beer & Wine,Sierra Nevada,10.99,7.66,5,30.3,Beverages,Aisle 14 - Beer & Wine,6 x 12 oz,066870021765,10.44,26.63,232,58,365,ambient,vegetarian;alcohol_21plus,wheat/gluten,Various,no,no,yes,3.3
+P0169,Cabernet Sauvignon,Beer & Wine,Barefoot,7.99,5.57,0,30.29,Beverages,Aisle 14 - Beer & Wine,750 ml,003397401489,7.99,30.29,295,73,365,ambient,vegan;vegetarian;gluten_free;alcohol_21plus,none,Various,no,no,yes,3.6
+P0170,Pinot Grigio,Beer & Wine,Barefoot,7.99,6.22,5,22.15,Beverages,Aisle 14 - Beer & Wine,750 ml,092614293968,7.59,18.05,131,32,365,ambient,vegan;vegetarian;gluten_free;alcohol_21plus,none,Various,no,no,yes,2.3
+P0171,Pepperoni Pizza,Frozen Meals & Pizza,DiGiorno,7.99,5.21,0,34.79,Frozen,Aisle 15 - Frozen,27.5 oz,018501631599,7.99,34.79,377,94,300,frozen,vegetarian;contains_pork,milk;wheat/gluten,USA,no,no,no,4.8
+P0172,Veggie Burrito,Frozen Meals & Pizza,Amy's,3.99,2.79,5,30.08,Frozen,Aisle 15 - Frozen,6 oz,047735866296,3.79,26.39,349,87,300,frozen,vegan;vegetarian,wheat/gluten;soy,USA,no,no,no,1.3
+P0173,Chicken Nuggets,Frozen Meals & Pizza,Tyson,9.99,6.69,30,33.03,Frozen,Aisle 15 - Frozen,29 oz,014262655110,6.99,4.29,62,15,300,frozen,,egg;wheat/gluten,USA,no,no,no,4.8
+P0174,Fish Sticks,Frozen Meals & Pizza,Gorton's,6.49,4.49,5,30.82,Frozen,Aisle 15 - Frozen,20 ct,012678886101,6.17,27.23,92,23,300,frozen,pescatarian,wheat/gluten;fish,USA,no,no,no,2.4
+P0175,Frozen Waffles,Frozen Meals & Pizza,Eggo,3.99,2.94,0,26.32,Frozen,Aisle 15 - Frozen,10 ct,060466183982,3.99,26.32,191,47,300,frozen,vegetarian,milk;egg;wheat/gluten,USA,no,no,no,3.7
+P0176,Vegan Mac & Cheese,Frozen Meals & Pizza,Daiya,4.99,3.63,0,27.25,Frozen,Aisle 15 - Frozen,10.6 oz,072126464715,4.99,27.25,162,40,300,frozen,vegan;vegetarian,wheat/gluten;soy,USA,no,no,no,2.0
+P0177,Sweet Peas,Frozen Vegetables & Fruit,Birds Eye,1.99,1.43,0,28.14,Frozen,Aisle 15 - Frozen,12 oz,093712406596,1.99,28.14,329,82,360,frozen,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.2
+P0178,Broccoli Florets,Frozen Vegetables & Fruit,Birds Eye,2.19,1.55,0,29.22,Frozen,Aisle 15 - Frozen,12 oz,092459375265,2.19,29.22,358,89,360,frozen,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.2
+P0179,Mixed Berries,Frozen Vegetables & Fruit,Wyman's,5.99,3.95,0,34.06,Frozen,Aisle 15 - Frozen,15 oz,035646519398,5.99,34.06,319,79,360,frozen,vegan;vegetarian;gluten_free,none,USA,no,no,no,1.7
+P0180,Crinkle Cut Fries,Frozen Vegetables & Fruit,Ore-Ida,3.99,2.59,0,35.09,Frozen,Aisle 15 - Frozen,32 oz,073741672434,3.99,35.09,397,99,360,frozen,vegan;vegetarian,none,USA,no,no,no,3.6
+P0181,Vanilla Bean Ice Cream,Ice Cream & Desserts,Häagen-Dazs,5.99,3.85,5,35.73,Frozen,Aisle 16 - Ice Cream,14 oz,097968868058,5.69,32.34,254,63,300,frozen,vegetarian;gluten_free,milk;egg,USA,no,no,no,3.4
+P0182,Chocolate Fudge Brownie Ice Cream,Ice Cream & Desserts,Ben & Jerry's,5.99,3.67,0,38.73,Frozen,Aisle 16 - Ice Cream,16 oz,052909656101,5.99,38.73,152,38,300,frozen,vegetarian,milk;egg;wheat/gluten;soy,USA,no,no,no,2.0
+P0183,Dairy-Free Chocolate Ice Cream,Ice Cream & Desserts,So Delicious,5.49,3.70,0,32.6,Frozen,Aisle 16 - Ice Cream,16 oz,093756798250,5.49,32.6,322,80,300,frozen,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.9
+P0184,Fruit Pops,Ice Cream & Desserts,FreshMart,3.49,2.22,5,36.39,Frozen,Aisle 16 - Ice Cream,12 ct,025457387571,3.32,33.13,84,21,300,frozen,vegan;vegetarian;gluten_free,none,USA,yes,no,no,2.8
+P0185,Tomato Ketchup,Condiments & Sauces,Heinz,3.99,2.48,0,37.84,Pantry,Aisle 17 - Condiments,32 oz,001051238282,3.99,37.84,178,44,365,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.3
+P0186,Yellow Mustard,Condiments & Sauces,French's,1.99,1.31,0,34.17,Pantry,Aisle 17 - Condiments,14 oz,022660937966,1.99,34.17,232,58,365,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,1.0
+P0187,Real Mayonnaise,Condiments & Sauces,Hellmann's,4.99,3.44,0,31.06,Pantry,Aisle 17 - Condiments,30 oz,019182553714,4.99,31.06,385,96,365,ambient,vegetarian;gluten_free,egg,USA,no,no,no,3.7
+P0188,Soy Sauce,Condiments & Sauces,Kikkoman,3.49,2.27,15,34.96,Pantry,Aisle 17 - Condiments,10 oz,069691557924,2.97,23.57,330,82,365,ambient,vegan;vegetarian,wheat/gluten;soy,USA,no,no,no,4.7
+P0189,Hot Sauce,Condiments & Sauces,Tabasco,3.29,2.10,15,36.17,Pantry,Aisle 17 - Condiments,5 oz,034125286692,2.80,25.0,85,21,365,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.3
+P0190,Hickory BBQ Sauce,Condiments & Sauces,Sweet Baby Ray's,3.49,2.31,0,33.81,Pantry,Aisle 17 - Condiments,18 oz,028274225790,3.49,33.81,300,75,365,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,4.5
+P0191,Ranch Dressing,Condiments & Sauces,Hidden Valley,3.99,2.34,0,41.35,Pantry,Aisle 17 - Condiments,16 oz,068876767721,3.99,41.35,124,31,365,ambient,vegetarian;gluten_free,milk;egg,USA,no,no,no,3.3
+P0192,Chunky Salsa,Condiments & Sauces,Tostitos,4.29,2.61,0,39.16,Pantry,Aisle 17 - Condiments,15.5 oz,043842797881,4.29,39.16,41,10,365,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,3.3
+P0193,White Vinegar,Condiments & Sauces,Heinz,2.49,1.70,0,31.73,Pantry,Aisle 17 - Condiments,32 oz,080783613407,2.49,31.73,212,53,365,ambient,vegan;vegetarian;gluten_free,none,USA,no,no,no,2.1
+P0194,Oat Milk,Plant-Based & Meat Alternatives,Oatly,4.49,2.86,0,36.3,Dairy & Eggs,Aisle 2 - Dairy,64 oz,033959629233,4.49,36.3,85,21,40,chilled,vegan;vegetarian,wheat/gluten,USA,no,yes,no,4.2
+P0195,Unsweetened Almond Milk,Plant-Based & Meat Alternatives,Silk,3.99,2.70,0,32.33,Dairy & Eggs,Aisle 2 - Dairy,64 oz,082544948126,3.99,32.33,330,82,40,chilled,vegan;vegetarian;gluten_free,tree nuts/peanuts,USA,no,yes,no,4.7
+P0196,Soy Milk,Plant-Based & Meat Alternatives,Silk,3.99,2.48,10,37.84,Dairy & Eggs,Aisle 2 - Dairy,64 oz,023253672946,3.59,30.92,384,96,40,chilled,vegan;vegetarian;gluten_free,soy,USA,no,yes,no,2.5
+P0197,Extra Firm Tofu,Plant-Based & Meat Alternatives,Nasoya,2.49,1.84,5,26.1,Dairy & Eggs,Aisle 2 - Dairy,14 oz,084577590175,2.37,22.36,231,57,40,chilled,vegan;vegetarian;gluten_free,soy,USA,no,yes,no,4.4
+P0198,Plant-Based Burger Patties,Plant-Based & Meat Alternatives,Beyond Meat,6.99,4.52,0,35.34,Dairy & Eggs,Aisle 2 - Dairy,2 ct,037454589297,6.99,35.34,244,61,40,chilled,vegan;vegetarian,soy,USA,no,yes,no,4.2
+P0199,Vegan Cheddar Shreds,Plant-Based & Meat Alternatives,Violife,4.99,3.16,5,36.67,Dairy & Eggs,Aisle 2 - Dairy,8 oz,070127706324,4.74,33.33,75,18,40,chilled,vegan;vegetarian;gluten_free,none,USA,no,yes,no,1.6
+P0200,Classic Hummus,Plant-Based & Meat Alternatives,Sabra,3.99,2.51,0,37.09,Dairy & Eggs,Aisle 2 - Dairy,10 oz,054152064361,3.99,37.09,360,90,40,chilled,vegan;vegetarian;gluten_free,sesame,USA,no,yes,no,3.8
+P0201,Diapers Size 3,Baby Care,Pampers,29.99,23.39,0,22.01,Baby,Aisle 18 - Baby,102 ct,093870051627,29.99,22.01,92,23,720,ambient,infant,none,USA,no,no,no,1.3
+P0202,Baby Wipes,Baby Care,Huggies,11.99,8.71,5,27.36,Baby,Aisle 18 - Baby,3 x 64 ct,055426221890,11.39,23.53,77,19,720,ambient,infant,none,USA,no,no,no,3.4
+P0203,Infant Formula Powder,Baby Care,Similac,31.99,24.22,0,24.29,Baby,Aisle 18 - Baby,30.8 oz,026973112196,31.99,24.29,134,33,720,ambient,infant,milk;soy,USA,no,no,no,2.4
+P0204,Fruit Puree Pouches,Baby Care,Gerber,4.49,3.23,10,28.06,Baby,Aisle 18 - Baby,4 ct,013899940438,4.04,20.05,166,41,720,ambient,vegan;gluten_free;infant,none,USA,no,no,no,3.4
+P0205,Baby Oatmeal Cereal,Baby Care,Gerber,3.99,3.01,0,24.56,Baby,Aisle 18 - Baby,8 oz,003761379180,3.99,24.56,355,88,720,ambient,vegan;infant,wheat/gluten,USA,no,no,no,4.9
+P0206,Paper Towels,Paper & Cleaning,Bounty,13.99,7.85,0,43.89,Household,Aisle 19 - Household,6 rolls,065827109104,13.99,43.89,316,79,1800,ambient,vegan,none,USA,no,no,no,1.9
+P0207,Toilet Paper Mega Rolls,Paper & Cleaning,Charmin,21.99,12.38,20,43.7,Household,Aisle 19 - Household,12 rolls,048666188924,17.59,29.62,284,71,1800,ambient,vegan,none,USA,no,no,no,1.3
+P0208,Dish Soap,Paper & Cleaning,Dawn,3.99,2.82,10,29.32,Household,Aisle 19 - Household,19.4 oz,056914630316,3.59,21.45,299,74,1800,ambient,vegan,none,USA,no,no,no,1.5
+P0209,Laundry Detergent,Paper & Cleaning,Tide,16.99,10.46,0,38.43,Household,Aisle 19 - Household,92 oz,021020275884,16.99,38.43,366,91,1800,ambient,vegan,none,USA,no,no,no,1.7
+P0210,Disinfectant Spray,Paper & Cleaning,Lysol,5.99,4.18,15,30.22,Household,Aisle 19 - Household,19 oz,010564814917,5.09,17.88,400,100,1800,ambient,vegan,none,USA,no,no,no,2.8
+P0211,Kitchen Trash Bags,Paper & Cleaning,Glad,11.99,7.90,0,34.11,Household,Aisle 19 - Household,80 ct,025241913800,11.99,34.11,315,78,1800,ambient,vegan,none,USA,no,no,no,4.4
+P0212,Aluminum Foil,Paper & Cleaning,Reynolds,5.99,4.30,0,28.21,Household,Aisle 19 - Household,75 sq ft,062208635365,5.99,28.21,211,52,1800,ambient,vegan,none,USA,no,no,no,2.1
+P0213,Scrub Sponges,Paper & Cleaning,Scotch-Brite,4.99,3.53,0,29.26,Household,Aisle 19 - Household,6 ct,002380617445,4.99,29.26,282,70,1800,ambient,vegan,none,USA,no,no,no,1.3
+P0214,Fabric Softener,Paper & Cleaning,Downy,7.99,5.13,0,35.79,Household,Aisle 19 - Household,103 oz,094937597383,7.99,35.79,174,43,1800,ambient,vegan,none,USA,no,no,no,1.6
+P0215,Zip Storage Bags Gallon,Paper & Cleaning,Ziploc,5.99,3.36,0,43.91,Household,Aisle 19 - Household,40 ct,050506413836,5.99,43.91,302,75,1800,ambient,vegan,none,USA,no,no,no,3.0
+P0216,Dishwasher Pods,Paper & Cleaning,Cascade,14.99,10.64,30,29.02,Household,Aisle 19 - Household,60 ct,010386571918,10.49,-1.43,168,42,1800,ambient,vegan,none,USA,no,no,no,1.5
+P0217,Paper Napkins,Paper & Cleaning,Vanity Fair,3.99,2.32,0,41.85,Household,Aisle 19 - Household,200 ct,006234456557,3.99,41.85,315,78,1800,ambient,vegan,none,USA,no,no,no,2.1
+P0218,Daily Moisture Shampoo,Personal Care,Pantene,5.99,3.82,0,36.23,Health & Beauty,Aisle 20 - Personal Care,12.6 oz,012127756185,5.99,36.23,324,81,1080,ambient,vegan,none,USA,no,no,no,4.9
+P0219,Daily Moisture Conditioner,Personal Care,Pantene,5.99,3.68,0,38.56,Health & Beauty,Aisle 20 - Personal Care,12 oz,011249035213,5.99,38.56,160,40,1080,ambient,vegan,none,USA,no,no,no,4.9
+P0220,Body Wash,Personal Care,Dove,6.49,3.78,0,41.76,Health & Beauty,Aisle 20 - Personal Care,22 oz,042067883171,6.49,41.76,178,44,1080,ambient,vegan,none,USA,no,no,no,4.2
+P0221,Fluoride Toothpaste,Personal Care,Colgate,3.49,2.19,0,37.25,Health & Beauty,Aisle 20 - Personal Care,6 oz,023651994101,3.49,37.25,138,34,1080,ambient,vegan,none,USA,no,no,no,1.8
+P0222,Soft Bristle Toothbrush,Personal Care,Oral-B,3.99,2.16,5,45.86,Health & Beauty,Aisle 20 - Personal Care,2 ct,010702966706,3.79,43.01,194,48,1080,ambient,vegan,none,USA,no,no,no,3.7
+P0223,Stick Deodorant,Personal Care,Old Spice,5.49,3.41,0,37.89,Health & Beauty,Aisle 20 - Personal Care,2.6 oz,044720999347,5.49,37.89,120,30,1080,ambient,vegan,none,USA,no,no,no,2.6
+P0224,Liquid Hand Soap,Personal Care,Softsoap,2.49,1.39,0,44.18,Health & Beauty,Aisle 20 - Personal Care,11.25 oz,062638380657,2.49,44.18,168,42,1080,ambient,vegan,none,USA,no,no,no,3.2
+P0225,Razor Cartridges,Personal Care,Gillette,19.99,11.35,25,43.22,Health & Beauty,Aisle 20 - Personal Care,4 ct,064205930407,14.99,24.28,189,47,1080,ambient,vegan,none,USA,no,no,no,3.1
+P0226,SPF 50 Sunscreen,Personal Care,Banana Boat,9.99,5.19,10,48.05,Health & Beauty,Aisle 20 - Personal Care,6 oz,033480396522,8.99,42.27,76,19,1080,ambient,vegan,none,USA,no,no,no,1.9
+P0227,Tampons Regular,Personal Care,Tampax,8.99,5.36,15,40.38,Health & Beauty,Aisle 20 - Personal Care,36 ct,005992937842,7.64,29.84,327,81,1080,ambient,vegan,none,USA,no,no,no,3.0
+P0228,Body Lotion,Personal Care,Jergens,5.99,3.80,0,36.56,Health & Beauty,Aisle 20 - Personal Care,16.8 oz,008705932525,5.99,36.56,137,34,1080,ambient,vegan,none,USA,no,no,no,1.2
+P0229,Ibuprofen 200mg,Health & Pharmacy,Advil,11.99,7.49,10,37.53,Health & Beauty,Aisle 21 - Pharmacy,100 ct,085156915452,10.79,30.58,81,20,720,ambient,vegan,none,USA,no,no,no,4.9
+P0230,Acetaminophen 500mg,Health & Pharmacy,Tylenol,9.99,5.25,0,47.45,Health & Beauty,Aisle 21 - Pharmacy,100 ct,075289539264,9.99,47.45,352,88,720,ambient,vegan,none,USA,no,no,no,3.9
+P0231,Vitamin C 500mg,Health & Pharmacy,Nature Made,9.99,5.99,0,40.04,Health & Beauty,Aisle 21 - Pharmacy,100 ct,096902959391,9.99,40.04,25,10,720,ambient,vegan,none,USA,no,no,no,4.7
+P0232,Daily Multivitamin,Health & Pharmacy,Centrum,14.99,9.39,10,37.36,Health & Beauty,Aisle 21 - Pharmacy,100 ct,052157043315,13.49,30.39,202,50,720,ambient,vegan,none,USA,no,no,no,2.0
+P0233,Adhesive Bandages,Health & Pharmacy,Band-Aid,4.99,3.15,0,36.87,Health & Beauty,Aisle 21 - Pharmacy,30 ct,076267658617,4.99,36.87,222,55,720,ambient,vegan,none,USA,no,no,no,4.2
+P0234,Allergy Relief 24hr,Health & Pharmacy,Zyrtec,19.99,11.03,10,44.82,Health & Beauty,Aisle 21 - Pharmacy,30 ct,071040541152,17.99,38.69,108,27,720,ambient,vegan,none,USA,no,no,no,4.6
+P0235,Adult Dry Dog Food,Pet Food & Supplies,Purina,24.99,18.14,0,27.41,Pet,Aisle 22 - Pet,16.5 lb,059970629620,24.99,27.41,72,18,540,ambient,dog_product,none,USA,no,no,no,1.4
+P0236,Dog Biscuits,Pet Food & Supplies,Milk-Bone,5.99,4.31,0,28.05,Pet,Aisle 22 - Pet,24 oz,088444310698,5.99,28.05,381,95,540,ambient,dog_product,none,USA,no,no,no,4.4
+P0237,Wet Cat Food Variety,Pet Food & Supplies,Fancy Feast,12.99,9.44,0,27.33,Pet,Aisle 22 - Pet,24 x 3 oz,014973103241,12.99,27.33,243,60,540,ambient,cat_product,none,USA,no,no,no,2.9
+P0238,Dry Cat Food,Pet Food & Supplies,Meow Mix,14.99,10.98,20,26.75,Pet,Aisle 22 - Pet,6.3 lb,041862565270,11.99,8.42,275,68,540,ambient,cat_product,none,USA,no,no,no,2.1
+P0239,Clumping Cat Litter,Pet Food & Supplies,Tidy Cats,15.99,10.88,0,31.96,Pet,Aisle 22 - Pet,35 lb,090211586938,15.99,31.96,162,40,540,ambient,cat_product,none,USA,no,no,no,1.2
+P0240,Tonkotsu Ramen Bowl,Ramen & Noodles,Ichiran,4.99,2.85,10,42.89,Ramen & Noodles,Aisle 23 - Ramen Bar,6.5 oz,088100240001,4.49,36.53,240,60,180,ambient,none,wheat/gluten;soy;egg,Japan,no,no,no,4.9
+P0241,Spicy Miso Ramen Bowl,Ramen & Noodles,Nissin Raoh,3.99,2.20,15,44.86,Ramen & Noodles,Aisle 23 - Ramen Bar,5.8 oz,088100240002,3.39,35.10,280,70,180,ambient,none,wheat/gluten;soy,Japan,no,no,no,4.8
+P0242,Shoyu Chicken Ramen Bowl,Ramen & Noodles,Maruchan Gold,3.49,1.90,0,45.56,Ramen & Noodles,Aisle 23 - Ramen Bar,5.5 oz,088100240003,3.49,45.56,310,75,180,ambient,none,wheat/gluten;soy,Japan,no,no,no,4.7
+P0243,Vegan Mushroom Ramen Bowl,Ramen & Noodles,Simply Joe,4.49,2.50,20,44.32,Ramen & Noodles,Aisle 23 - Ramen Bar,6.0 oz,088100240004,3.59,30.36,210,50,180,ambient,vegan;vegetarian,wheat/gluten;soy,USA,yes,no,no,4.6
+P0244,Garlic Pork Belly Ramen Bowl,Ramen & Noodles,Nongshim,4.79,2.70,10,43.63,Ramen & Noodles,Aisle 23 - Ramen Bar,6.2 oz,088100240005,4.31,37.35,190,45,180,ambient,contains_pork,wheat/gluten;soy,Korea,no,no,no,4.9
+P0245,Kimchi Udon Noodle Bowl,Ramen & Noodles,Nongshim,4.29,2.40,15,44.06,Ramen & Noodles,Aisle 23 - Ramen Bar,6.0 oz,088100240006,3.65,34.25,220,55,180,ambient,vegan;vegetarian,wheat/gluten;soy,Korea,no,no,no,4.7
+P0246,Crispy Pork Gyoza,Prepared Meals,Simply Joe,5.99,3.40,15,43.24,Prepared Meals,Aisle 24 - Hot Deli,16 oz,088100240007,5.09,33.20,260,65,30,chilled,contains_pork,wheat/gluten;soy,USA,yes,yes,no,4.9
+P0247,Mandarin Orange Chicken,Prepared Meals,Simply Joe,6.49,3.80,10,41.45,Prepared Meals,Aisle 24 - Hot Deli,22 oz,088100240008,5.84,34.93,300,75,30,chilled,none,wheat/gluten;soy,USA,yes,yes,no,5.0
+P0248,Rotisserie Whole Chicken,Prepared Meals,Simply Joe,5.99,4.10,0,31.55,Prepared Meals,Aisle 24 - Hot Deli,3 lb,088100240009,5.99,31.55,180,45,3,chilled,gluten_free,none,USA,yes,yes,no,5.0
+P0249,Teriyaki Beef Skewers,Prepared Meals,Simply Joe,8.99,5.60,15,37.71,Prepared Meals,Aisle 24 - Hot Deli,14 oz,088100240010,7.64,26.70,150,35,14,chilled,none,soy;wheat/gluten,USA,yes,yes,no,4.6
+P0250,Sea Salt Brownie Bites,Bakery,Simply Joe,4.49,2.30,20,48.78,Bakery,Aisle 5 - Bakery,12 oz,088100240011,3.59,35.93,220,55,14,ambient,vegetarian,milk;egg;wheat/gluten,USA,yes,yes,no,4.9
+P0251,Peanut Butter Pretzel Nuggets,Snacks,Simply Joe,3.99,2.10,15,47.37,Snacks,Aisle 10 - Snacks,16 oz,088100240012,3.39,38.05,290,70,180,ambient,vegan;vegetarian,wheat/gluten;tree nuts/peanuts,USA,yes,no,no,4.9

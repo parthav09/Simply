@@ -1,0 +1,498 @@
+list_id,customer_id,list_item_no,product_id,product_name,product_type,department,aisle,quantity,priority,on_written_list,expected_unit_price,expected_line_total,max_acceptable_unit_price,substitute_allowed,preferred_brand
+L0001,C0001,1,P0139,Gummy Bears,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,2.49,2.49,2.68,yes,Haribo
+L0001,C0001,2,P0035,Large Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,4.29,8.58,4.61,yes,Eggland's Best
+L0001,C0001,3,P0156,Energy Drink,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,3,must_have,yes,2.54,7.62,2.76,no,Red Bull
+L0001,C0001,4,P0029,2% Reduced Fat Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,3,must_have,yes,3.49,10.47,3.97,yes,FreshMart
+L0001,C0001,5,P0053,Halal Chicken Breast,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,8.49,8.49,9.23,no,Crescent Foods
+L0001,C0001,6,P0231,Vitamin C 500mg,Health & Pharmacy,Health & Beauty,Aisle 21 - Pharmacy,1,want,yes,9.99,9.99,10.15,yes,Nature Made
+L0001,C0001,7,P0069,White Sandwich Bread,Bread,Bakery,Aisle 5 - Bakery,3,want,yes,2.24,6.72,2.52,no,Wonder
+L0001,C0001,8,P0111,Canned Black Beans,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,1,want,yes,1.39,1.39,1.59,no,Goya
+L0001,C0001,9,P0166,Instant Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,2,nice_to_have,yes,8.49,16.98,8.52,no,Nescafé
+L0001,C0001,10,P0218,Daily Moisture Shampoo,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,nice_to_have,yes,5.99,5.99,6.77,no,Pantene
+L0002,C0002,1,P0158,Apple Juice,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,3.14,3.14,3.28,yes,Mott's
+L0002,C0002,2,P0017,Broccoli Crowns,Fresh Vegetables,Produce,Aisle 1 - Produce,1,must_have,yes,2.06,2.06,2.08,yes,Local Farms
+L0002,C0002,3,P0104,Strawberry Jam,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,1,want,no,3.49,3.49,3.9,no,Smucker's
+L0003,C0003,1,P0054,Halal Chicken Thighs,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.49,5.49,5.74,yes,Crescent Foods
+L0003,C0003,2,P0183,Dairy-Free Chocolate Ice Cream,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,must_have,yes,5.49,5.49,6.15,yes,So Delicious
+L0003,C0003,3,P0163,Classic Roast Ground Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,must_have,yes,9.99,9.99,11.36,yes,Folgers
+L0003,C0003,4,P0009,Hass Avocados,Fresh Fruit,Produce,Aisle 1 - Produce,1,want,no,1.23,1.23,1.39,yes,Mission Produce
+L0003,C0003,5,P0147,Sea Salt Roasted Seaweed,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,want,no,2.37,2.37,2.51,yes,Annie Chun's
+L0003,C0003,6,P0129,Tortilla Chips,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,impulse_candidate,no,4.49,4.49,5.07,no,Tostitos
+L0004,C0004,1,P0152,Purified Water 24 Pack,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,3,must_have,yes,5.99,17.97,6.62,yes,Dasani
+L0004,C0004,2,P0209,Laundry Detergent,Paper & Cleaning,Household,Aisle 19 - Household,2,must_have,yes,16.99,33.98,18.14,no,Tide
+L0004,C0004,3,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,0.98,0.98,1.08,yes,Dannon
+L0005,C0005,1,P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,3.37,3.37,3.44,yes,Chips Ahoy
+L0005,C0005,2,P0195,Unsweetened Almond Milk,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,3.99,3.99,4.01,no,Silk
+L0005,C0005,3,P0038,Plain Greek Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,3,must_have,yes,5.49,16.47,5.86,no,Chobani
+L0005,C0005,4,P0103,Almond Butter,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,2,must_have,yes,9.99,19.98,11.92,no,Justin's
+L0005,C0005,5,P0239,Clumping Cat Litter,Pet Food & Supplies,Pet,Aisle 22 - Pet,1,must_have,yes,15.99,15.99,16.67,yes,Tidy Cats
+L0005,C0005,6,P0124,Crunchy Granola,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,2,must_have,yes,4.99,9.98,5.88,no,Nature Valley
+L0005,C0005,7,P0128,Original Pringles,Chips & Crackers,Snacks,Aisle 10 - Snacks,2,must_have,yes,2.12,4.24,2.27,yes,Pringles
+L0005,C0005,8,P0153,Spring Water 24 Pack,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,want,no,4.49,4.49,4.71,no,FreshMart
+L0005,C0005,9,P0191,Ranch Dressing,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,want,no,3.99,3.99,4.22,no,Hidden Valley
+L0005,C0005,10,P0087,All-Purpose Flour,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,want,no,4.99,4.99,5.99,yes,King Arthur
+L0005,C0005,11,P0210,Disinfectant Spray,Paper & Cleaning,Household,Aisle 19 - Household,2,want,no,5.09,10.18,5.94,no,Lysol
+L0005,C0005,12,P0159,Unsweetened Green Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,want,no,1.99,1.99,2.4,yes,Pure Leaf
+L0005,C0005,13,P0079,Corn Tortillas,Bread,Bakery,Aisle 5 - Bakery,2,impulse_candidate,no,2.79,5.58,3.24,no,Mission
+L0005,C0005,14,P0142,Mixed Nuts,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,impulse_candidate,no,8.09,8.09,9.1,yes,Planters
+L0006,C0006,1,P0177,Sweet Peas,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,must_have,yes,1.99,1.99,2.5,no,Birds Eye
+L0006,C0006,2,P0096,Coconut Oil,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,1,must_have,yes,8.49,8.49,8.7,no,Nutiva
+L0006,C0006,3,P0160,Kombucha Ginger,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,3.59,3.59,4.13,no,GT's
+L0006,C0006,4,P0133,Butter Popcorn Microwave,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,must_have,yes,4.99,4.99,5.94,no,Orville Redenbacher
+L0006,C0006,5,P0143,Raw Almonds,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,want,no,8.07,8.07,11.28,no,Blue Diamond
+L0006,C0006,6,P0007,Seedless Red Grapes,Fresh Fruit,Produce,Aisle 1 - Produce,2,want,no,2.44,4.88,2.97,no,Local Farms
+L0006,C0006,7,P0050,Chicken Thighs Bone-In,Poultry,Meat & Seafood,Aisle 3 - Meat,1,impulse_candidate,no,3.49,3.49,4.33,no,Perdue
+L0007,C0007,1,P0035,Large Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,4.29,8.58,5.19,yes,Eggland's Best
+L0007,C0007,2,P0131,Butter Crackers,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,must_have,yes,3.56,3.56,4.32,yes,Ritz
+L0007,C0007,3,P0016,Baby Carrots,Fresh Vegetables,Produce,Aisle 1 - Produce,2,must_have,yes,1.99,3.98,2.19,yes,Grimmway Farms
+L0007,C0007,4,P0150,Pepsi Cans,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,must_have,yes,6.79,13.58,8.22,no,PepsiCo
+L0007,C0007,5,P0124,Crunchy Granola,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,1,must_have,yes,4.99,4.99,6.05,yes,Nature Valley
+L0007,C0007,6,P0089,Brown Sugar,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.84,2.84,3.24,yes,Domino
+L0007,C0007,7,P0197,Extra Firm Tofu,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,2.37,2.37,2.72,yes,Nasoya
+L0007,C0007,8,P0188,Soy Sauce,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,want,no,2.97,2.97,3.44,yes,Kikkoman
+L0007,C0007,9,P0031,Organic Whole Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,2,want,no,5.39,10.78,5.98,yes,Horizon
+L0007,C0007,10,P0166,Instant Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,want,no,8.49,8.49,8.71,yes,Nescafé
+L0007,C0007,11,P0230,Acetaminophen 500mg,Health & Pharmacy,Health & Beauty,Aisle 21 - Pharmacy,1,want,no,9.99,9.99,11.44,yes,Tylenol
+L0007,C0007,12,P0162,English Breakfast Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,want,no,4.24,4.24,5.07,yes,Twinings
+L0007,C0007,13,P0227,Tampons Regular,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,impulse_candidate,no,7.64,7.64,8.19,no,Tampax
+L0007,C0007,14,P0078,Flour Tortillas,Bread,Bakery,Aisle 5 - Bakery,3,impulse_candidate,no,3.29,9.87,3.77,no,Mission
+L0008,C0008,1,P0080,Long Grain White Rice,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,2,must_have,yes,4.49,8.98,4.5,yes,Uncle Ben's
+L0008,C0008,2,P0197,Extra Firm Tofu,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,2.37,2.37,2.58,yes,Nasoya
+L0008,C0008,3,P0134,Brown Rice Cakes,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,must_have,yes,2.99,2.99,3.15,no,Quaker
+L0008,C0008,4,P0014,Yellow Onions,Fresh Vegetables,Produce,Aisle 1 - Produce,1,must_have,yes,3.49,3.49,3.56,yes,Local Farms
+L0008,C0008,5,P0159,Unsweetened Green Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,1.99,1.99,2.06,yes,Pure Leaf
+L0008,C0008,6,P0163,Classic Roast Ground Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,must_have,yes,9.99,9.99,10.09,yes,Folgers
+L0008,C0008,7,P0138,Milk Chocolate Bar,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,2,must_have,yes,1.34,2.68,1.47,yes,Hershey's
+L0008,C0008,8,P0225,Razor Cartridges,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,want,no,14.99,14.99,16.29,no,Gillette
+L0008,C0008,9,P0100,Pure Honey,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,1,want,no,7.49,7.49,8.0,yes,Nature Nate's
+L0008,C0008,10,P0147,Sea Salt Roasted Seaweed,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,want,no,2.37,2.37,2.42,yes,Annie Chun's
+L0008,C0008,11,P0001,Bananas,Fresh Fruit,Produce,Aisle 1 - Produce,1,want,no,0.69,0.69,0.75,yes,Dole
+L0008,C0008,12,P0079,Corn Tortillas,Bread,Bakery,Aisle 5 - Bakery,2,impulse_candidate,no,2.79,5.58,3.0,yes,Mission
+L0008,C0008,13,P0042,Salted Butter,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,impulse_candidate,no,3.99,3.99,4.28,no,Land O'Lakes
+L0009,C0009,1,P0162,English Breakfast Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,4.24,4.24,4.3,yes,Twinings
+L0009,C0009,2,P0236,Dog Biscuits,Pet Food & Supplies,Pet,Aisle 22 - Pet,1,must_have,yes,5.99,5.99,6.58,no,Milk-Bone
+L0009,C0009,3,P0023,Garlic Bulbs,Fresh Vegetables,Produce,Aisle 1 - Produce,2,must_have,yes,0.79,1.58,0.84,yes,Christopher Ranch
+L0009,C0009,4,P0037,Organic Free-Range Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,3,must_have,yes,6.64,19.92,7.99,no,Vital Farms
+L0009,C0009,5,P0106,Diced Tomatoes,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,2,must_have,yes,1.49,2.98,1.64,yes,Hunt's
+L0009,C0009,6,P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,3.37,3.37,3.97,no,Chips Ahoy
+L0009,C0009,7,P0131,Butter Crackers,Chips & Crackers,Snacks,Aisle 10 - Snacks,3,must_have,yes,3.56,10.68,3.75,no,Ritz
+L0009,C0009,8,P0066,Large Raw Shrimp,Fresh & Frozen Seafood,Meat & Seafood,Aisle 4 - Seafood,1,must_have,yes,9.99,9.99,10.83,yes,Gorton's
+L0009,C0009,9,P0171,Pepperoni Pizza,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,2,want,yes,7.99,15.98,8.04,yes,DiGiorno
+L0009,C0009,10,P0029,2% Reduced Fat Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,3,want,yes,3.49,10.47,3.68,yes,FreshMart
+L0009,C0009,11,P0195,Unsweetened Almond Milk,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,3.99,3.99,4.73,no,Silk
+L0009,C0009,12,P0211,Kitchen Trash Bags,Paper & Cleaning,Household,Aisle 19 - Household,1,want,yes,11.99,11.99,12.85,no,Glad
+L0009,C0009,13,P0087,All-Purpose Flour,Baking & Staples,Pantry,Aisle 6 - Dry Goods,2,want,yes,4.99,9.98,5.33,no,King Arthur
+L0009,C0009,14,P0054,Halal Chicken Thighs,Poultry,Meat & Seafood,Aisle 3 - Meat,1,nice_to_have,yes,5.49,5.49,5.73,no,Crescent Foods
+L0009,C0009,15,P0163,Classic Roast Ground Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,nice_to_have,yes,9.99,9.99,11.15,no,Folgers
+L0009,C0009,16,P0105,Chocolate Hazelnut Spread,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,1,nice_to_have,yes,3.99,3.99,4.7,yes,Nutella
+L0010,C0010,1,P0135,Oreo Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,4.07,4.07,4.4,yes,Oreo
+L0010,C0010,2,P0162,English Breakfast Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,4.24,4.24,4.81,no,Twinings
+L0010,C0010,3,P0101,Pure Maple Syrup,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,1,must_have,yes,7.49,7.49,7.62,no,Kirkland Farms
+L0010,C0010,4,P0041,Coconut Milk Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,1.89,3.78,2.21,no,So Delicious
+L0010,C0010,5,P0085,Gluten-Free Penne,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,3.49,3.49,3.57,yes,Barilla
+L0010,C0010,6,P0233,Adhesive Bandages,Health & Pharmacy,Health & Beauty,Aisle 21 - Pharmacy,2,must_have,yes,4.99,9.98,5.64,no,Band-Aid
+L0010,C0010,7,P0166,Instant Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,must_have,yes,8.49,8.49,9.43,no,Nescafé
+L0010,C0010,8,P0011,Pineapple,Fresh Fruit,Produce,Aisle 1 - Produce,3,want,yes,3.39,10.17,4.15,no,Dole
+L0010,C0010,9,P0092,Dried Green Lentils,Baking & Staples,Pantry,Aisle 6 - Dry Goods,2,want,yes,2.29,4.58,2.3,yes,Goya
+L0010,C0010,10,P0172,Veggie Burrito,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,2,want,yes,3.79,7.58,4.2,yes,Amy's
+L0010,C0010,11,P0150,Pepsi Cans,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,want,yes,6.79,13.58,7.57,no,PepsiCo
+L0010,C0010,12,P0227,Tampons Regular,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,nice_to_have,yes,7.64,7.64,8.1,no,Tampax
+L0010,C0010,13,P0197,Extra Firm Tofu,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,nice_to_have,yes,2.37,2.37,2.44,yes,Nasoya
+L0011,C0011,1,P0168,Pale Ale 6 Pack,Beer & Wine,Beverages,Aisle 14 - Beer & Wine,1,must_have,yes,10.44,10.44,10.7,no,Sierra Nevada
+L0011,C0011,2,P0065,Atlantic Salmon Fillet,Fresh & Frozen Seafood,Meat & Seafood,Aisle 4 - Seafood,1,must_have,yes,9.59,9.59,10.12,yes,FreshMart
+L0011,C0011,3,P0104,Strawberry Jam,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,1,must_have,yes,3.49,3.49,3.64,yes,Smucker's
+L0011,C0011,4,P0031,Organic Whole Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,2,want,yes,5.39,10.78,6.0,no,Horizon
+L0011,C0011,5,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,0.98,0.98,0.99,no,Dannon
+L0011,C0011,6,P0177,Sweet Peas,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,nice_to_have,yes,1.99,1.99,1.99,yes,Birds Eye
+L0012,C0012,1,P0069,White Sandwich Bread,Bread,Bakery,Aisle 5 - Bakery,1,must_have,yes,2.24,2.24,2.32,yes,Wonder
+L0012,C0012,2,P0110,Tomato Soup,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,1,must_have,yes,1.99,1.99,2.12,no,Campbell's
+L0012,C0012,3,P0216,Dishwasher Pods,Paper & Cleaning,Household,Aisle 19 - Household,1,want,no,10.49,10.49,10.98,yes,Cascade
+L0013,C0013,1,P0096,Coconut Oil,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,1,must_have,yes,8.49,8.49,8.78,no,Nutiva
+L0013,C0013,2,P0021,Red Bell Peppers,Fresh Vegetables,Produce,Aisle 1 - Produce,2,must_have,yes,1.49,2.98,1.64,no,Local Farms
+L0013,C0013,3,P0055,Ground Beef 80/20,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.39,5.39,5.5,yes,FreshMart
+L0013,C0013,4,P0051,Whole Chicken,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,8.99,8.99,9.07,yes,FreshMart
+L0013,C0013,5,P0105,Chocolate Hazelnut Spread,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,2,want,no,3.99,7.98,4.3,yes,Nutella
+L0013,C0013,6,P0080,Long Grain White Rice,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,want,no,4.49,4.49,4.72,yes,Uncle Ben's
+L0013,C0013,7,P0174,Fish Sticks,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,want,no,6.17,6.17,6.68,yes,Gorton's
+L0013,C0013,8,P0178,Broccoli Florets,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,2,impulse_candidate,no,2.19,4.38,2.37,no,Birds Eye
+L0014,C0014,1,P0046,Sliced Swiss Cheese,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,3.39,3.39,3.42,yes,Sargento
+L0014,C0014,2,P0146,Chewy Granola Bars,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,must_have,yes,4.29,4.29,4.58,yes,Nature Valley
+L0014,C0014,3,P0078,Flour Tortillas,Bread,Bakery,Aisle 5 - Bakery,1,must_have,yes,3.29,3.29,3.94,yes,Mission
+L0014,C0014,4,P0217,Paper Napkins,Paper & Cleaning,Household,Aisle 19 - Household,1,must_have,yes,3.99,3.99,4.28,yes,Vanity Fair
+L0014,C0014,5,P0162,English Breakfast Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,4.24,4.24,4.61,no,Twinings
+L0014,C0014,6,P0178,Broccoli Florets,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,2,must_have,yes,2.19,4.38,2.52,yes,Birds Eye
+L0014,C0014,7,P0123,Honey Nut Oat Rings,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,2,must_have,yes,3.29,6.58,3.61,no,FreshMart
+L0014,C0014,8,P0027,Fresh Cilantro,Fresh Vegetables,Produce,Aisle 1 - Produce,1,want,yes,0.99,0.99,1.04,yes,Local Farms
+L0014,C0014,9,P0192,Chunky Salsa,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,want,yes,4.29,4.29,4.38,no,Tostitos
+L0014,C0014,10,P0155,Sports Drink Fruit Punch,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,want,yes,1.79,3.58,2.01,yes,Gatorade
+L0014,C0014,11,P0175,Frozen Waffles,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,2,want,yes,3.99,7.98,4.73,yes,Eggo
+L0014,C0014,12,P0165,Coffee Pods Variety,Coffee,Beverages,Aisle 13 - Coffee & Tea,2,want,yes,14.99,29.98,16.3,no,Keurig
+L0014,C0014,13,P0181,Vanilla Bean Ice Cream,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,nice_to_have,yes,5.69,5.69,6.21,yes,Häagen-Dazs
+L0014,C0014,14,P0104,Strawberry Jam,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,1,nice_to_have,yes,3.49,3.49,3.72,no,Smucker's
+L0015,C0015,1,P0030,Skim Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,3.39,3.39,3.88,yes,FreshMart
+L0015,C0015,2,P0149,Diet Coke Cans,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,must_have,yes,8.99,17.98,10.23,no,Coca-Cola
+L0015,C0015,3,P0049,Boneless Skinless Chicken Breast,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,6.99,6.99,7.94,yes,Tyson
+L0015,C0015,4,P0212,Aluminum Foil,Paper & Cleaning,Household,Aisle 19 - Household,1,want,yes,5.99,5.99,6.53,yes,Reynolds
+L0015,C0015,5,P0084,Penne Rigate,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,nice_to_have,yes,1.79,1.79,1.96,no,Barilla
+L0016,C0016,1,P0048,Cottage Cheese,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,2.71,2.71,2.8,yes,Breakstone's
+L0016,C0016,2,P0073,Plain Bagels,Bread,Bakery,Aisle 5 - Bakery,2,must_have,yes,3.99,7.98,4.01,yes,Thomas'
+L0016,C0016,3,P0182,Chocolate Fudge Brownie Ice Cream,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,must_have,yes,5.99,5.99,6.01,yes,Ben & Jerry's
+L0016,C0016,4,P0039,Strawberry Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,2,want,yes,0.79,1.58,0.82,yes,Yoplait
+L0016,C0016,5,P0015,Russet Potatoes,Fresh Vegetables,Produce,Aisle 1 - Produce,2,want,yes,4.74,9.48,4.84,yes,Idaho Spuds
+L0016,C0016,6,P0212,Aluminum Foil,Paper & Cleaning,Household,Aisle 19 - Household,1,nice_to_have,yes,5.99,5.99,6.37,yes,Reynolds
+L0017,C0017,1,P0128,Original Pringles,Chips & Crackers,Snacks,Aisle 10 - Snacks,3,must_have,yes,2.12,6.36,2.12,yes,Pringles
+L0017,C0017,2,P0160,Kombucha Ginger,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,3.59,3.59,3.91,yes,GT's
+L0017,C0017,3,P0034,Half & Half,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,2.65,2.65,2.7,yes,Land O'Lakes
+L0017,C0017,4,P0156,Energy Drink,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,3,must_have,yes,2.54,7.62,2.63,no,Red Bull
+L0017,C0017,5,P0069,White Sandwich Bread,Bread,Bakery,Aisle 5 - Bakery,2,must_have,yes,2.24,4.48,2.34,yes,Wonder
+L0017,C0017,6,P0063,Oven Roasted Turkey Breast,Deli Meats,Meat & Seafood,Aisle 3 - Meat,1,want,no,8.99,8.99,9.08,yes,Boar's Head
+L0017,C0017,7,P0062,Halal Lamb Chops,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,want,no,16.99,16.99,17.42,yes,Crescent Foods
+L0017,C0017,8,P0013,Roma Tomatoes,Fresh Vegetables,Produce,Aisle 1 - Produce,2,want,no,1.99,3.98,2.09,no,Local Farms
+L0017,C0017,9,P0187,Real Mayonnaise,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,impulse_candidate,no,4.99,4.99,5.45,yes,Hellmann's
+L0017,C0017,10,P0180,Crinkle Cut Fries,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,impulse_candidate,no,3.99,3.99,4.44,no,Ore-Ida
+L0018,C0018,1,P0021,Red Bell Peppers,Fresh Vegetables,Produce,Aisle 1 - Produce,3,must_have,yes,1.49,4.47,1.5,yes,Local Farms
+L0018,C0018,2,P0102,Creamy Peanut Butter,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,1,must_have,yes,3.99,3.99,4.55,no,Jif
+L0018,C0018,3,P0218,Daily Moisture Shampoo,Personal Care,Health & Beauty,Aisle 20 - Personal Care,2,must_have,yes,5.99,11.98,6.37,yes,Pantene
+L0018,C0018,4,P0197,Extra Firm Tofu,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,2.37,2.37,2.53,yes,Nasoya
+L0018,C0018,5,P0055,Ground Beef 80/20,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.39,5.39,5.97,no,FreshMart
+L0018,C0018,6,P0111,Canned Black Beans,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,3,must_have,yes,1.39,4.17,1.41,no,Goya
+L0018,C0018,7,P0035,Large Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,4.29,8.58,4.76,no,Eggland's Best
+L0018,C0018,8,P0135,Oreo Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,2,must_have,yes,4.07,8.14,4.59,no,Oreo
+L0018,C0018,9,P0086,Egg Noodles,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,want,yes,2.29,2.29,2.3,yes,No Yolks
+L0018,C0018,10,P0182,Chocolate Fudge Brownie Ice Cream,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,want,yes,5.99,5.99,6.55,no,Ben & Jerry's
+L0018,C0018,11,P0088,Granulated Sugar,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,want,yes,3.99,3.99,4.52,no,Domino
+L0018,C0018,12,P0144,Fruit & Nut Bar,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,2,want,yes,1.79,3.58,1.8,no,Kind
+L0018,C0018,13,P0178,Broccoli Florets,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,want,yes,2.19,2.19,2.21,no,Birds Eye
+L0018,C0018,14,P0043,Sharp Cheddar Block,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,nice_to_have,yes,4.39,4.39,4.53,no,Tillamook
+L0018,C0018,15,P0149,Diet Coke Cans,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,nice_to_have,yes,8.99,8.99,9.3,no,Coca-Cola
+L0018,C0018,16,P0212,Aluminum Foil,Paper & Cleaning,Household,Aisle 19 - Household,1,nice_to_have,yes,5.99,5.99,6.06,yes,Reynolds
+L0019,C0019,1,P0176,Vegan Mac & Cheese,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,3,must_have,yes,4.99,14.97,6.6,no,Daiya
+L0019,C0019,2,P0156,Energy Drink,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,must_have,yes,2.54,5.08,3.51,no,Red Bull
+L0019,C0019,3,P0111,Canned Black Beans,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,3,must_have,yes,1.39,4.17,1.63,no,Goya
+L0019,C0019,4,P0180,Crinkle Cut Fries,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,must_have,yes,3.99,3.99,4.69,no,Ore-Ida
+L0019,C0019,5,P0099,Ground Cinnamon,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,1,must_have,yes,3.99,3.99,4.54,yes,McCormick
+L0019,C0019,6,P0010,Seedless Watermelon,Fresh Fruit,Produce,Aisle 1 - Produce,2,must_have,yes,5.99,11.98,6.65,no,Local Farms
+L0019,C0019,7,P0092,Dried Green Lentils,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.29,2.29,3.12,no,Goya
+L0019,C0019,8,P0137,Dark Chocolate Bar 70%,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,2,must_have,yes,3.99,7.98,4.43,no,Lindt
+L0019,C0019,9,P0074,Hamburger Buns,Bread,Bakery,Aisle 5 - Bakery,2,want,yes,3.49,6.98,4.9,no,Arnold
+L0019,C0019,10,P0085,Gluten-Free Penne,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,want,yes,3.49,3.49,3.84,no,Barilla
+L0019,C0019,11,P0037,Organic Free-Range Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,3,want,yes,6.64,19.92,6.81,no,Vital Farms
+L0019,C0019,12,P0041,Coconut Milk Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,2,want,yes,1.89,3.78,2.16,no,So Delicious
+L0019,C0019,13,P0053,Halal Chicken Breast,Poultry,Meat & Seafood,Aisle 3 - Meat,1,nice_to_have,yes,8.49,8.49,8.61,no,Crescent Foods
+L0019,C0019,14,P0211,Kitchen Trash Bags,Paper & Cleaning,Household,Aisle 19 - Household,1,nice_to_have,yes,11.99,11.99,16.98,no,Glad
+L0019,C0019,15,P0122,Corn Flakes,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,2,nice_to_have,yes,4.29,8.58,5.39,yes,Kellogg's
+L0020,C0020,1,P0092,Dried Green Lentils,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.29,2.29,2.57,yes,Goya
+L0020,C0020,2,P0148,Coca-Cola Cans,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,must_have,yes,8.99,8.99,10.28,yes,Coca-Cola
+L0020,C0020,3,P0077,Blueberry Muffins,Bread,Bakery,Aisle 5 - Bakery,1,must_have,yes,3.49,3.49,3.77,yes,FreshMart Bakery
+L0020,C0020,4,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,0.98,0.98,1.12,yes,Dannon
+L0020,C0020,5,P0198,Plant-Based Burger Patties,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,6.99,6.99,7.74,yes,Beyond Meat
+L0020,C0020,6,P0026,White Mushrooms,Fresh Vegetables,Produce,Aisle 1 - Produce,2,want,yes,2.39,4.78,2.74,yes,Monterey Mushrooms
+L0020,C0020,7,P0162,English Breakfast Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,want,yes,4.24,4.24,4.51,yes,Twinings
+L0020,C0020,8,P0111,Canned Black Beans,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,2,nice_to_have,yes,1.39,2.78,1.59,yes,Goya
+L0021,C0021,1,P0057,Bacon,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,6.99,6.99,7.29,yes,Oscar Mayer
+L0021,C0021,2,P0080,Long Grain White Rice,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,4.49,4.49,4.51,no,Uncle Ben's
+L0021,C0021,3,P0052,Ground Turkey 93% Lean,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.99,5.99,6.87,no,Jennie-O
+L0021,C0021,4,P0154,Lime Sparkling Water,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,must_have,yes,5.49,5.49,5.8,no,LaCroix
+L0021,C0021,5,P0121,Raisin Bran,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,1,must_have,yes,4.79,4.79,4.94,yes,Kellogg's
+L0021,C0021,6,P0110,Tomato Soup,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,3,must_have,yes,1.99,5.97,1.99,yes,Campbell's
+L0021,C0021,7,P0208,Dish Soap,Paper & Cleaning,Household,Aisle 19 - Household,1,must_have,yes,3.59,3.59,4.02,no,Dawn
+L0021,C0021,8,P0221,Fluoride Toothpaste,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,want,no,3.49,3.49,3.61,yes,Colgate
+L0021,C0021,9,P0142,Mixed Nuts,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,2,want,no,8.09,16.18,8.75,yes,Planters
+L0021,C0021,10,P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,want,no,3.37,3.37,3.6,no,Chips Ahoy
+L0021,C0021,11,P0021,Red Bell Peppers,Fresh Vegetables,Produce,Aisle 1 - Produce,1,want,no,1.49,1.49,1.59,no,Local Farms
+L0021,C0021,12,P0127,Nacho Cheese Tortilla Chips,Chips & Crackers,Snacks,Aisle 10 - Snacks,3,want,no,4.99,14.97,5.53,yes,Doritos
+L0021,C0021,13,P0184,Fruit Pops,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,impulse_candidate,no,3.32,3.32,3.78,no,FreshMart
+L0021,C0021,14,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,2,impulse_candidate,no,0.98,1.96,1.05,yes,Dannon
+L0022,C0022,1,P0099,Ground Cinnamon,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,1,must_have,yes,3.99,3.99,4.65,no,McCormick
+L0022,C0022,2,P0037,Organic Free-Range Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,6.64,6.64,6.87,no,Vital Farms
+L0022,C0022,3,P0092,Dried Green Lentils,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.29,2.29,2.77,no,Goya
+L0022,C0022,4,P0218,Daily Moisture Shampoo,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,must_have,yes,5.99,5.99,6.67,no,Pantene
+L0022,C0022,5,P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,3.37,3.37,3.83,yes,Chips Ahoy
+L0022,C0022,6,P0113,Sweet Corn,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,1,must_have,yes,1.29,1.29,1.32,no,Del Monte
+L0022,C0022,7,P0150,Pepsi Cans,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,want,yes,6.79,13.58,9.33,yes,PepsiCo
+L0022,C0022,8,P0162,English Breakfast Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,want,yes,4.24,4.24,4.52,yes,Twinings
+L0022,C0022,9,P0134,Brown Rice Cakes,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,want,yes,2.99,2.99,3.03,no,Quaker
+L0022,C0022,10,P0051,Whole Chicken,Poultry,Meat & Seafood,Aisle 3 - Meat,1,want,yes,8.99,8.99,12.42,no,FreshMart
+L0022,C0022,11,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,1,nice_to_have,yes,0.98,0.98,1.2,no,Dannon
+L0022,C0022,12,P0143,Raw Almonds,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,nice_to_have,yes,8.07,8.07,9.18,yes,Blue Diamond
+L0023,C0023,1,P0036,Large Eggs Value Pack,Eggs,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,5.99,5.99,6.62,no,FreshMart
+L0023,C0023,2,P0116,Vegetable Broth,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,1,must_have,yes,3.29,3.29,3.66,no,Pacific Foods
+L0023,C0023,3,P0209,Laundry Detergent,Paper & Cleaning,Household,Aisle 19 - Household,1,want,yes,16.99,16.99,21.13,yes,Tide
+L0024,C0024,1,P0180,Crinkle Cut Fries,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,must_have,yes,3.99,3.99,4.16,yes,Ore-Ida
+L0024,C0024,2,P0008,Lemons,Fresh Fruit,Produce,Aisle 1 - Produce,1,must_have,yes,0.79,0.79,0.8,yes,Sunkist
+L0024,C0024,3,P0171,Pepperoni Pizza,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,2,must_have,yes,7.99,15.98,8.12,yes,DiGiorno
+L0024,C0024,4,P0063,Oven Roasted Turkey Breast,Deli Meats,Meat & Seafood,Aisle 3 - Meat,1,want,no,8.99,8.99,9.94,yes,Boar's Head
+L0024,C0024,5,P0220,Body Wash,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,impulse_candidate,no,6.49,6.49,6.92,yes,Dove
+L0025,C0025,1,P0089,Brown Sugar,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.84,2.84,3.01,yes,Domino
+L0025,C0025,2,P0188,Soy Sauce,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,must_have,yes,2.97,2.97,3.28,no,Kikkoman
+L0025,C0025,3,P0129,Tortilla Chips,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,want,yes,4.49,4.49,4.84,no,Tostitos
+L0026,C0026,1,P0172,Veggie Burrito,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,must_have,yes,3.79,3.79,3.93,yes,Amy's
+L0026,C0026,2,P0029,2% Reduced Fat Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,3.49,3.49,3.52,no,FreshMart
+L0026,C0026,3,P0177,Sweet Peas,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,must_have,yes,1.99,1.99,2.07,yes,Birds Eye
+L0026,C0026,4,P0189,Hot Sauce,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,want,no,2.8,2.8,2.88,no,Tabasco
+L0026,C0026,5,P0220,Body Wash,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,impulse_candidate,no,6.49,6.49,7.04,yes,Dove
+L0027,C0027,1,P0158,Apple Juice,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,3.14,3.14,3.63,no,Mott's
+L0027,C0027,2,P0120,Frosted Flakes,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,1,must_have,yes,4.99,4.99,5.54,no,Kellogg's
+L0027,C0027,3,P0182,Chocolate Fudge Brownie Ice Cream,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,want,no,5.99,5.99,6.37,yes,Ben & Jerry's
+L0027,C0027,4,P0165,Coffee Pods Variety,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,want,no,14.99,14.99,17.86,no,Keurig
+L0028,C0028,1,P0030,Skim Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,3.39,6.78,3.7,no,FreshMart
+L0028,C0028,2,P0205,Baby Oatmeal Cereal,Baby Care,Baby,Aisle 18 - Baby,1,must_have,yes,3.99,3.99,4.27,no,Gerber
+L0028,C0028,3,P0061,Halal Ground Beef,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.59,5.59,6.25,yes,Crescent Foods
+L0028,C0028,4,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,0.98,0.98,1.2,yes,Dannon
+L0028,C0028,5,P0130,Soft Pretzels Twists,Chips & Crackers,Snacks,Aisle 10 - Snacks,2,must_have,yes,3.29,6.58,3.88,no,Rold Gold
+L0028,C0028,6,P0157,Orange Juice No Pulp,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,4.99,4.99,5.38,no,Tropicana
+L0028,C0028,7,P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,3.37,3.37,4.07,yes,Chips Ahoy
+L0028,C0028,8,P0006,Blueberries,Fresh Fruit,Produce,Aisle 1 - Produce,3,must_have,yes,3.99,11.97,4.53,no,Driscoll's
+L0028,C0028,9,P0177,Sweet Peas,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,want,no,1.99,1.99,2.22,yes,Birds Eye
+L0028,C0028,10,P0152,Purified Water 24 Pack,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,want,no,5.99,11.98,6.96,yes,Dasani
+L0028,C0028,11,P0069,White Sandwich Bread,Bread,Bakery,Aisle 5 - Bakery,2,want,no,2.24,4.48,2.48,yes,Wonder
+L0028,C0028,12,P0215,Zip Storage Bags Gallon,Paper & Cleaning,Household,Aisle 19 - Household,1,want,no,5.99,5.99,7.15,no,Ziploc
+L0028,C0028,13,P0105,Chocolate Hazelnut Spread,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,1,impulse_candidate,no,3.99,3.99,4.35,no,Nutella
+L0028,C0028,14,P0171,Pepperoni Pizza,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,impulse_candidate,no,7.99,7.99,8.97,no,DiGiorno
+L0028,C0028,15,P0025,Zucchini,Fresh Vegetables,Produce,Aisle 1 - Produce,3,impulse_candidate,no,1.69,5.07,1.78,no,Local Farms
+L0029,C0029,1,P0046,Sliced Swiss Cheese,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,3.39,3.39,3.48,yes,Sargento
+L0029,C0029,2,P0076,Butter Croissants,Bread,Bakery,Aisle 5 - Bakery,1,must_have,yes,4.19,4.19,4.45,yes,FreshMart Bakery
+L0029,C0029,3,P0168,Pale Ale 6 Pack,Beer & Wine,Beverages,Aisle 14 - Beer & Wine,1,want,no,10.44,10.44,11.02,yes,Sierra Nevada
+L0029,C0029,4,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,1,want,no,0.98,0.98,1.08,no,Dannon
+L0030,C0030,1,P0001,Bananas,Fresh Fruit,Produce,Aisle 1 - Produce,2,must_have,yes,0.69,1.38,0.79,yes,Dole
+L0030,C0030,2,P0067,Tilapia Fillets,Fresh & Frozen Seafood,Meat & Seafood,Aisle 4 - Seafood,1,must_have,yes,5.59,5.59,6.13,yes,FreshMart
+L0030,C0030,3,P0029,2% Reduced Fat Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,3.49,3.49,3.89,yes,FreshMart
+L0030,C0030,4,P0054,Halal Chicken Thighs,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.49,5.49,5.6,no,Crescent Foods
+L0030,C0030,5,P0061,Halal Ground Beef,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.59,5.59,5.8,no,Crescent Foods
+L0030,C0030,6,P0086,Egg Noodles,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.29,2.29,2.42,yes,No Yolks
+L0030,C0030,7,P0035,Large Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,4.29,4.29,4.58,no,Eggland's Best
+L0030,C0030,8,P0172,Veggie Burrito,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,must_have,yes,3.79,3.79,3.99,yes,Amy's
+L0030,C0030,9,P0016,Baby Carrots,Fresh Vegetables,Produce,Aisle 1 - Produce,1,want,yes,1.99,1.99,2.06,yes,Grimmway Farms
+L0030,C0030,10,P0156,Energy Drink,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,want,yes,2.54,5.08,2.58,yes,Red Bull
+L0030,C0030,11,P0218,Daily Moisture Shampoo,Personal Care,Health & Beauty,Aisle 20 - Personal Care,2,want,yes,5.99,11.98,6.24,yes,Pantene
+L0030,C0030,12,P0133,Butter Popcorn Microwave,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,want,yes,4.99,4.99,5.1,yes,Orville Redenbacher
+L0030,C0030,13,P0178,Broccoli Florets,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,2,nice_to_have,yes,2.19,4.38,2.51,yes,Birds Eye
+L0030,C0030,14,P0095,Vegetable Oil,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,2,nice_to_have,yes,4.99,9.98,5.05,no,Wesson
+L0030,C0030,15,P0184,Fruit Pops,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,2,nice_to_have,yes,3.32,6.64,3.7,yes,FreshMart
+L0031,C0031,1,P0203,Infant Formula Powder,Baby Care,Baby,Aisle 18 - Baby,1,must_have,yes,31.99,31.99,32.52,no,Similac
+L0031,C0031,2,P0237,Wet Cat Food Variety,Pet Food & Supplies,Pet,Aisle 22 - Pet,1,must_have,yes,12.99,12.99,13.84,yes,Fancy Feast
+L0031,C0031,3,P0158,Apple Juice,Juice & Tea,Beverages,Aisle 12 - Beverages,1,want,yes,3.14,3.14,3.48,yes,Mott's
+L0032,C0032,1,P0165,Coffee Pods Variety,Coffee,Beverages,Aisle 13 - Coffee & Tea,2,must_have,yes,14.99,29.98,15.3,yes,Keurig
+L0032,C0032,2,P0178,Broccoli Florets,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,2,must_have,yes,2.19,4.38,2.57,yes,Birds Eye
+L0032,C0032,3,P0050,Chicken Thighs Bone-In,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,3.49,3.49,3.94,no,Perdue
+L0032,C0032,4,P0159,Unsweetened Green Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,1.99,1.99,2.27,no,Pure Leaf
+L0032,C0032,5,P0084,Penne Rigate,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,2,must_have,yes,1.79,3.58,2.17,yes,Barilla
+L0032,C0032,6,P0234,Allergy Relief 24hr,Health & Pharmacy,Health & Beauty,Aisle 21 - Pharmacy,1,must_have,yes,17.99,17.99,18.74,no,Zyrtec
+L0032,C0032,7,P0106,Diced Tomatoes,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,1,must_have,yes,1.49,1.49,1.8,yes,Hunt's
+L0032,C0032,8,P0058,Pork Chops Center Cut,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,4.49,4.49,5.43,yes,Smithfield
+L0032,C0032,9,P0064,Black Forest Ham,Deli Meats,Meat & Seafood,Aisle 3 - Meat,1,want,yes,4.99,4.99,5.24,no,Oscar Mayer
+L0032,C0032,10,P0217,Paper Napkins,Paper & Cleaning,Household,Aisle 19 - Household,2,want,yes,3.99,7.98,4.08,no,Vanity Fair
+L0032,C0032,11,P0133,Butter Popcorn Microwave,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,want,yes,4.99,4.99,5.24,no,Orville Redenbacher
+L0032,C0032,12,P0099,Ground Cinnamon,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,1,want,yes,3.99,3.99,4.1,yes,McCormick
+L0032,C0032,13,P0038,Plain Greek Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,5.49,5.49,6.2,yes,Chobani
+L0032,C0032,14,P0194,Oat Milk,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,nice_to_have,yes,4.49,4.49,5.36,yes,Oatly
+L0032,C0032,15,P0143,Raw Almonds,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,nice_to_have,yes,8.07,8.07,9.36,no,Blue Diamond
+L0032,C0032,16,P0105,Chocolate Hazelnut Spread,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,1,nice_to_have,yes,3.99,3.99,4.46,yes,Nutella
+L0033,C0033,1,P0052,Ground Turkey 93% Lean,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.99,5.99,6.2,no,Jennie-O
+L0033,C0033,2,P0173,Chicken Nuggets,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,must_have,yes,6.99,6.99,7.62,yes,Tyson
+L0033,C0033,3,P0164,Whole Bean House Blend,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,must_have,yes,11.99,11.99,13.11,yes,Starbucks
+L0033,C0033,4,P0182,Chocolate Fudge Brownie Ice Cream,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,must_have,yes,5.99,5.99,6.68,yes,Ben & Jerry's
+L0033,C0033,5,P0113,Sweet Corn,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,2,must_have,yes,1.29,2.58,1.42,yes,Del Monte
+L0033,C0033,6,P0007,Seedless Red Grapes,Fresh Fruit,Produce,Aisle 1 - Produce,2,must_have,yes,2.44,4.88,2.74,yes,Local Farms
+L0033,C0033,7,P0014,Yellow Onions,Fresh Vegetables,Produce,Aisle 1 - Produce,2,must_have,yes,3.49,6.98,3.86,yes,Local Farms
+L0033,C0033,8,P0134,Brown Rice Cakes,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,must_have,yes,2.99,2.99,3.35,no,Quaker
+L0033,C0033,9,P0030,Skim Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,2,want,yes,3.39,6.78,3.59,no,FreshMart
+L0033,C0033,10,P0146,Chewy Granola Bars,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,want,yes,4.29,4.29,4.53,no,Nature Valley
+L0033,C0033,11,P0043,Sharp Cheddar Block,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,4.39,4.39,4.52,yes,Tillamook
+L0033,C0033,12,P0193,White Vinegar,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,want,yes,2.49,2.49,2.62,yes,Heinz
+L0033,C0033,13,P0037,Organic Free-Range Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,3,want,yes,6.64,19.92,7.08,yes,Vital Farms
+L0033,C0033,14,P0162,English Breakfast Tea,Juice & Tea,Beverages,Aisle 12 - Beverages,1,nice_to_have,yes,4.24,4.24,4.48,yes,Twinings
+L0033,C0033,15,P0076,Butter Croissants,Bread,Bakery,Aisle 5 - Bakery,1,nice_to_have,yes,4.19,4.19,4.26,yes,FreshMart Bakery
+L0033,C0033,16,P0232,Daily Multivitamin,Health & Pharmacy,Health & Beauty,Aisle 21 - Pharmacy,2,nice_to_have,yes,13.49,26.98,15.25,no,Centrum
+L0034,C0034,1,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,0.98,1.96,1.04,no,Dannon
+L0034,C0034,2,P0127,Nacho Cheese Tortilla Chips,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,must_have,yes,4.99,4.99,5.02,no,Doritos
+L0034,C0034,3,P0009,Hass Avocados,Fresh Fruit,Produce,Aisle 1 - Produce,2,must_have,yes,1.23,2.46,1.24,no,Mission Produce
+L0034,C0034,4,P0031,Organic Whole Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,5.39,5.39,5.71,no,Horizon
+L0034,C0034,5,P0037,Organic Free-Range Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,6.64,13.28,7.55,no,Vital Farms
+L0034,C0034,6,P0069,White Sandwich Bread,Bread,Bakery,Aisle 5 - Bakery,2,must_have,yes,2.24,4.48,2.6,yes,Wonder
+L0034,C0034,7,P0117,Chunk Light Tuna in Water,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,1,must_have,yes,1.35,1.35,1.47,no,StarKist
+L0034,C0034,8,P0061,Halal Ground Beef,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.59,5.59,6.45,yes,Crescent Foods
+L0034,C0034,9,P0166,Instant Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,want,no,8.49,8.49,9.71,yes,Nescafé
+L0034,C0034,10,P0177,Sweet Peas,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,want,no,1.99,1.99,2.31,no,Birds Eye
+L0034,C0034,11,P0189,Hot Sauce,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,want,no,2.8,2.8,3.07,no,Tabasco
+L0034,C0034,12,P0137,Dark Chocolate Bar 70%,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,want,no,3.99,3.99,4.3,yes,Lindt
+L0034,C0034,13,P0171,Pepperoni Pizza,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,impulse_candidate,no,7.99,7.99,8.76,yes,DiGiorno
+L0034,C0034,14,P0181,Vanilla Bean Ice Cream,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,impulse_candidate,no,5.69,5.69,6.16,no,Häagen-Dazs
+L0034,C0034,15,P0151,Sprite Bottle,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,impulse_candidate,no,2.39,2.39,2.43,yes,Coca-Cola
+L0035,C0035,1,P0001,Bananas,Fresh Fruit,Produce,Aisle 1 - Produce,1,must_have,yes,0.69,0.69,0.7,no,Dole
+L0035,C0035,2,P0064,Black Forest Ham,Deli Meats,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,4.99,4.99,6.79,yes,Oscar Mayer
+L0035,C0035,3,P0090,Rolled Oats,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,4.49,4.49,5.76,no,Quaker
+L0035,C0035,4,P0107,Tomato Sauce,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,2,must_have,yes,1.29,2.58,1.62,yes,Hunt's
+L0035,C0035,5,P0143,Raw Almonds,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,want,no,8.07,8.07,9.93,no,Blue Diamond
+L0035,C0035,6,P0044,Shredded Mozzarella,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,want,no,3.99,3.99,4.78,no,Kraft
+L0035,C0035,7,P0053,Halal Chicken Breast,Poultry,Meat & Seafood,Aisle 3 - Meat,1,impulse_candidate,no,8.49,8.49,11.35,no,Crescent Foods
+L0036,C0036,1,P0123,Honey Nut Oat Rings,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,1,must_have,yes,3.29,3.29,3.35,yes,FreshMart
+L0036,C0036,2,P0178,Broccoli Florets,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,must_have,yes,2.19,2.19,2.2,yes,Birds Eye
+L0036,C0036,3,P0090,Rolled Oats,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,4.49,4.49,4.58,yes,Quaker
+L0036,C0036,4,P0208,Dish Soap,Paper & Cleaning,Household,Aisle 19 - Household,1,want,yes,3.59,3.59,3.79,yes,Dawn
+L0036,C0036,5,P0163,Classic Roast Ground Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,nice_to_have,yes,9.99,9.99,10.04,yes,Folgers
+L0037,C0037,1,P0202,Baby Wipes,Baby Care,Baby,Aisle 18 - Baby,1,must_have,yes,11.39,11.39,12.67,no,Huggies
+L0037,C0037,2,P0151,Sprite Bottle,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,must_have,yes,2.39,2.39,2.41,no,Coca-Cola
+L0037,C0037,3,P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,3.37,3.37,3.88,yes,Chips Ahoy
+L0037,C0037,4,P0049,Boneless Skinless Chicken Breast,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,6.99,6.99,7.93,no,Tyson
+L0037,C0037,5,P0131,Butter Crackers,Chips & Crackers,Snacks,Aisle 10 - Snacks,2,must_have,yes,3.56,7.12,3.64,yes,Ritz
+L0037,C0037,6,P0161,Black Tea Bags,Juice & Tea,Beverages,Aisle 12 - Beverages,1,want,yes,4.49,4.49,5.1,yes,Lipton
+L0037,C0037,7,P0177,Sweet Peas,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,want,yes,1.99,1.99,2.01,no,Birds Eye
+L0037,C0037,8,P0173,Chicken Nuggets,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,want,yes,6.99,6.99,7.67,no,Tyson
+L0037,C0037,9,P0089,Brown Sugar,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,nice_to_have,yes,2.84,2.84,3.0,yes,Domino
+L0037,C0037,10,P0019,Organic Baby Spinach,Fresh Vegetables,Produce,Aisle 1 - Produce,2,nice_to_have,yes,3.99,7.98,4.2,no,Earthbound Farm
+L0038,C0038,1,P0031,Organic Whole Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,5.39,10.78,6.0,no,Horizon
+L0038,C0038,2,P0069,White Sandwich Bread,Bread,Bakery,Aisle 5 - Bakery,2,must_have,yes,2.24,4.48,2.44,yes,Wonder
+L0038,C0038,3,P0067,Tilapia Fillets,Fresh & Frozen Seafood,Meat & Seafood,Aisle 4 - Seafood,1,must_have,yes,5.59,5.59,5.67,yes,FreshMart
+L0038,C0038,4,P0236,Dog Biscuits,Pet Food & Supplies,Pet,Aisle 22 - Pet,1,must_have,yes,5.99,5.99,6.16,no,Milk-Bone
+L0038,C0038,5,P0089,Brown Sugar,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.84,2.84,3.13,yes,Domino
+L0038,C0038,6,P0036,Large Eggs Value Pack,Eggs,Dairy & Eggs,Aisle 2 - Dairy,3,must_have,yes,5.99,17.97,6.51,no,FreshMart
+L0038,C0038,7,P0082,Brown Rice,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,4.49,4.49,5.06,yes,Lundberg
+L0038,C0038,8,P0204,Fruit Puree Pouches,Baby Care,Baby,Aisle 18 - Baby,1,must_have,yes,4.04,4.04,4.26,yes,Gerber
+L0038,C0038,9,P0133,Butter Popcorn Microwave,Chips & Crackers,Snacks,Aisle 10 - Snacks,3,must_have,yes,4.99,14.97,5.3,no,Orville Redenbacher
+L0038,C0038,10,P0056,Ribeye Steak,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,want,no,14.99,14.99,16.91,no,Angus Select
+L0038,C0038,11,P0221,Fluoride Toothpaste,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,want,no,3.49,3.49,4.01,yes,Colgate
+L0038,C0038,12,P0046,Sliced Swiss Cheese,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,want,no,3.39,3.39,3.87,yes,Sargento
+L0038,C0038,13,P0170,Pinot Grigio,Beer & Wine,Beverages,Aisle 14 - Beer & Wine,1,want,no,7.59,7.59,7.89,yes,Barefoot
+L0038,C0038,14,P0142,Mixed Nuts,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,2,want,no,8.09,16.18,8.57,yes,Planters
+L0038,C0038,15,P0138,Milk Chocolate Bar,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,impulse_candidate,no,1.34,1.34,1.54,yes,Hershey's
+L0038,C0038,16,P0111,Canned Black Beans,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,2,impulse_candidate,no,1.39,2.78,1.41,yes,Goya
+L0038,C0038,17,P0105,Chocolate Hazelnut Spread,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,2,impulse_candidate,no,3.99,7.98,4.48,no,Nutella
+L0039,C0039,1,P0209,Laundry Detergent,Paper & Cleaning,Household,Aisle 19 - Household,1,must_have,yes,16.99,16.99,18.5,no,Tide
+L0039,C0039,2,P0054,Halal Chicken Thighs,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.49,5.49,5.87,yes,Crescent Foods
+L0039,C0039,3,P0195,Unsweetened Almond Milk,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,3.99,3.99,3.99,no,Silk
+L0039,C0039,4,P0025,Zucchini,Fresh Vegetables,Produce,Aisle 1 - Produce,1,must_have,yes,1.69,1.69,1.75,no,Local Farms
+L0039,C0039,5,P0151,Sprite Bottle,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,want,yes,2.39,4.78,2.62,no,Coca-Cola
+L0039,C0039,6,P0011,Pineapple,Fresh Fruit,Produce,Aisle 1 - Produce,2,want,yes,3.39,6.78,3.67,no,Dole
+L0039,C0039,7,P0078,Flour Tortillas,Bread,Bakery,Aisle 5 - Bakery,2,want,yes,3.29,6.58,3.59,no,Mission
+L0039,C0039,8,P0048,Cottage Cheese,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,nice_to_have,yes,2.71,2.71,2.99,no,Breakstone's
+L0040,C0040,1,P0052,Ground Turkey 93% Lean,Poultry,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.99,5.99,8.17,no,Jennie-O
+L0040,C0040,2,P0153,Spring Water 24 Pack,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,must_have,yes,4.49,4.49,5.81,yes,FreshMart
+L0040,C0040,3,P0130,Soft Pretzels Twists,Chips & Crackers,Snacks,Aisle 10 - Snacks,2,want,no,3.29,6.58,4.68,no,Rold Gold
+L0041,C0041,1,P0166,Instant Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,must_have,yes,8.49,8.49,9.19,no,Nescafé
+L0041,C0041,2,P0130,Soft Pretzels Twists,Chips & Crackers,Snacks,Aisle 10 - Snacks,3,must_have,yes,3.29,9.87,3.78,yes,Rold Gold
+L0041,C0041,3,P0233,Adhesive Bandages,Health & Pharmacy,Health & Beauty,Aisle 21 - Pharmacy,1,must_have,yes,4.99,4.99,5.73,yes,Band-Aid
+L0041,C0041,4,P0066,Large Raw Shrimp,Fresh & Frozen Seafood,Meat & Seafood,Aisle 4 - Seafood,1,must_have,yes,9.99,9.99,10.9,yes,Gorton's
+L0041,C0041,5,P0032,Lactose-Free Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,4.99,4.99,5.33,yes,Lactaid
+L0041,C0041,6,P0035,Large Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,4.29,4.29,4.44,no,Eggland's Best
+L0041,C0041,7,P0008,Lemons,Fresh Fruit,Produce,Aisle 1 - Produce,2,must_have,yes,0.79,1.58,0.8,no,Sunkist
+L0041,C0041,8,P0213,Scrub Sponges,Paper & Cleaning,Household,Aisle 19 - Household,2,must_have,yes,4.99,9.98,5.35,yes,Scotch-Brite
+L0041,C0041,9,P0101,Pure Maple Syrup,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,1,want,yes,7.49,7.49,7.84,no,Kirkland Farms
+L0041,C0041,10,P0084,Penne Rigate,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,2,want,yes,1.79,3.58,1.88,yes,Barilla
+L0041,C0041,11,P0064,Black Forest Ham,Deli Meats,Meat & Seafood,Aisle 3 - Meat,1,want,yes,4.99,4.99,5.3,no,Oscar Mayer
+L0041,C0041,12,P0023,Garlic Bulbs,Fresh Vegetables,Produce,Aisle 1 - Produce,2,want,yes,0.79,1.58,0.86,yes,Christopher Ranch
+L0041,C0041,13,P0123,Honey Nut Oat Rings,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,1,want,yes,3.29,3.29,3.34,yes,FreshMart
+L0041,C0041,14,P0105,Chocolate Hazelnut Spread,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,2,nice_to_have,yes,3.99,7.98,4.38,yes,Nutella
+L0041,C0041,15,P0173,Chicken Nuggets,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,3,nice_to_have,yes,6.99,20.97,7.53,yes,Tyson
+L0041,C0041,16,P0184,Fruit Pops,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,2,nice_to_have,yes,3.32,6.64,3.69,yes,FreshMart
+L0042,C0042,1,P0074,Hamburger Buns,Bread,Bakery,Aisle 5 - Bakery,2,must_have,yes,3.49,6.98,3.67,no,Arnold
+L0042,C0042,2,P0153,Spring Water 24 Pack,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,must_have,yes,4.49,8.98,4.67,no,FreshMart
+L0042,C0042,3,P0164,Whole Bean House Blend,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,must_have,yes,11.99,11.99,12.24,yes,Starbucks
+L0042,C0042,4,P0191,Ranch Dressing,Condiments & Sauces,Pantry,Aisle 17 - Condiments,2,must_have,yes,3.99,7.98,4.17,no,Hidden Valley
+L0042,C0042,5,P0220,Body Wash,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,must_have,yes,6.49,6.49,7.23,no,Dove
+L0042,C0042,6,P0117,Chunk Light Tuna in Water,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,3,must_have,yes,1.35,4.05,1.46,yes,StarKist
+L0042,C0042,7,P0008,Lemons,Fresh Fruit,Produce,Aisle 1 - Produce,1,want,yes,0.79,0.79,0.86,yes,Sunkist
+L0042,C0042,8,P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,want,yes,3.37,3.37,3.74,no,Chips Ahoy
+L0042,C0042,9,P0059,Italian Sausage,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,want,yes,4.79,4.79,5.12,no,Johnsonville
+L0042,C0042,10,P0127,Nacho Cheese Tortilla Chips,Chips & Crackers,Snacks,Aisle 10 - Snacks,3,want,yes,4.99,14.97,5.43,yes,Doritos
+L0042,C0042,11,P0035,Large Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,1,nice_to_have,yes,4.29,4.29,4.89,yes,Eggland's Best
+L0042,C0042,12,P0080,Long Grain White Rice,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,2,nice_to_have,yes,4.49,8.98,4.82,no,Uncle Ben's
+L0043,C0043,1,P0031,Organic Whole Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,5.39,5.39,5.94,yes,Horizon
+L0043,C0043,2,P0155,Sports Drink Fruit Punch,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,2,must_have,yes,1.79,3.58,1.86,yes,Gatorade
+L0043,C0043,3,P0037,Organic Free-Range Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,6.64,6.64,6.7,yes,Vital Farms
+L0043,C0043,4,P0177,Sweet Peas,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,want,no,1.99,1.99,2.13,yes,Birds Eye
+L0043,C0043,5,P0007,Seedless Red Grapes,Fresh Fruit,Produce,Aisle 1 - Produce,2,impulse_candidate,no,2.44,4.88,2.55,yes,Local Farms
+L0044,C0044,1,P0158,Apple Juice,Juice & Tea,Beverages,Aisle 12 - Beverages,1,must_have,yes,3.14,3.14,3.18,yes,Mott's
+L0044,C0044,2,P0028,Whole Milk,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,4.79,9.58,4.84,no,Horizon
+L0044,C0044,3,P0223,Stick Deodorant,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,must_have,yes,5.49,5.49,6.04,no,Old Spice
+L0044,C0044,4,P0024,Sweet Potatoes,Fresh Vegetables,Produce,Aisle 1 - Produce,3,must_have,yes,1.49,4.47,1.57,yes,Local Farms
+L0044,C0044,5,P0183,Dairy-Free Chocolate Ice Cream,Ice Cream & Desserts,Frozen,Aisle 16 - Ice Cream,1,must_have,yes,5.49,5.49,5.81,no,So Delicious
+L0044,C0044,6,P0126,Classic Potato Chips,Chips & Crackers,Snacks,Aisle 10 - Snacks,2,must_have,yes,4.24,8.48,4.58,yes,Lay's
+L0044,C0044,7,P0156,Energy Drink,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,must_have,yes,2.54,2.54,2.82,no,Red Bull
+L0044,C0044,8,P0062,Halal Lamb Chops,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,want,no,16.99,16.99,18.11,yes,Crescent Foods
+L0044,C0044,9,P0189,Hot Sauce,Condiments & Sauces,Pantry,Aisle 17 - Condiments,1,want,no,2.8,2.8,3.02,yes,Tabasco
+L0044,C0044,10,P0174,Fish Sticks,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,want,no,6.17,6.17,6.17,yes,Gorton's
+L0044,C0044,11,P0054,Halal Chicken Thighs,Poultry,Meat & Seafood,Aisle 3 - Meat,1,want,no,5.49,5.49,5.5,yes,Crescent Foods
+L0044,C0044,12,P0238,Dry Cat Food,Pet Food & Supplies,Pet,Aisle 22 - Pet,1,impulse_candidate,no,11.99,11.99,12.91,no,Meow Mix
+L0044,C0044,13,P0089,Brown Sugar,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,impulse_candidate,no,2.84,2.84,2.94,yes,Domino
+L0045,C0045,1,P0093,Dried Black Beans,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.08,2.08,2.33,yes,Goya
+L0045,C0045,2,P0165,Coffee Pods Variety,Coffee,Beverages,Aisle 13 - Coffee & Tea,1,must_have,yes,14.99,14.99,16.18,no,Keurig
+L0045,C0045,3,P0081,Basmati Rice,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,8.99,8.99,9.73,no,Tilda
+L0045,C0045,4,P0120,Frosted Flakes,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,1,must_have,yes,4.99,4.99,5.26,yes,Kellogg's
+L0045,C0045,5,P0139,Gummy Bears,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,want,yes,2.49,2.49,2.83,yes,Haribo
+L0045,C0045,6,P0035,Large Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,3,want,yes,4.29,12.87,4.36,yes,Eggland's Best
+L0045,C0045,7,P0126,Classic Potato Chips,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,want,yes,4.24,4.24,4.64,yes,Lay's
+L0045,C0045,8,P0016,Baby Carrots,Fresh Vegetables,Produce,Aisle 1 - Produce,1,nice_to_have,yes,1.99,1.99,2.07,yes,Grimmway Farms
+L0046,C0046,1,P0135,Oreo Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,4.07,4.07,4.28,yes,Oreo
+L0046,C0046,2,P0034,Half & Half,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,2.65,5.3,2.75,no,Land O'Lakes
+L0046,C0046,3,P0198,Plant-Based Burger Patties,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,6.99,6.99,7.47,yes,Beyond Meat
+L0046,C0046,4,P0151,Sprite Bottle,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,must_have,yes,2.39,2.39,2.43,yes,Coca-Cola
+L0046,C0046,5,P0143,Raw Almonds,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,must_have,yes,8.07,8.07,8.84,yes,Blue Diamond
+L0046,C0046,6,P0023,Garlic Bulbs,Fresh Vegetables,Produce,Aisle 1 - Produce,2,must_have,yes,0.79,1.58,0.83,yes,Christopher Ranch
+L0046,C0046,7,P0037,Organic Free-Range Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,6.64,13.28,7.19,yes,Vital Farms
+L0046,C0046,8,P0172,Veggie Burrito,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,want,yes,3.79,3.79,4.35,yes,Amy's
+L0046,C0046,9,P0113,Sweet Corn,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,1,want,yes,1.29,1.29,1.47,yes,Del Monte
+L0046,C0046,10,P0045,Cream Cheese,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,3.29,3.29,3.66,no,Philadelphia
+L0046,C0046,11,P0081,Basmati Rice,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,want,yes,8.99,8.99,9.58,yes,Tilda
+L0046,C0046,12,P0203,Infant Formula Powder,Baby Care,Baby,Aisle 18 - Baby,1,want,yes,31.99,31.99,34.98,yes,Similac
+L0046,C0046,13,P0219,Daily Moisture Conditioner,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,nice_to_have,yes,5.99,5.99,6.21,no,Pantene
+L0046,C0046,14,P0133,Butter Popcorn Microwave,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,nice_to_have,yes,4.99,4.99,5.47,yes,Orville Redenbacher
+L0047,C0047,1,P0164,Whole Bean House Blend,Coffee,Beverages,Aisle 13 - Coffee & Tea,2,must_have,yes,11.99,23.98,12.58,no,Starbucks
+L0047,C0047,2,P0073,Plain Bagels,Bread,Bakery,Aisle 5 - Bakery,3,must_have,yes,3.99,11.97,4.05,no,Thomas'
+L0047,C0047,3,P0090,Rolled Oats,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,4.49,4.49,5.09,yes,Quaker
+L0047,C0047,4,P0123,Honey Nut Oat Rings,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,1,must_have,yes,3.29,3.29,3.64,no,FreshMart
+L0047,C0047,5,P0013,Roma Tomatoes,Fresh Vegetables,Produce,Aisle 1 - Produce,1,must_have,yes,1.99,1.99,2.12,no,Local Farms
+L0047,C0047,6,P0132,Cheddar Goldfish,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,must_have,yes,4.49,4.49,4.52,yes,Pepperidge Farm
+L0047,C0047,7,P0037,Organic Free-Range Eggs,Eggs,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,6.64,13.28,6.76,no,Vital Farms
+L0047,C0047,8,P0176,Vegan Mac & Cheese,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,2,want,yes,4.99,9.98,5.54,yes,Daiya
+L0047,C0047,9,P0105,Chocolate Hazelnut Spread,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,2,want,yes,3.99,7.98,4.38,no,Nutella
+L0047,C0047,10,P0096,Coconut Oil,"Oils, Spices & Sweeteners",Pantry,Aisle 7 - Oils & Spices,2,want,yes,8.49,16.98,9.21,no,Nutiva
+L0047,C0047,11,P0042,Salted Butter,Cheese & Butter,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,3.99,3.99,4.33,no,Land O'Lakes
+L0047,C0047,12,P0086,Egg Noodles,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,nice_to_have,yes,2.29,2.29,2.4,yes,No Yolks
+L0047,C0047,13,P0065,Atlantic Salmon Fillet,Fresh & Frozen Seafood,Meat & Seafood,Aisle 4 - Seafood,1,nice_to_have,yes,9.59,9.59,9.82,no,FreshMart
+L0048,C0048,1,P0136,Chocolate Chip Cookies,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,3.37,3.37,3.58,no,Chips Ahoy
+L0048,C0048,2,P0083,Spaghetti,Rice & Pasta,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,1.52,1.52,1.61,yes,Barilla
+L0048,C0048,3,P0039,Strawberry Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,0.79,0.79,0.84,no,Yoplait
+L0048,C0048,4,P0021,Red Bell Peppers,Fresh Vegetables,Produce,Aisle 1 - Produce,2,want,yes,1.49,2.98,1.57,no,Local Farms
+L0048,C0048,5,P0011,Pineapple,Fresh Fruit,Produce,Aisle 1 - Produce,3,want,yes,3.39,10.17,3.61,no,Dole
+L0048,C0048,6,P0176,Vegan Mac & Cheese,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,nice_to_have,yes,4.99,4.99,5.43,no,Daiya
+L0049,C0049,1,P0061,Halal Ground Beef,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,5.59,5.59,5.85,no,Crescent Foods
+L0049,C0049,2,P0115,Chicken Broth,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,2,must_have,yes,2.49,4.98,2.8,no,Swanson
+L0049,C0049,3,P0064,Black Forest Ham,Deli Meats,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,4.99,4.99,5.52,yes,Oscar Mayer
+L0049,C0049,4,P0220,Body Wash,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,must_have,yes,6.49,6.49,7.72,no,Dove
+L0049,C0049,5,P0105,Chocolate Hazelnut Spread,Spreads & Jams,Pantry,Aisle 7 - Oils & Spices,1,must_have,yes,3.99,3.99,4.0,no,Nutella
+L0049,C0049,6,P0034,Half & Half,Milk & Cream,Dairy & Eggs,Aisle 2 - Dairy,1,must_have,yes,2.65,2.65,3.12,no,Land O'Lakes
+L0049,C0049,7,P0166,Instant Coffee,Coffee,Beverages,Aisle 13 - Coffee & Tea,2,must_have,yes,8.49,16.98,10.32,no,Nescafé
+L0049,C0049,8,P0040,Vanilla Low-Fat Yogurt,Yogurt,Dairy & Eggs,Aisle 2 - Dairy,2,must_have,yes,0.98,1.96,1.18,yes,Dannon
+L0049,C0049,9,P0168,Pale Ale 6 Pack,Beer & Wine,Beverages,Aisle 14 - Beer & Wine,1,want,yes,10.44,10.44,12.78,no,Sierra Nevada
+L0049,C0049,10,P0175,Frozen Waffles,Frozen Meals & Pizza,Frozen,Aisle 15 - Frozen,1,want,yes,3.99,3.99,4.57,no,Eggo
+L0049,C0049,11,P0211,Kitchen Trash Bags,Paper & Cleaning,Household,Aisle 19 - Household,1,want,yes,11.99,11.99,12.69,yes,Glad
+L0049,C0049,12,P0122,Corn Flakes,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,2,want,yes,4.29,8.58,4.4,no,Kellogg's
+L0049,C0049,13,P0155,Sports Drink Fruit Punch,Soft Drinks & Water,Beverages,Aisle 12 - Beverages,1,want,yes,1.79,1.79,2.19,no,Gatorade
+L0049,C0049,14,P0157,Orange Juice No Pulp,Juice & Tea,Beverages,Aisle 12 - Beverages,1,nice_to_have,yes,4.99,4.99,5.51,yes,Tropicana
+L0049,C0049,15,P0180,Crinkle Cut Fries,Frozen Vegetables & Fruit,Frozen,Aisle 15 - Frozen,1,nice_to_have,yes,3.99,3.99,4.18,yes,Ore-Ida
+L0049,C0049,16,P0126,Classic Potato Chips,Chips & Crackers,Snacks,Aisle 10 - Snacks,1,nice_to_have,yes,4.24,4.24,4.52,no,Lay's
+L0050,C0050,1,P0138,Milk Chocolate Bar,"Cookies, Candy & Sweets",Snacks,Aisle 11 - Sweets,1,must_have,yes,1.34,1.34,1.44,no,Hershey's
+L0050,C0050,2,P0093,Dried Black Beans,Baking & Staples,Pantry,Aisle 6 - Dry Goods,1,must_have,yes,2.08,2.08,2.58,no,Goya
+L0050,C0050,3,P0123,Honey Nut Oat Rings,Breakfast Cereal,Pantry,Aisle 9 - Breakfast,1,must_have,yes,3.29,3.29,3.51,no,FreshMart
+L0050,C0050,4,P0108,Marinara Pasta Sauce,Canned & Jarred Goods,Pantry,Aisle 8 - Canned,1,must_have,yes,2.3,2.3,3.1,no,Prego
+L0050,C0050,5,P0198,Plant-Based Burger Patties,Plant-Based & Meat Alternatives,Dairy & Eggs,Aisle 2 - Dairy,1,want,yes,6.99,6.99,8.49,no,Beyond Meat
+L0050,C0050,6,P0218,Daily Moisture Shampoo,Personal Care,Health & Beauty,Aisle 20 - Personal Care,1,want,yes,5.99,5.99,8.35,no,Pantene
+L0050,C0050,7,P0147,Sea Salt Roasted Seaweed,Nuts & Healthy Snacks,Snacks,Aisle 10 - Snacks,1,nice_to_have,yes,2.37,2.37,2.57,no,Annie Chun's
+L0001,C0001,11,P0240,Tonkotsu Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,2,must_have,yes,4.49,8.98,4.99,yes,Ichiran
+L0002,C0002,4,P0241,Spicy Miso Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,1,must_have,yes,3.39,3.39,3.99,yes,Nissin Raoh
+L0002,C0002,5,P0248,Rotisserie Whole Chicken,Prepared Meals,Prepared Meals,Aisle 24 - Hot Deli,1,must_have,yes,5.99,5.99,6.50,no,Simply Joe
+L0003,C0003,7,P0242,Shoyu Chicken Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,2,must_have,yes,3.49,6.98,3.99,yes,Maruchan Gold
+L0004,C0004,4,P0244,Garlic Pork Belly Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,2,must_have,yes,4.31,8.62,4.99,yes,Nongshim
+L0004,C0004,5,P0056,Ribeye Steak,Beef & Pork,Meat & Seafood,Aisle 3 - Meat,1,must_have,yes,14.99,14.99,16.50,no,Angus Select
+L0005,C0005,8,P0243,Vegan Mushroom Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,2,must_have,yes,3.59,7.18,4.49,yes,Simply Joe
+L0006,C0006,8,P0245,Kimchi Udon Noodle Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,1,must_have,yes,3.65,3.65,4.29,yes,Nongshim
+L0007,C0007,9,P0247,Mandarin Orange Chicken,Prepared Meals,Prepared Meals,Aisle 24 - Hot Deli,1,must_have,yes,5.84,5.84,6.49,yes,Simply Joe
+L0008,C0008,8,P0240,Tonkotsu Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,1,must_have,yes,4.49,4.49,4.99,yes,Ichiran
+L0009,C0009,8,P0248,Rotisserie Whole Chicken,Prepared Meals,Prepared Meals,Aisle 24 - Hot Deli,1,must_have,yes,5.99,5.99,6.49,no,Simply Joe
+L0010,C0010,9,P0241,Spicy Miso Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,2,must_have,yes,3.39,6.78,3.99,yes,Nissin Raoh
+L0011,C0011,9,P0246,Crispy Pork Gyoza,Prepared Meals,Prepared Meals,Aisle 24 - Hot Deli,1,must_have,yes,5.09,5.09,5.99,yes,Simply Joe
+L0012,C0012,9,P0242,Shoyu Chicken Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,1,must_have,yes,3.49,3.49,3.99,yes,Maruchan Gold
+L0013,C0013,9,P0248,Rotisserie Whole Chicken,Prepared Meals,Prepared Meals,Aisle 24 - Hot Deli,1,must_have,yes,5.99,5.99,6.49,no,Simply Joe
+L0014,C0014,9,P0244,Garlic Pork Belly Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,1,must_have,yes,4.31,4.31,4.99,yes,Nongshim
+L0015,C0015,9,P0240,Tonkotsu Ramen Bowl,Ramen & Noodles,Ramen & Noodles,Aisle 23 - Ramen Bar,2,must_have,yes,4.49,8.98,4.99,yes,Ichiran

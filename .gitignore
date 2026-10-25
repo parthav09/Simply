@@ -1,0 +1,13 @@
+.env
+.env.local
+.venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+
+node_modules/
+.next/
+out/
+
+simulation/results.json
+simulation/trajectory/

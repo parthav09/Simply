@@ -1,0 +1,5 @@
+# Install only inside the repo virtual environment:
+#   source .venv/bin/activate
+#   python -m pip install -r requirements.txt
+#
+# Add third-party packages here as the simulation needs them.
