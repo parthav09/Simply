@@ -250,3 +250,55 @@ P0248,Rotisserie Whole Chicken,Prepared Meals,Simply Joe,5.99,4.10,0,31.55,Prepa
 P0249,Teriyaki Beef Skewers,Prepared Meals,Simply Joe,8.99,5.60,15,37.71,Prepared Meals,Aisle 24 - Hot Deli,14 oz,088100240010,7.64,26.70,150,35,14,chilled,none,soy;wheat/gluten,USA,yes,yes,no,4.6
 P0250,Sea Salt Brownie Bites,Bakery,Simply Joe,4.49,2.30,20,48.78,Bakery,Aisle 5 - Bakery,12 oz,088100240011,3.59,35.93,220,55,14,ambient,vegetarian,milk;egg;wheat/gluten,USA,yes,yes,no,4.9
 P0251,Peanut Butter Pretzel Nuggets,Snacks,Simply Joe,3.99,2.10,15,47.37,Snacks,Aisle 10 - Snacks,16 oz,088100240012,3.39,38.05,290,70,180,ambient,vegan;vegetarian,wheat/gluten;tree nuts/peanuts,USA,yes,no,no,4.9
+P0252,Avocados,Fresh Fruit,Simply Demo,3.99,2.39,0,40,Produce,Expansion - Produce,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0253,Baby Spinach,Leafy Greens,Simply Demo,2.99,1.79,0,40,Produce,Expansion - Produce,1 pack,,2.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0254,Oat Milk,Plant Milk,Simply Demo,3.49,2.09,0,40,Dairy & Eggs,Expansion - Dairy & Eggs,1 pack,,3.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0255,Cottage Cheese,Cheese,Simply Demo,3.99,2.39,0,40,Dairy & Eggs,Expansion - Dairy & Eggs,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0256,Turkey Breast,Poultry,Simply Demo,7.99,4.79,0,40,Meat & Seafood,Expansion - Meat & Seafood,1 pack,,7.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0257,Cod Fillets,Seafood,Simply Demo,9.49,5.69,0,40,Meat & Seafood,Expansion - Meat & Seafood,1 pack,,9.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0258,Sourdough Rolls,Bread,Simply Demo,4.49,2.69,0,40,Bakery,Expansion - Bakery,1 pack,,4.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0259,Cinnamon Swirls,Pastry,Simply Demo,4.99,2.99,0,40,Bakery,Expansion - Bakery,1 pack,,4.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0260,Frozen Mango,Frozen Fruit,Simply Demo,3.99,2.39,0,40,Frozen,Expansion - Frozen,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0261,Vegetable Dumplings,Frozen Meals,Simply Demo,5.49,3.29,0,40,Frozen,Expansion - Frozen,1 pack,,5.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0262,Red Lentils,Pulses,Simply Demo,2.49,1.49,0,40,Pantry,Expansion - Pantry,1 pack,,2.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0263,Coconut Milk,Canned Goods,Simply Demo,2.99,1.79,0,40,Pantry,Expansion - Pantry,1 pack,,2.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0264,Roasted Chickpeas,Savory Snacks,Simply Demo,3.49,2.09,0,40,Snacks,Expansion - Snacks,1 pack,,3.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0265,Mango Fruit Strips,Fruit Snacks,Simply Demo,3.99,2.39,0,40,Snacks,Expansion - Snacks,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0266,Sparkling Lemon Water,Water,Simply Demo,4.49,2.69,0,40,Beverages,Expansion - Beverages,1 pack,,4.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0267,Cold Brew Coffee,Coffee,Simply Demo,4.99,2.99,0,40,Beverages,Expansion - Beverages,1 pack,,4.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0270,Dishwasher Tablets,Cleaning,Simply Demo,8.99,5.39,0,40,Household,Expansion - Household,1 pack,,8.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0271,Compost Bags,Kitchen,Simply Demo,5.49,3.29,0,40,Household,Expansion - Household,1 pack,,5.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0272,Baby Wipes,Baby Care,Simply Demo,3.99,2.39,0,40,Baby,Expansion - Baby,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0273,Baby Fruit Puree,Baby Food,Simply Demo,2.49,1.49,0,40,Baby,Expansion - Baby,1 pack,,2.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0276,Miso Ramen Bowl,Noodles,Simply Demo,4.49,2.69,0,40,Ramen & Noodles,Expansion - Ramen & Noodles,1 pack,,4.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0277,Sesame Soba Noodles,Noodles,Simply Demo,3.99,2.39,0,40,Ramen & Noodles,Expansion - Ramen & Noodles,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0278,Falafel Lunch Bowl,Prepared Meals,Simply Demo,6.99,4.19,0,40,Prepared Meals,Expansion - Prepared Meals,1 pack,,6.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0279,Vegetable Curry,Prepared Meals,Simply Demo,6.49,3.89,0,40,Prepared Meals,Expansion - Prepared Meals,1 pack,,6.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0280,Persian Cucumbers,Fresh Vegetables,Simply Demo,2.99,1.79,0,40,Produce,Market - Produce,1 pack,,2.99,40,100,20,30,chilled,unspecified,unspecified,unspecified,yes,yes,no,3
+P0281,Mini Sweet Peppers,Fresh Vegetables,Simply Demo,3.49,2.09,0,40,Produce,Market - Produce,1 pack,,3.49,40,100,20,30,chilled,unspecified,unspecified,unspecified,yes,yes,no,3
+P0282,Vanilla Skyr,Yogurt,Simply Demo,1.99,1.19,0,40,Dairy & Eggs,Market - Dairy & Eggs,1 pack,,1.99,40,100,20,30,chilled,unspecified,unspecified,unspecified,yes,yes,no,3
+P0283,Cultured Salted Butter,Butter,Simply Demo,3.99,2.39,0,40,Dairy & Eggs,Market - Dairy & Eggs,1 pack,,3.99,40,100,20,30,chilled,unspecified,unspecified,unspecified,yes,yes,no,3
+P0284,Lemon Pepper Chicken Thighs,Poultry,Simply Demo,7.49,4.49,0,40,Meat & Seafood,Market - Meat & Seafood,1 pack,,7.49,40,100,20,30,chilled,unspecified,unspecified,unspecified,yes,yes,no,3
+P0285,Wild Sockeye Salmon,Seafood,Simply Demo,11.99,7.19,0,40,Meat & Seafood,Market - Meat & Seafood,1 pack,,11.99,40,100,20,30,chilled,unspecified,unspecified,unspecified,yes,yes,no,3
+P0286,Rosemary Focaccia,Bread,Simply Demo,4.49,2.69,0,40,Bakery,Market - Bakery,1 pack,,4.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,yes,no,3
+P0287,Chocolate Babka,Sweet Bread,Simply Demo,5.99,3.59,0,40,Bakery,Market - Bakery,1 pack,,5.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,yes,no,3
+P0288,Vegetable Gyoza,Frozen Meals,Simply Demo,4.99,2.99,0,40,Frozen,Market - Frozen,1 pack,,4.99,40,100,20,30,frozen,unspecified,unspecified,unspecified,yes,yes,no,3
+P0289,Frozen Blueberries,Frozen Fruit,Simply Demo,3.99,2.39,0,40,Frozen,Market - Frozen,1 pack,,3.99,40,100,20,30,frozen,unspecified,unspecified,unspecified,yes,yes,no,3
+P0290,Chili Onion Crunch,Condiments,Simply Demo,4.49,2.69,0,40,Pantry,Market - Pantry,1 pack,,4.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0291,Everything Seasoning,Seasoning,Simply Demo,2.49,1.49,0,40,Pantry,Market - Pantry,1 pack,,2.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0292,Plantain Chips,Chips,Simply Demo,2.49,1.49,0,40,Snacks,Market - Snacks,1 pack,,2.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0293,Dark Chocolate Almonds,Chocolate,Simply Demo,4.99,2.99,0,40,Snacks,Market - Snacks,1 pack,,4.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0294,Blood Orange Sparkling Water,Water,Simply Demo,3.99,2.39,0,40,Beverages,Market - Beverages,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0295,Matcha Green Tea,Tea,Simply Demo,3.49,2.09,0,40,Beverages,Market - Beverages,1 pack,,3.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0296,Coconut Body Lotion,Skincare,Simply Demo,5.99,3.59,0,40,Health & Beauty,Market - Health & Beauty,1 pack,,5.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0297,Peppermint Toothpaste,Dental Care,Simply Demo,3.49,2.09,0,40,Health & Beauty,Market - Health & Beauty,1 pack,,3.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0298,Citrus Dish Soap,Cleaning,Simply Demo,2.99,1.79,0,40,Household,Market - Household,1 pack,,2.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0299,Recycled Paper Napkins,Paper Goods,Simply Demo,2.49,1.49,0,40,Household,Market - Household,1 pack,,2.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0300,Oatmeal Baby Cereal,Baby Food,Simply Demo,3.99,2.39,0,40,Baby,Market - Baby,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0301,Fragrance Free Baby Wash,Baby Care,Simply Demo,4.99,2.99,0,40,Baby,Market - Baby,1 pack,,4.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0302,Salmon Cat Food,Pet Food,Simply Demo,2.49,1.49,0,40,Pet,Market - Pet,1 pack,,2.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0303,Peanut Butter Dog Biscuits,Pet Treats,Simply Demo,3.99,2.39,0,40,Pet,Market - Pet,1 pack,,3.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0304,Garlic Sesame Udon,Noodles,Simply Demo,4.49,2.69,0,40,Ramen & Noodles,Market - Ramen & Noodles,1 pack,,4.49,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0305,Shoyu Ramen Kit,Noodles,Simply Demo,4.99,2.99,0,40,Ramen & Noodles,Market - Ramen & Noodles,1 pack,,4.99,40,100,20,30,ambient,unspecified,unspecified,unspecified,yes,no,no,3
+P0306,Mediterranean Salad Bowl,Prepared Meals,Simply Demo,6.49,3.89,0,40,Prepared Meals,Market - Prepared Meals,1 pack,,6.49,40,100,20,30,chilled,unspecified,unspecified,unspecified,yes,yes,no,3
+P0307,Pesto Pasta Lunch,Prepared Meals,Simply Demo,5.99,3.59,0,40,Prepared Meals,Market - Prepared Meals,1 pack,,5.99,40,100,20,30,chilled,unspecified,unspecified,unspecified,yes,yes,no,3

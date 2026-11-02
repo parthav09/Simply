@@ -1,13 +1,72 @@
+# Credentials and machine-local configuration (commit only safe templates).
 .env
-.env.local
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+.aws/
+
+# Python environments, caches, test and coverage output.
 .venv/
+venv/
 __pycache__/
 *.py[cod]
-.DS_Store
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage/
+*.egg-info/
 
+# JavaScript dependencies and generated builds.
 node_modules/
 .next/
 out/
+dist/
+build/
+.vercel/
+*.tsbuildinfo
 
-simulation/results.json
-simulation/trajectory/
+# Browser-test and local capture artifacts.
+playwright-report/
+test-results/
+.playwright/
+
+# Local run history and API accounting databases stay on disk.
+# Curated landing/public/replays evidence and test fixtures remain publishable.
+/simulation/results.json
+/simulation/trajectory/
+/simulation/runs/
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+*.db-journal
+
+# Generated training packages and model checkpoints; keep source notebooks/data.
+/data/*.zip
+/data/simply_qwen_colab_starter/
+checkpoint-*/
+wandb/
+runs/
+*.safetensors
+*.pt
+*.pth
+.ipynb_checkpoints/
+
+# Logs, editor leftovers and OS metadata.
+*.log
+*.log.*
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

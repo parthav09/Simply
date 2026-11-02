@@ -1,0 +1,128 @@
+{
+  "matrix_version": 1,
+  "study_id": "48ea3402f27344af949f1002123fe826",
+  "children": [
+    {
+      "directory": "model-0",
+      "model": "gpt-6-luna",
+      "sha256": "5702f49f13f93c75d09eb6da41b8f3602c7888c01328ebd43c0277d66761e0ab"
+    },
+    {
+      "directory": "model-1",
+      "model": "gpt-6.1-terra",
+      "sha256": "946793c6fdc3187b2a64c0a385a1e15035a48e15b4aaa2720fe634f8a9b8fe9b"
+    }
+  ],
+  "schedule": [
+    {
+      "directory": "model-0",
+      "arm_id": "arm-1",
+      "repetition": 1
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-1",
+      "repetition": 1
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-0",
+      "repetition": 1
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-0",
+      "repetition": 1
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-0",
+      "repetition": 2
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-0",
+      "repetition": 2
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-1",
+      "repetition": 2
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-1",
+      "repetition": 2
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-1",
+      "repetition": 3
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-0",
+      "repetition": 3
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-1",
+      "repetition": 3
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-0",
+      "repetition": 3
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-0",
+      "repetition": 4
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-1",
+      "repetition": 4
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-0",
+      "repetition": 4
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-1",
+      "repetition": 4
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-1",
+      "repetition": 5
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-1",
+      "repetition": 5
+    },
+    {
+      "directory": "model-1",
+      "arm_id": "arm-0",
+      "repetition": 5
+    },
+    {
+      "directory": "model-0",
+      "arm_id": "arm-0",
+      "repetition": 5
+    }
+  ],
+  "repetitions": 5,
+  "cohort_size": 10,
+  "primary_metrics": [
+    "checkout_completion",
+    "purchased_unit_fulfillment",
+    "mean_successful_moves"
+  ],
+  "scope": "Development benchmark: assisted system performance, not unassisted model intelligence or real retail impact.",
+  "comparisons": "Layout B minus A within each model; Terra minus Luna within each layout. All four comparisons declared before execution.",
+  "sha256": "190f8e0250c4076f27cec0086088d532e459c649a49afe6afd628bf549eaafdd"
+}

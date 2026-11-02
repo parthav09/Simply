@@ -1,0 +1,86 @@
+"""Versioned shopper prompts. Baseline preserves the pre-evaluation prompt."""
+
+import json
+from collections import Counter
+from agents.schema import DECISION_JSON_EXAMPLE, format_allowed_actions
+
+def baseline_prompt(self, observation=None):
+    obs = self._unpack_observation(observation)
+    profile = obs.customer
+    shelves = []
+    for shelf in obs.nearby_shelves:
+        products = ", ".join(shelf.products) or "empty"
+        shelves.append(f"- ({shelf.x}, {shelf.y}) {shelf.aisle}: {products}")
+    if not shelves:
+        shelves.append("- no shelves in view")
+    cart = ", ".join(getattr(item, "name", str(item)) for item in obs.cart) or "empty"
+    return "\n".join([
+        profile.build_persona_summary(),
+        "",
+        profile.build_behavioral_directives(),
+        "",
+        "Requested products: " + (", ".join(profile.get_target_products()) or "none"),
+        f"Current state: {obs.phase} at ({obs.x}, {obs.y}).",
+        f"Cart: {cart}.",
+        "Nearby shelves:",
+        *shelves,
+        "Choose one step:",
+        format_allowed_actions(obs.allowed_steps),
+        f"Reply with JSON only: {DECISION_JSON_EXAMPLE}",
+    ])
+
+
+def informed_prompt(shopper, observation=None):
+    """Information only: no route solver, purchase override, or budget enforcement."""
+    from core.accounting import basket, cents
+    obs = shopper._unpack_observation(observation)
+    grid = getattr(shopper, '_grid', None)
+    if grid is None:
+        raise ValueError('Informed prompts require a core store observation')
+    cart = [{'product_id': i.product_id, 'name': i.name, 'quantity': i.quantity} for i in obs.cart]
+    totals = basket(cart, list(grid.products.values()))
+    quantities = totals['quantities']
+    visible = []
+    for shelf in grid.shelves:
+        if grid.distance_to_shelf(obs.x, obs.y, shelf) == 1:
+            visible.extend({'product_id': p['id'], 'name': p['name'], 'unit_price_cents': cents(p['price']),
+                            'company': p.get('company', ''), 'dietary_tags': p.get('dietary_tags', ''),
+                            'allergens': p.get('allergens', '')} for p in shelf.products)
+    profile = obs.customer
+    needs = [{'product_id': i.product_id, 'name': i.product_name, 'quantity': i.quantity,
+              'remaining': max(0, i.quantity - quantities.get(i.product_id, 0)), 'priority': i.priority,
+              'department': i.department, 'max_unit_price_cents': cents(i.max_acceptable_unit_price),
+              'preferred_brand': i.preferred_brand} for i in profile.shopping_list]
+    history = [{'step': o.decision.step if o.decision else None, 'product_id': o.decision.product_id if o.decision else None,
+                'reason': o.decision.reason if o.decision else '', 'applied': o.applied, 'failure': o.failure}
+               for o in shopper.decision_history[-8:]]
+    facts = {
+        'position': [obs.x, obs.y], 'phase': obs.phase,
+        'coordinate_system': 'Top-left origin (0,0). x increases right; y increases down.',
+        'legal_move_destinations': {step:[obs.x+dx,obs.y+dy] for step,(dx,dy) in {
+            'move_up':(0,-1),'move_down':(0,1),'move_left':(-1,0),'move_right':(1,0)}.items() if step in obs.allowed_steps},
+        'cart': cart, 'spend_cents': totals['basket_cents'], 'budget_cents': cents(profile.budget_per_trip_usd),
+        'remaining_budget_cents': cents(profile.budget_per_trip_usd) - totals['known_basket_cents'],
+        'shopping_list': needs, 'grabbable_products': visible,
+        'checkout_cells': grid.checkout, 'store_bounds': [grid.width, grid.height],
+        'department_locations': [{'department': s.department, 'shelf_cells': s.cells()} for s in grid.shelves],
+        'blocked_cells': sorted(grid.blocked),
+        'recent_actions': history,
+        'recent_positions': [[t.x_after, t.y_after] for t in shopper.trajectory[-12:]],
+        'turns_used': shopper.turns_used, 'turns_remaining': shopper.turn_budget - shopper.turns_used,
+        'allowed_steps': list(obs.allowed_steps),
+    }
+    return '\n'.join([
+        profile.build_persona_summary(), profile.build_behavioral_directives(),
+        'You decide every shopping action. Prices are in cents. Overspending is possible; consider your persona and priorities.',
+        'Your task is to collect requested quantities and complete checkout within the remaining turns. Choose your own route and tradeoffs.',
+        'Coordinates use a top-left origin: up subtracts 1 from y; down adds 1 to y; left subtracts 1 from x; right adds 1 to x.',
+        'Only move_* changes location, by one cell. Shelf cells are blocked. Buy with grab and the exact visible product_id.',
+        'You may buy multiple units with separate grab actions. remove removes one unit by exact product_id.',
+        'Checkout requires a nonempty cart at a checkout cell. It takes two checkout actions: enter checkout, then pay.',
+        'Do not mistake a shelf location for a walkable aisle. Use the map and recent actions to plan your own route.',
+        'A turn limit ends the trip without automatically purchasing the cart. Your reason is a short public action explanation.',
+        'Current state: ' + json.dumps(facts, separators=(',', ':'), ensure_ascii=False),
+        'Choose one step:', format_allowed_actions(obs.allowed_steps),
+        f'Reply with exactly one JSON object, no repeated objects or extra text: {DECISION_JSON_EXAMPLE}',
+    ])

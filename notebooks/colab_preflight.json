@@ -1,0 +1,32 @@
+{
+  "notebook_format": "passed",
+  "code_cell_syntax": "passed",
+  "code_cells": 15,
+  "assistant_mask_and_target_checks": "352 passed",
+  "observation_action_checks": "352 passed",
+  "tokenizer_source": "Qwen/Qwen3-4B-Instruct-2507 official tokenizer.json and tokenizer_config.json",
+  "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+  "lengths": {
+    "train": {
+      "examples": 234,
+      "min_tokens": 4247,
+      "median_tokens": 7554.0,
+      "max_tokens": 15234
+    },
+    "validation": {
+      "examples": 58,
+      "min_tokens": 3812,
+      "median_tokens": 6907.5,
+      "max_tokens": 10354
+    },
+    "test": {
+      "examples": 60,
+      "min_tokens": 4266,
+      "median_tokens": 6928.0,
+      "max_tokens": 10350
+    }
+  },
+  "gpu_execution": "not run; requires Colab CUDA runtime",
+  "rendered_visual_inspection": "not performed; inspect in Colab before running",
+  "notebook_sha256": "22f1f82aeba337ba045299338c7b51f40cc53059428043855b467c658959e1eb"
+}

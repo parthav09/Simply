@@ -1,0 +1,23 @@
+/* Session restoration and terminal UX must never restart or erase a run. */
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict'),ts=require('typescript');
+const exportsObject={};const source=fs.readFileSync(path.join(__dirname,'../lib/live-session.ts'),'utf8');
+vm.runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports:exportsObject});
+const {liveRunStorageKey,rememberRun,readRememberedRun,restoreRunSelection,liveEndNotice,liveStatusLabel}=exportsObject;
+const values=new Map(),storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
+const id='a'.repeat(32),active='b'.repeat(32);
+const runs=[{run_id:id,status:'budget_exhausted',controllable:false},{run_id:active,status:'recording',controllable:true}];
+rememberRun(storage,id);assert.equal(values.get(liveRunStorageKey),id);
+assert.equal(restoreRunSelection('',runs,readRememberedRun(storage)),id);
+assert.equal(restoreRunSelection(id,[],''),id,'A refresh must not reset the selected final state');
+rememberRun(storage,'');assert.equal(readRememberedRun(storage),'');
+assert.equal(restoreRunSelection('',[runs[0]],''),'','New setup must not reattach an ended recording');
+assert.equal(restoreRunSelection('',[{...runs[1],controllable:false}],''),'','A stale unowned log must not masquerade as an active session');
+assert.equal(restoreRunSelection('',runs,''),active);
+assert.doesNotThrow(()=>rememberRun(undefined,id));assert.equal(readRememberedRun(undefined),'');
+const ended=status=>({source:{status},summary:{finished_count:0,shopper_count:10},events:[]});
+assert.equal(liveEndNotice(ended('incomplete')),null);
+assert.match(liveEndNotice(ended('budget_exhausted')).detail,/without an app-enforced spending cap/);
+assert.match(liveEndNotice({...ended('aborted'),events:[{failure:'OpenAI HTTP 429; reservation retained'}]}).title,/provider rate or quota/);
+assert.match(liveEndNotice(ended('completed')).detail,/0\/10 shoppers checked out/);
+assert.doesNotMatch(liveStatusLabel('budget_exhausted'),/budget_exhausted/);
+console.log('Live session checks passed: final-state restoration, explicit new setup, no phantom run attachment, and clear budget/provider outcomes.');

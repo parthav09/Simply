@@ -1,3 +1,5 @@
+"""Export simulation layouts and shoppers as JSON consumed by the web experience."""
+
 import json
 import sys
 from pathlib import Path
@@ -7,62 +9,12 @@ if str(SIMULATION_DIR) not in sys.path:
     sys.path.insert(0, str(SIMULATION_DIR))
 
 from core.customers import load_customers
+from core.config import MAX_SHOPPER_COUNT
 from core.grid import LAYOUTS, build_store
+from core.presentation import PEOPLE, product_emoji
 
 OUT = SIMULATION_DIR.parent / "landing" / "data" / "store.json"
 OUT_V2 = SIMULATION_DIR.parent / "landing" / "data" / "store_v2.json"
-
-PEOPLE = [
-    "🧑", "👩", "👨", "👧", "🧔", "👵", "👴", "🧕",
-    "👱‍♀️", "👱", "🧑‍🦰", "🧑‍🦱", "🧑‍🦳", "🧑‍🦲", "👩‍🦰",
-]
-
-PRODUCT_EMOJI = [
-    ("ramen", "🍜"), ("udon", "🍜"), ("noodle", "🍜"), ("gyoza", "🥟"),
-    ("rotisserie", "🍗"), ("orange chicken", "🍗"), ("teriyaki", "🍢"),
-    ("banana", "🍌"), ("apple", "🍎"), ("orange", "🍊"), ("strawberr", "🍓"),
-    ("blueberr", "🫐"), ("grape", "🍇"), ("lemon", "🍋"), ("peach", "🍑"),
-    ("pear", "🍐"), ("melon", "🍈"), ("carrot", "🥕"), ("broccoli", "🥦"),
-    ("lettuce", "🥬"), ("tomato", "🍅"), ("potato", "🥔"), ("onion", "🧅"),
-    ("garlic", "🧄"), ("egg", "🥚"), ("milk", "🥛"), ("cheese", "🧀"),
-    ("butter", "🧈"), ("yogurt", "🍦"), ("chicken", "🍗"), ("beef", "🥩"),
-    ("ribeye", "🥩"), ("pork", "🥓"), ("salmon", "🐟"), ("shrimp", "🦐"),
-    ("fish", "🐠"), ("bread", "🍞"), ("croissant", "🥐"), ("brownie", "🍫"),
-    ("cake", "🍰"), ("cookie", "🍪"), ("candy", "🍬"), ("gummy", "🍬"),
-    ("chocolate", "🍫"), ("coffee", "☕"), ("tea", "🍵"), ("beer", "🍺"),
-    ("wine", "🍷"), ("soda", "🥤"), ("juice", "🧃"), ("water", "💧"),
-    ("energy drink", "⚡"), ("rice", "🍚"), ("pasta", "🍝"), ("bean", "🫘"),
-    ("soup", "🍲"), ("honey", "🍯"), ("shampoo", "🧴"), ("soap", "🧼"),
-    ("tooth", "🪥"), ("vitamin", "💊"), ("detergent", "🧺"), ("towel", "🧻"),
-    ("paper", "🧻"), ("baby", "🍼"), ("diaper", "👶"), ("dog", "🐶"),
-    ("cat", "🐱"), ("ice cream", "🍨"), ("pizza", "🍕"), ("frozen", "🧊"),
-]
-
-DEPARTMENT_EMOJI_FALLBACK = {
-    "Produce": "🥬",
-    "Dairy & Eggs": "🥛",
-    "Meat & Seafood": "🥩",
-    "Bakery": "🥐",
-    "Frozen": "🧊",
-    "Pantry": "🥫",
-    "Snacks": "🍪",
-    "Beverages": "🥤",
-    "Health & Beauty": "🧴",
-    "Household": "🧹",
-    "Baby": "🍼",
-    "Pet": "🐾",
-    "Ramen & Noodles": "🍜",
-    "Prepared Meals": "🍗",
-}
-
-
-def product_emoji(product):
-    name = product["name"].lower()
-    for word, emoji in PRODUCT_EMOJI:
-        if word in name:
-            return emoji
-    return DEPARTMENT_EMOJI_FALLBACK.get(product["department"], "🛒")
-
 
 def export_layout(layout_name, customers):
     grid = build_store(layout_name=layout_name)
@@ -131,7 +83,7 @@ def export_layout(layout_name, customers):
 
 
 def main():
-    customers = load_customers()[:15]
+    customers = load_customers()[:MAX_SHOPPER_COUNT]
     layouts = {
         name: export_layout(name, customers)
         for name in LAYOUTS

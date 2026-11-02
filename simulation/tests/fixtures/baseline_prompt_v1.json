@@ -1,0 +1,532 @@
+{
+  "fixture_version": 1,
+  "purpose": "Literal historical baseline requests, not a model-quality benchmark",
+  "source": {
+    "run_id": "c71e06c1a2934ee59e21e6ed5b2c271b",
+    "sha256": "627c0850e5c4b753057c667a36fd9b3e9f13446bad2e3e9e9c1a6260e589191e",
+    "provider": "gemini",
+    "status": "aborted"
+  },
+  "profiles": {
+    "C0040": {
+      "customer_id": "C0040",
+      "first_name": "Hugo",
+      "last_name": "Clark",
+      "age": 27,
+      "gender": "male",
+      "occupation": "Healthcare Worker",
+      "income_bracket_usd": "100k+",
+      "household_size": 1,
+      "num_children": 0,
+      "has_infant_under_2": false,
+      "pet_ownership": "dog_and_cat",
+      "diet_type": "omnivore",
+      "food_allergy": "egg",
+      "drinks_alcohol": true,
+      "health_consciousness_1_5": 2,
+      "organic_preference_1_5": 3,
+      "distance_from_store_km": 10.7,
+      "transport_mode": "rideshare",
+      "trip_type": "quick_trip",
+      "visits_per_month": 10,
+      "preferred_day": "both",
+      "preferred_time_slot": "evening_rush(17-20)",
+      "accompanied_by": "partner",
+      "budget_per_trip_usd": 14.15,
+      "price_sensitivity_1_5": 1,
+      "brand_loyalty_1_5": 4,
+      "coupon_usage": "sometimes",
+      "promo_responsiveness_0_1": 0.32,
+      "loyalty_member": true,
+      "shopping_style": "impulsive",
+      "uses_shopping_list": false,
+      "impulse_buy_probability": 0.66,
+      "walking_pace": "fast",
+      "store_familiarity_1_5": 4,
+      "cart_type": "none",
+      "avg_time_in_store_min": 9,
+      "payment_method": "mobile_wallet",
+      "prefers_self_checkout": false,
+      "queue_patience_min": 5,
+      "brings_own_bags": false,
+      "eco_conscious_1_5": 3,
+      "shopping_list": [
+        {
+          "list_id": "L0040",
+          "product_id": "P0052",
+          "product_name": "Ground Turkey 93% Lean",
+          "product_type": "Poultry",
+          "department": "Meat & Seafood",
+          "aisle": "Aisle 3 - Meat",
+          "quantity": 1,
+          "priority": "must_have",
+          "on_written_list": true,
+          "expected_unit_price": 5.99,
+          "expected_line_total": 5.99,
+          "max_acceptable_unit_price": 8.17,
+          "substitute_allowed": false,
+          "preferred_brand": "Jennie-O"
+        },
+        {
+          "list_id": "L0040",
+          "product_id": "P0153",
+          "product_name": "Spring Water 24 Pack",
+          "product_type": "Soft Drinks & Water",
+          "department": "Beverages",
+          "aisle": "Aisle 12 - Beverages",
+          "quantity": 1,
+          "priority": "must_have",
+          "on_written_list": true,
+          "expected_unit_price": 4.49,
+          "expected_line_total": 4.49,
+          "max_acceptable_unit_price": 5.81,
+          "substitute_allowed": true,
+          "preferred_brand": "FreshMart"
+        }
+      ]
+    },
+    "C0002": {
+      "customer_id": "C0002",
+      "first_name": "Mia",
+      "last_name": "Brown",
+      "age": 61,
+      "gender": "female",
+      "occupation": "Self-Employed",
+      "income_bracket_usd": "50k-75k",
+      "household_size": 1,
+      "num_children": 0,
+      "has_infant_under_2": false,
+      "pet_ownership": "none",
+      "diet_type": "omnivore",
+      "food_allergy": "none",
+      "drinks_alcohol": true,
+      "health_consciousness_1_5": 3,
+      "organic_preference_1_5": 3,
+      "distance_from_store_km": 2.3,
+      "transport_mode": "walk",
+      "trip_type": "quick_trip",
+      "visits_per_month": 12,
+      "preferred_day": "weekend",
+      "preferred_time_slot": "lunch(12-14)",
+      "accompanied_by": "alone",
+      "budget_per_trip_usd": 9.32,
+      "price_sensitivity_1_5": 3,
+      "brand_loyalty_1_5": 5,
+      "coupon_usage": "sometimes",
+      "promo_responsiveness_0_1": 0.58,
+      "loyalty_member": false,
+      "shopping_style": "mixed",
+      "uses_shopping_list": false,
+      "impulse_buy_probability": 0.14,
+      "walking_pace": "normal",
+      "store_familiarity_1_5": 5,
+      "cart_type": "basket",
+      "avg_time_in_store_min": 11,
+      "payment_method": "debit_card",
+      "prefers_self_checkout": true,
+      "queue_patience_min": 3,
+      "brings_own_bags": true,
+      "eco_conscious_1_5": 1,
+      "shopping_list": [
+        {
+          "list_id": "L0002",
+          "product_id": "P0241",
+          "product_name": "Spicy Miso Ramen Bowl",
+          "product_type": "Ramen & Noodles",
+          "department": "Ramen & Noodles",
+          "aisle": "Aisle 23 - Ramen Bar",
+          "quantity": 1,
+          "priority": "must_have",
+          "on_written_list": true,
+          "expected_unit_price": 3.39,
+          "expected_line_total": 3.99,
+          "max_acceptable_unit_price": 3.99,
+          "substitute_allowed": true,
+          "preferred_brand": "Nissin Raoh"
+        }
+      ]
+    },
+    "C0025": {
+      "customer_id": "C0025",
+      "first_name": "Chloe",
+      "last_name": "Patel",
+      "age": 35,
+      "gender": "female",
+      "occupation": "Executive/Manager",
+      "income_bracket_usd": "75k-100k",
+      "household_size": 1,
+      "num_children": 0,
+      "has_infant_under_2": false,
+      "pet_ownership": "none",
+      "diet_type": "vegetarian",
+      "food_allergy": "none",
+      "drinks_alcohol": false,
+      "health_consciousness_1_5": 5,
+      "organic_preference_1_5": 5,
+      "distance_from_store_km": 5.1,
+      "transport_mode": "car",
+      "trip_type": "quick_trip",
+      "visits_per_month": 15,
+      "preferred_day": "weekday",
+      "preferred_time_slot": "lunch(12-14)",
+      "accompanied_by": "alone",
+      "budget_per_trip_usd": 12.56,
+      "price_sensitivity_1_5": 2,
+      "brand_loyalty_1_5": 2,
+      "coupon_usage": "never",
+      "promo_responsiveness_0_1": 0.5,
+      "loyalty_member": false,
+      "shopping_style": "planner",
+      "uses_shopping_list": true,
+      "impulse_buy_probability": 0.14,
+      "walking_pace": "fast",
+      "store_familiarity_1_5": 4,
+      "cart_type": "none",
+      "avg_time_in_store_min": 9,
+      "payment_method": "mobile_wallet",
+      "prefers_self_checkout": true,
+      "queue_patience_min": 1,
+      "brings_own_bags": false,
+      "eco_conscious_1_5": 3,
+      "shopping_list": [
+        {
+          "list_id": "L0025",
+          "product_id": "P0089",
+          "product_name": "Brown Sugar",
+          "product_type": "Baking & Staples",
+          "department": "Pantry",
+          "aisle": "Aisle 6 - Dry Goods",
+          "quantity": 1,
+          "priority": "must_have",
+          "on_written_list": true,
+          "expected_unit_price": 2.84,
+          "expected_line_total": 2.99,
+          "max_acceptable_unit_price": 3.01,
+          "substitute_allowed": true,
+          "preferred_brand": "Domino"
+        },
+        {
+          "list_id": "L0025",
+          "product_id": "P0129",
+          "product_name": "Tortilla Chips",
+          "product_type": "Chips & Crackers",
+          "department": "Snacks",
+          "aisle": "Aisle 10 - Snacks",
+          "quantity": 1,
+          "priority": "want",
+          "on_written_list": true,
+          "expected_unit_price": 4.49,
+          "expected_line_total": 4.49,
+          "max_acceptable_unit_price": 4.84,
+          "substitute_allowed": false,
+          "preferred_brand": "Tostitos"
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "sequence": 1,
+      "agent_id": "C0040",
+      "before": {
+        "x": 1,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0052",
+            "name": "Ground Turkey 93% Lean",
+            "quantity": 1,
+            "x": 1,
+            "y": 2
+          },
+          {
+            "product_id": "P0153",
+            "name": "Spring Water 24 Pack",
+            "quantity": 1,
+            "x": 11,
+            "y": 10
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 0,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Hugo Clark (C0040).\nProfile: 27 year old male, Healthcare Worker, income 100k+, household of 1, 0 children.\nPreferences: diet omnivore, allergy egg, drinks alcohol, health 2/5, organic 3/5, price sensitivity 1/5, a loyalty member.\nThis trip is a quick_trip with a budget of $14.15. Style impulsive, pace fast.\nShopping needs:\n- Poultry: Ground Turkey 93% Lean\n- Soft Drinks & Water: Spring Water 24 Pack\n\nPrefer discounts.\nHealthy food is not a priority.\nShop quickly.\nAvoid egg.\nAn unplanned item is acceptable when it fits the budget.\nPrefer to stay near a $14.15 trip.\n\nRequested products: Ground Turkey 93% Lean, Spring Water 24 Pack\nCurrent state: BrowsingState at (1, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    },
+    {
+      "sequence": 2,
+      "agent_id": "C0002",
+      "before": {
+        "x": 2,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0241",
+            "name": "Spicy Miso Ramen Bowl",
+            "quantity": 1,
+            "x": 6,
+            "y": 1
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 0,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Mia Brown (C0002).\nProfile: 61 year old female, Self-Employed, income 50k-75k, household of 1, 0 children.\nPreferences: diet omnivore, allergy none, drinks alcohol, health 3/5, organic 3/5, price sensitivity 3/5, not a loyalty member.\nThis trip is a quick_trip with a budget of $9.32. Style mixed, pace normal.\nShopping needs:\n- Ramen & Noodles: Spicy Miso Ramen Bowl\n\nPrefer discounts.\nShop quickly.\nPrefer to stay near a $9.32 trip.\n\nRequested products: Spicy Miso Ramen Bowl\nCurrent state: BrowsingState at (2, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    },
+    {
+      "sequence": 3,
+      "agent_id": "C0025",
+      "before": {
+        "x": 3,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0089",
+            "name": "Brown Sugar",
+            "quantity": 1,
+            "x": 9,
+            "y": 6
+          },
+          {
+            "product_id": "P0129",
+            "name": "Tortilla Chips",
+            "quantity": 1,
+            "x": 18,
+            "y": 9
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 0,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Chloe Patel (C0025).\nProfile: 35 year old female, Executive/Manager, income 75k-100k, household of 1, 0 children.\nPreferences: diet vegetarian, allergy none, does not drink alcohol, health 5/5, organic 5/5, price sensitivity 2/5, not a loyalty member.\nThis trip is a quick_trip with a budget of $12.56. Style planner, pace fast.\nShopping needs:\n- Baking & Staples: Brown Sugar\n- Chips & Crackers: Tortilla Chips\n\nPrefer discounts.\nPrefer organic products.\nChoose healthy food.\nShop quickly.\nPrefer food that fits a vegetarian diet.\nAvoid alcohol.\nPrefer items on the shopping list over extras.\nPrefer to stay near a $12.56 trip.\n\nRequested products: Brown Sugar, Tortilla Chips\nCurrent state: BrowsingState at (3, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    },
+    {
+      "sequence": 4,
+      "agent_id": "C0040",
+      "before": {
+        "x": 2,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0052",
+            "name": "Ground Turkey 93% Lean",
+            "quantity": 1,
+            "x": 1,
+            "y": 2
+          },
+          {
+            "product_id": "P0153",
+            "name": "Spring Water 24 Pack",
+            "quantity": 1,
+            "x": 11,
+            "y": 10
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 1,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Hugo Clark (C0040).\nProfile: 27 year old male, Healthcare Worker, income 100k+, household of 1, 0 children.\nPreferences: diet omnivore, allergy egg, drinks alcohol, health 2/5, organic 3/5, price sensitivity 1/5, a loyalty member.\nThis trip is a quick_trip with a budget of $14.15. Style impulsive, pace fast.\nShopping needs:\n- Poultry: Ground Turkey 93% Lean\n- Soft Drinks & Water: Spring Water 24 Pack\n\nPrefer discounts.\nHealthy food is not a priority.\nShop quickly.\nAvoid egg.\nAn unplanned item is acceptable when it fits the budget.\nPrefer to stay near a $14.15 trip.\n\nRequested products: Ground Turkey 93% Lean, Spring Water 24 Pack\nCurrent state: BrowsingState at (2, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    },
+    {
+      "sequence": 5,
+      "agent_id": "C0002",
+      "before": {
+        "x": 3,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0241",
+            "name": "Spicy Miso Ramen Bowl",
+            "quantity": 1,
+            "x": 6,
+            "y": 1
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 1,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Mia Brown (C0002).\nProfile: 61 year old female, Self-Employed, income 50k-75k, household of 1, 0 children.\nPreferences: diet omnivore, allergy none, drinks alcohol, health 3/5, organic 3/5, price sensitivity 3/5, not a loyalty member.\nThis trip is a quick_trip with a budget of $9.32. Style mixed, pace normal.\nShopping needs:\n- Ramen & Noodles: Spicy Miso Ramen Bowl\n\nPrefer discounts.\nShop quickly.\nPrefer to stay near a $9.32 trip.\n\nRequested products: Spicy Miso Ramen Bowl\nCurrent state: BrowsingState at (3, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    },
+    {
+      "sequence": 6,
+      "agent_id": "C0025",
+      "before": {
+        "x": 4,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0089",
+            "name": "Brown Sugar",
+            "quantity": 1,
+            "x": 9,
+            "y": 6
+          },
+          {
+            "product_id": "P0129",
+            "name": "Tortilla Chips",
+            "quantity": 1,
+            "x": 18,
+            "y": 9
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 1,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Chloe Patel (C0025).\nProfile: 35 year old female, Executive/Manager, income 75k-100k, household of 1, 0 children.\nPreferences: diet vegetarian, allergy none, does not drink alcohol, health 5/5, organic 5/5, price sensitivity 2/5, not a loyalty member.\nThis trip is a quick_trip with a budget of $12.56. Style planner, pace fast.\nShopping needs:\n- Baking & Staples: Brown Sugar\n- Chips & Crackers: Tortilla Chips\n\nPrefer discounts.\nPrefer organic products.\nChoose healthy food.\nShop quickly.\nPrefer food that fits a vegetarian diet.\nAvoid alcohol.\nPrefer items on the shopping list over extras.\nPrefer to stay near a $12.56 trip.\n\nRequested products: Brown Sugar, Tortilla Chips\nCurrent state: BrowsingState at (4, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    },
+    {
+      "sequence": 7,
+      "agent_id": "C0040",
+      "before": {
+        "x": 3,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0052",
+            "name": "Ground Turkey 93% Lean",
+            "quantity": 1,
+            "x": 1,
+            "y": 2
+          },
+          {
+            "product_id": "P0153",
+            "name": "Spring Water 24 Pack",
+            "quantity": 1,
+            "x": 11,
+            "y": 10
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 2,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Hugo Clark (C0040).\nProfile: 27 year old male, Healthcare Worker, income 100k+, household of 1, 0 children.\nPreferences: diet omnivore, allergy egg, drinks alcohol, health 2/5, organic 3/5, price sensitivity 1/5, a loyalty member.\nThis trip is a quick_trip with a budget of $14.15. Style impulsive, pace fast.\nShopping needs:\n- Poultry: Ground Turkey 93% Lean\n- Soft Drinks & Water: Spring Water 24 Pack\n\nPrefer discounts.\nHealthy food is not a priority.\nShop quickly.\nAvoid egg.\nAn unplanned item is acceptable when it fits the budget.\nPrefer to stay near a $14.15 trip.\n\nRequested products: Ground Turkey 93% Lean, Spring Water 24 Pack\nCurrent state: BrowsingState at (3, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    },
+    {
+      "sequence": 8,
+      "agent_id": "C0002",
+      "before": {
+        "x": 4,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0241",
+            "name": "Spicy Miso Ramen Bowl",
+            "quantity": 1,
+            "x": 6,
+            "y": 1
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 2,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Mia Brown (C0002).\nProfile: 61 year old female, Self-Employed, income 50k-75k, household of 1, 0 children.\nPreferences: diet omnivore, allergy none, drinks alcohol, health 3/5, organic 3/5, price sensitivity 3/5, not a loyalty member.\nThis trip is a quick_trip with a budget of $9.32. Style mixed, pace normal.\nShopping needs:\n- Ramen & Noodles: Spicy Miso Ramen Bowl\n\nPrefer discounts.\nShop quickly.\nPrefer to stay near a $9.32 trip.\n\nRequested products: Spicy Miso Ramen Bowl\nCurrent state: BrowsingState at (4, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    },
+    {
+      "sequence": 9,
+      "agent_id": "C0025",
+      "before": {
+        "x": 5,
+        "y": 12,
+        "phase": "BrowsingState",
+        "cart": [],
+        "nearby_shelves": [],
+        "requirements": [
+          {
+            "product_id": "P0089",
+            "name": "Brown Sugar",
+            "quantity": 1,
+            "x": 9,
+            "y": 6
+          },
+          {
+            "product_id": "P0129",
+            "name": "Tortilla Chips",
+            "quantity": 1,
+            "x": 18,
+            "y": 9
+          }
+        ],
+        "allowed_steps": [
+          "move_left",
+          "move_right",
+          "move_up",
+          "move_down"
+        ],
+        "turns_used": 2,
+        "turn_budget": 120
+      },
+      "prompt": "You are shopper Chloe Patel (C0025).\nProfile: 35 year old female, Executive/Manager, income 75k-100k, household of 1, 0 children.\nPreferences: diet vegetarian, allergy none, does not drink alcohol, health 5/5, organic 5/5, price sensitivity 2/5, not a loyalty member.\nThis trip is a quick_trip with a budget of $12.56. Style planner, pace fast.\nShopping needs:\n- Baking & Staples: Brown Sugar\n- Chips & Crackers: Tortilla Chips\n\nPrefer discounts.\nPrefer organic products.\nChoose healthy food.\nShop quickly.\nPrefer food that fits a vegetarian diet.\nAvoid alcohol.\nPrefer items on the shopping list over extras.\nPrefer to stay near a $12.56 trip.\n\nRequested products: Brown Sugar, Tortilla Chips\nCurrent state: BrowsingState at (5, 12).\nCart: empty.\nNearby shelves:\n- no shelves in view\nChoose one step:\n- move_left: Move one cell left.\n- move_right: Move one cell right.\n- move_up: Move one cell up.\n- move_down: Move one cell down.\nReply with JSON only: {\"step\": \"move_right\", \"product_id\": \"\", \"reason\": \"\"}"
+    }
+  ]
+}

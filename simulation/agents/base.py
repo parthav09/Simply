@@ -1,3 +1,5 @@
+"""Shared immutable decision contracts and the minimal agent base type."""
+
 from dataclasses import dataclass, field
 
 
@@ -30,10 +32,13 @@ class Decision:
 
 @dataclass(frozen=True)
 class ProposalResult:
-    """Gemini text plus the parsed decision, if the response passed validation."""
+    """Provider text plus the parsed decision, if the response passed validation."""
 
-    raw_response: str
+    raw_response: str | None
     decision: Decision | None = None
+    telemetry: dict | None = None
+    # Explicit model choices after decision; core validates each at execution.
+    continuation: tuple[Decision, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -63,3 +68,7 @@ class Agent:
     def decide(self, observation):
         raise NotImplementedError("Subclasses must implement decide(observation)")
 
+
+
+class MissingProviderApiKeyError(RuntimeError):
+    """Fatal configuration failure; do not turn it into repeated shopper turns."""

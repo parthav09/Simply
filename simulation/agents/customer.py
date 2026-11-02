@@ -1,3 +1,5 @@
+"""Customer profile and shopping-list data parsed from the CSV datasets."""
+
 from dataclasses import dataclass
 
 

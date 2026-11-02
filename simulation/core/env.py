@@ -1,3 +1,5 @@
+"""Read local environment configuration and report virtual-environment status."""
+
 import sys
 from pathlib import Path
 

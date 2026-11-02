@@ -1,4 +1,4 @@
-"""Gemini-driven store steps plus read-only helpers for the Tkinter display."""
+"""Legacy compatibility helpers. The authoritative lab interface is React."""
 
 from agents.state import BrowsingState, FinishedState
 
@@ -55,6 +55,4 @@ def auto_step(grid, shopper):
     if decision is None:
         return False
     applied = grid.apply(shopper, decision)
-    if isinstance(shopper.state, FinishedState):
-        shopper.state.x, shopper.state.y = grid.exit
     return applied

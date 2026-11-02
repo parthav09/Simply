@@ -1,3 +1,5 @@
+"""Shopper behavior that turns observations into validated actions and state updates."""
+
 from agents.base import Decision, Observation
 from agents.state import (
     BrowsingState,
@@ -6,7 +8,7 @@ from agents.state import (
     FinishedState,
     TrajectoryStep,
 )
-from agents.schema import DECISION_JSON_EXAMPLE, format_allowed_actions
+from agents.schema import DECISION_JSON_EXAMPLE, format_allowed_actions, is_valid_decision
 from agents.steps import MOVES, STEP_DESCRIPTIONS
 
 
@@ -23,6 +25,16 @@ class Shopper:
         self._turn_budget = turn_budget
         self.turns_used = 0
         self.decision_history = ()
+
+    @property
+    def _grid(self):
+        ref = getattr(self, '_grid_ref', None)
+        return ref() if ref else None
+
+    @_grid.setter
+    def _grid(self, value):
+        import weakref
+        self._grid_ref = weakref.ref(value)
 
     @property
     def customer_id(self):
@@ -140,133 +152,50 @@ class Shopper:
 
         adapter = decision_adapter or decide_with_llm
         decision = adapter(self, obs)
-        if decision is None or decision.step not in allowed:
+        if not is_valid_decision(decision, allowed):
             raise RuntimeError(
                 "The LLM did not return a valid allowed decision for this observation."
             )
         return decision
 
     def perform(self, step, product_id=None):
-        if isinstance(step, Decision):
-            product_id = step.product_id
-            step = step.step
-        if step not in self.allowed_steps():
-            return False
-        if step in MOVES:
-            dx, dy = MOVES[step]
-            return self.move(dx, dy, step)
-        return getattr(self, step)(product_id)
-
-    def move_left(self, product_id=None):
-        return self.move(-1, 0, "move_left")
-
-    def move_right(self, product_id=None):
-        return self.move(1, 0, "move_right")
-
-    def move_up(self, product_id=None):
-        return self.move(0, -1, "move_up")
-
-    def move_down(self, product_id=None):
-        return self.move(0, 1, "move_down")
+        from core.actions import apply_action
+        return apply_action(self, step, product_id)
 
     def move(self, dx, dy, step):
-        before_x = self.state.x
-        before_y = self.state.y
-        self.state.x += dx
-        self.state.y += dy
-        self.record(step, before_x, before_y, True)
-        return True
+        return self.perform(step)
+
+    def move_left(self, product_id=None):
+        return self.perform("move_left")
+
+    def move_right(self, product_id=None):
+        return self.perform("move_right")
+
+    def move_up(self, product_id=None):
+        return self.perform("move_up")
+
+    def move_down(self, product_id=None):
+        return self.perform("move_down")
 
     def grab(self, product_id=None):
-        before_x = self.state.x
-        before_y = self.state.y
-        for shelf in self.state.nearby_shelves:
-            for name in shelf.products:
-                item = self.find_list_item(product_id, name)
-                if product_id and item is None and product_id != name:
-                    continue
-                picked_id = item.product_id if item else name
-                picked_name = item.product_name if item else name
-                self.state.cart.append(CartItem(picked_id, picked_name, 1, shelf.x, shelf.y))
-                self.record("grab", before_x, before_y, True)
-                return True
-        self.record("grab", before_x, before_y, False)
-        return False
+        return self.perform("grab", product_id)
 
     def remove(self, product_id=None):
-        before_x = self.state.x
-        before_y = self.state.y
-        if not self.state.cart:
-            self.record("remove", before_x, before_y, False)
-            return False
-        if product_id:
-            for index, item in enumerate(self.state.cart):
-                if item.product_id == product_id or item.name == product_id:
-                    self.state.cart.pop(index)
-                    self.record("remove", before_x, before_y, True)
-                    return True
-        self.state.cart.pop()
-        self.record("remove", before_x, before_y, True)
-        return True
+        return self.perform("remove", product_id)
 
     def checkout(self, product_id=None):
-        before_x = self.state.x
-        before_y = self.state.y
-        if isinstance(self.state, BrowsingState):
-            self.state = self.state.enter_checkout()
-            self.record("checkout", before_x, before_y, True)
-            return True
-        if isinstance(self.state, CheckoutState):
-            self.state = self.state.finish()
-            self.record("checkout", before_x, before_y, True)
-            return True
-        self.record("checkout", before_x, before_y, False)
-        return False
-
-    def find_list_item(self, product_id, shelf_name, customer=None):
-        profile = customer or self.customer
-        for item in profile.shopping_list:
-            same_shelf = item.product_name == shelf_name or item.product_id == shelf_name
-            if not same_shelf:
-                continue
-            if not product_id or product_id in (item.product_id, item.product_name):
-                return item
-        return None
+        return self.perform("checkout", product_id)
 
     def record(self, step, before_x, before_y, success):
         self.step_count += 1
         self.trajectory.append(TrajectoryStep(
-            self.step_count,
-            step,
-            before_x,
-            before_y,
-            self.state.x,
-            self.state.y,
-            [item.product_id for item in self.state.cart],
-            success,
+            self.step_count, step, before_x, before_y,
+            self.state.x, self.state.y,
+            [item.product_id for item in self.state.cart], success,
         ))
 
-    def prompt(self, observation=None):
-        obs = self._unpack_observation(observation)
-        profile = obs.customer
-        shelves = []
-        for shelf in obs.nearby_shelves:
-            products = ", ".join(shelf.products) or "empty"
-            shelves.append(f"- ({shelf.x}, {shelf.y}) {shelf.aisle}: {products}")
-        if not shelves:
-            shelves.append("- no shelves in view")
-        cart = ", ".join(getattr(item, "name", str(item)) for item in obs.cart) or "empty"
-        return "\n".join([
-            profile.build_persona_summary(),
-            "",
-            profile.build_behavioral_directives(),
-            "",
-            "Requested products: " + (", ".join(profile.get_target_products()) or "none"),
-            f"Current state: {obs.phase} at ({obs.x}, {obs.y}).",
-            f"Cart: {cart}.",
-            "Nearby shelves:",
-            *shelves,
-            "Choose one step:",
-            format_allowed_actions(obs.allowed_steps),
-            f"Reply with JSON only: {DECISION_JSON_EXAMPLE}",
-        ])
+    def prompt(self, observation=None, *, action_plan=False):
+        from agents.prompts import baseline_prompt, informed_prompt
+        if getattr(self, "prompt_variant", "baseline") == "informed":
+            return informed_prompt(self, observation, action_plan=action_plan)
+        return baseline_prompt(self, observation)

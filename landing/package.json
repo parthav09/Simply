@@ -3,11 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "verify:engine": "node scripts/verify-engine.cjs"
+    "verify:engine": "node scripts/verify-engine.cjs",
+    "verify:replay": "node scripts/verify-replay.cjs",
+    "verify:live": "node scripts/verify-live.cjs",
+    "typecheck": "tsc --noEmit",
+    "simulate:openrouter": "../.venv/bin/python ../simulation/main.py --provider openrouter --export-web",
+    "simulate:openai": "../.venv/bin/python ../simulation/main.py --provider openai --export-web",
+    "simulation:serve": "../.venv/bin/python ../simulation/serve.py",
+    "verify:ui": "node scripts/verify-ui.cjs",
+    "verify:history": "node scripts/verify-history.cjs",
+    "verify:live-session": "node scripts/verify-live-session.cjs",
+    "verify:study": "node scripts/verify-study.cjs",
+    "verify:matrix": "node scripts/verify-matrix.cjs",
+    "verify:dashboard": "node scripts/verify-dashboard.cjs"
   },
   "dependencies": {
     "next": "16.4.2",

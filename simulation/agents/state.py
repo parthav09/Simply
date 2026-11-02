@@ -1,3 +1,5 @@
+"""Mutable, per-shopper browsing, checkout, cart, and trajectory state."""
+
 from dataclasses import dataclass, field
 
 from agents.customer import Customer

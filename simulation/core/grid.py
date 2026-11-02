@@ -1,106 +1,76 @@
+"""Store layouts, shelf assortments, pathfinding, observations, and action application."""
+
 import csv
-from collections import deque
+from collections import Counter, deque
 from dataclasses import dataclass, field
 
 from agents.state import NearbyShelf
 from agents.steps import MOVES
-from core.config import PRODUCTS_PATH
+from core.config import PRODUCTS_PATH, SHOPPING_LISTS_PATH
 
-WIDTH = 28
-HEIGHT = 16
+WIDTH = 22
+HEIGHT = 14
 
-ENTRANCE = [(2, 14), (3, 14), (4, 14), (5, 14), (6, 14)]
-CHECKOUT = [(19, 14), (20, 14), (21, 14), (22, 14), (23, 14), (24, 14)]
-EXIT = (26, 14)
+ENTRANCE = [(x, 12) for x in range(1, 8)]
+CHECKOUT = [(x, 12) for x in range(16, 21)]
+EXIT = (21, 12)
 
-# Thoughtful architectural fixture shapes using (dx, dy) offsets from (x, y)
+# Each accessible shelf section holds an assortment of SKUs, like a real bay.
 SHAPES = {
-    "back_case_5x2": [(dx, dy) for dy in range(2) for dx in range(5)],
-    "corner_l_left": [
-        (0, 0), (1, 0), (2, 0), (3, 0),
-        (0, 1), (1, 1), (2, 1), (3, 1),
-        (0, 2), (1, 2),
-    ],
-    "corner_l_right": [
-        (0, 0), (1, 0), (2, 0), (3, 0),
-        (0, 1), (1, 1), (2, 1), (3, 1),
-                        (2, 2), (3, 2),
-    ],
-    "u_island": [
-        (0, 0), (1, 0), (2, 0), (3, 0),
-        (0, 1),                 (3, 1),
-    ],
-    "t_gondola": [
-        (0, 0), (1, 0), (2, 0), (3, 0),
-                (1, 1), (2, 1),
-    ],
-    "plus_pod": [
-                (1, 0),
-        (0, 1), (1, 1), (2, 1),
-                (1, 2),
-    ],
-    "wall_wing_2x4": [(dx, dy) for dy in range(4) for dx in range(2)],
-    "gondola_4x2": [(dx, dy) for dy in range(2) for dx in range(4)],
-    "crate_3x2": [(dx, dy) for dy in range(2) for dx in range(3)],
-    "endcap_2x2": [(dx, dy) for dy in range(2) for dx in range(2)],
-    "step_display": [
-        (0, 0), (1, 0), (2, 0),
-                (1, 1), (2, 1), (3, 1),
-    ],
+    "shelf_bay": [(x, y) for y in range(2) for x in range(3)],
+    "cold_case": [(x, y) for y in range(2) for x in range(3)],
+    "market_table": [(x, y) for y in range(2) for x in range(3)],
+    "feature_display": [(x, y) for y in range(2) for x in range(2)],
 }
 
-# Two thoughtfully zoned architectural store layouts (28x16)
-LAYOUTS = {
-    "costco_back_anchor": {
-        "id": "costco_back_anchor",
-        "name": "Layout A — Perimeter Anchor Loop (Costco Logic)",
-        "subtitle": "Fresh anchors (Butcher Meat, Ramen Bar, Dairy Cold Case, Rotisserie Deli) frame the North back wall; shoppers entering from the South-West walk past the Front Impulse Plaza (Snacks, Artisan Bakery, Beverages).",
-        "shelves": [
-            # NORTH PERIMETER WALL (y=1..3) — High-demand anchor destinations
-            {"department": "Meat & Seafood", "emoji": "🥩", "x": 1, "y": 1, "shape": "corner_l_left", "zone": "back_anchor"},
-            {"department": "Ramen & Noodles", "emoji": "🍜", "x": 7, "y": 1, "shape": "back_case_5x2", "zone": "back_anchor"},
-            {"department": "Dairy & Eggs", "emoji": "🥛", "x": 14, "y": 1, "shape": "back_case_5x2", "zone": "back_anchor"},
-            {"department": "Prepared Meals", "emoji": "🍗", "x": 21, "y": 1, "shape": "corner_l_right", "zone": "back_anchor"},
-            # WEST & EAST PERIMETER WINGS (y=5..8)
-            {"department": "Health & Beauty", "emoji": "🧴", "x": 1, "y": 5, "shape": "wall_wing_2x4", "zone": "mid_store"},
-            {"department": "Pet", "emoji": "🐾", "x": 25, "y": 5, "shape": "wall_wing_2x4", "zone": "mid_store"},
-            # CENTER MARKET PLAZA (y=5..6) — Evenly spaced 2-cell boulevards
-            {"department": "Produce", "emoji": "🥬", "x": 5, "y": 5, "shape": "u_island", "zone": "mid_store"},
-            {"department": "Pantry", "emoji": "🥫", "x": 11, "y": 5, "shape": "t_gondola", "zone": "mid_store"},
-            {"department": "Frozen", "emoji": "🧊", "x": 17, "y": 5, "shape": "gondola_4x2", "zone": "mid_store"},
-            # SOUTH-FRONT IMPULSE PROMENADE (y=9..11) — Directly between Entrance & Checkout
-            {"department": "Baby", "emoji": "🍼", "x": 1, "y": 10, "shape": "endcap_2x2", "zone": "mid_store"},
-            {"department": "Snacks", "emoji": "🍪", "x": 5, "y": 9, "shape": "plus_pod", "zone": "front_impulse"},
-            {"department": "Bakery", "emoji": "🥐", "x": 10, "y": 9, "shape": "u_island", "zone": "front_impulse"},
-            {"department": "Beverages", "emoji": "🥤", "x": 16, "y": 9, "shape": "step_display", "zone": "front_impulse"},
-            {"department": "Household", "emoji": "🧹", "x": 22, "y": 10, "shape": "crate_3x2", "zone": "mid_store"},
-        ],
-    },
-    "neighborhood_express": {
-        "id": "neighborhood_express",
-        "name": "Layout B — Front-Essentials Express",
-        "subtitle": "Daily staples (Produce, Dairy, Butcher Meat, Ramen Bar, Artisan Bakery) form a fast Front Express Row right above the Entrance & Registers; specialty & non-food aisles sit calmly at the back.",
-        "shelves": [
-            # NORTH BACK WALL (y=1..2) — Low-frequency non-food & specialty
-            {"department": "Pet", "emoji": "🐾", "x": 2, "y": 1, "shape": "crate_3x2", "zone": "back_specialty"},
-            {"department": "Baby", "emoji": "🍼", "x": 7, "y": 1, "shape": "crate_3x2", "zone": "back_specialty"},
-            {"department": "Household", "emoji": "🧹", "x": 12, "y": 1, "shape": "gondola_4x2", "zone": "back_specialty"},
-            {"department": "Health & Beauty", "emoji": "🧴", "x": 18, "y": 1, "shape": "gondola_4x2", "zone": "back_specialty"},
-            {"department": "Frozen", "emoji": "🧊", "x": 24, "y": 1, "shape": "crate_3x2", "zone": "back_specialty"},
-            # MIDDLE MARKET AISLES (y=5..7)
-            {"department": "Snacks", "emoji": "🍪", "x": 2, "y": 5, "shape": "plus_pod", "zone": "mid_store"},
-            {"department": "Pantry", "emoji": "🥫", "x": 7, "y": 5, "shape": "u_island", "zone": "mid_store"},
-            {"department": "Beverages", "emoji": "🥤", "x": 13, "y": 5, "shape": "t_gondola", "zone": "mid_store"},
-            {"department": "Prepared Meals", "emoji": "🍗", "x": 19, "y": 5, "shape": "u_island", "zone": "mid_store"},
-            # SOUTH-FRONT EXPRESS BOULEVARD (y=10..11) — Immediate access from Entrance & Checkout
-            {"department": "Produce", "emoji": "🥬", "x": 1, "y": 10, "shape": "gondola_4x2", "zone": "front_essential"},
-            {"department": "Dairy & Eggs", "emoji": "🥛", "x": 7, "y": 10, "shape": "gondola_4x2", "zone": "front_essential"},
-            {"department": "Meat & Seafood", "emoji": "🥩", "x": 13, "y": 10, "shape": "gondola_4x2", "zone": "front_essential"},
-            {"department": "Ramen & Noodles", "emoji": "🍜", "x": 19, "y": 10, "shape": "crate_3x2", "zone": "front_essential"},
-            {"department": "Bakery", "emoji": "🥐", "x": 24, "y": 10, "shape": "crate_3x2", "zone": "front_essential"},
-        ],
-    },
+DEPARTMENTS = {
+    "Meat & Seafood": "🥩", "Ramen & Noodles": "🍜", "Dairy & Eggs": "🥛",
+    "Prepared Meals": "🍗", "Health & Beauty": "🧴", "Pet": "🐾",
+    "Produce": "🥬", "Pantry": "🥫", "Frozen": "🧊", "Baby": "🍼",
+    "Snacks": "🍪", "Bakery": "🥐", "Beverages": "🥤", "Household": "🧹",
 }
+
+
+def make_layouts():
+    visits = Counter()
+    with open(SHOPPING_LISTS_PATH, newline="", encoding="utf-8") as handle:
+        seen = set()
+        for row in csv.DictReader(handle):
+            key = (row["customer_id"], row["department"])
+            if key not in seen:
+                seen.add(key)
+                visits[row["department"]] += 1
+    ranked = sorted(DEPARTMENTS, key=lambda name: (-visits[name], name))
+    definitions = [
+        ("costco_back_anchor", "Layout A — Anchor loop",
+         "Staples at the back, with snacks and bakery near the entrance.",
+         list(DEPARTMENTS)),
+        ("neighborhood_express", "Layout B — Express essentials",
+         "Daily essentials near the entrance for shorter shopping trips.",
+         ["Pet", "Baby", "Household", "Health & Beauty", "Frozen",
+          "Snacks", "Pantry", "Beverages", "Prepared Meals",
+          "Ramen & Noodles", "Produce", "Dairy & Eggs", "Meat & Seafood", "Bakery"]),
+    ]
+    slots = [(x, y) for y in (1, 5, 9) for x in (1, 5, 9, 13, 17)]
+    layouts = {}
+    for layout_id, name, subtitle, order in definitions:
+        shelves = []
+        for department, (x, y) in zip(order, slots):
+            zone = "back_anchor" if y <= 5 and department in ranked[:6] else "mid_store"
+            if y == 9:
+                zone = "front_essential" if layout_id == "neighborhood_express" else "front_impulse"
+            shape = ("cold_case" if department in ("Dairy & Eggs", "Meat & Seafood", "Frozen")
+                     else "market_table" if department == "Produce" else "shelf_bay")
+            shelves.append({"department": department, "emoji": DEPARTMENTS[department],
+                            "x": x, "y": y, "shape": shape, "zone": zone})
+        feature = "Snacks"
+        shelves.append({"department": feature, "emoji": DEPARTMENTS[feature],
+                        "x": 17, "y": 9, "shape": "feature_display", "zone": "front_feature"})
+        layouts[layout_id] = {"id": layout_id, "name": name, "subtitle": subtitle, "shelves": shelves}
+    return layouts
+
+
+LAYOUTS = make_layouts()
 
 
 @dataclass
@@ -109,14 +79,14 @@ class Shelf:
     y: int
     department: str
     emoji: str
-    shape: str = "gondola_4x2"
+    shape: str = "shelf_bay"
     zone: str = "mid_store"
     offsets: list = field(default_factory=list)
     products: list = field(default_factory=list)
 
     def __post_init__(self):
         if not self.offsets:
-            self.offsets = list(SHAPES.get(self.shape, SHAPES["gondola_4x2"]))
+            self.offsets = list(SHAPES.get(self.shape, SHAPES["shelf_bay"]))
 
     @property
     def width(self):
@@ -141,6 +111,7 @@ class Shelf:
     def product_cell(self, product):
         cells = self.face_cells()
         spot = self.products.index(product) if product in self.products else 0
+        # A bay contains several products at each accessible shelf section.
         return cells[spot % len(cells)]
 
 
@@ -149,7 +120,7 @@ class Grid:
 
     def __init__(self, products_path=PRODUCTS_PATH, layout_name="costco_back_anchor"):
         if layout_name not in LAYOUTS:
-            layout_name = "costco_back_anchor"
+            raise ValueError(f"Unknown layout: {layout_name}")
         self.layout_name = layout_name
         self.layout_meta = LAYOUTS[layout_name]
         self.width = WIDTH
@@ -171,13 +142,14 @@ class Grid:
                 zone=spec["zone"],
             )
             self.shelves.append(shelf)
-            shelf_by_department[shelf.department] = shelf
+            shelf_by_department.setdefault(shelf.department, []).append(shelf)
 
         with open(products_path, newline="", encoding="utf-8") as handle:
             for row in csv.DictReader(handle):
-                shelf = shelf_by_department.get(row["department"])
-                if shelf is None:
+                department_shelves = shelf_by_department.get(row["department"])
+                if not department_shelves:
                     continue
+                shelf = min(department_shelves, key=lambda s: len(s.products) / len(s.face_cells()))
                 product = {
                     "id": row["id"],
                     "name": row["product_name"],
@@ -185,6 +157,9 @@ class Grid:
                     "department": row["department"],
                     "aisle": row["aisle"],
                     "price": float(row["selling_price"]),
+                    "company": row.get("company", ""),
+                    "dietary_tags": row.get("dietary_tags", ""),
+                    "allergens": row.get("allergens", ""),
                     "discounted_price": float(row.get("discounted_price") or row["selling_price"]),
                     "discount_percent": float(row.get("discount_percent") or 0),
                     "popularity": float(row.get("popularity_score") or 3.0),
@@ -193,6 +168,12 @@ class Grid:
                 cell = shelf.product_cell(product)
                 product["x"], product["y"] = cell
                 self.products[product["id"]] = product
+
+        # Unstocked sections become open floor; keep shared SKU positions unique.
+        for shelf in self.shelves:
+            shelf.offsets = list(dict.fromkeys(
+                (p["x"] - shelf.x, p["y"] - shelf.y) for p in shelf.products
+            ))
 
         self.blocked = set()
         for shelf in self.shelves:
@@ -237,10 +218,15 @@ class Grid:
                 shopper.state.place_requirement(item, product["x"], product["y"])
 
     def spawn(self, shoppers):
+        reserved = set(self.checkout) | {self.exit}
+        spawn_cells = sorted(
+            ((x, y) for y in range(self.height) for x in range(self.width)
+             if self.walkable(x, y) and (x, y) not in reserved),
+            key=lambda cell: (min(abs(cell[0] - x) + abs(cell[1] - y) for x, y in self.entrance), -cell[1], cell[0]),
+        )
         for index, shopper in enumerate(shoppers):
-            x, y = self.entrance[index % len(self.entrance)]
-            shopper.state.x = x
-            shopper.state.y = y - index // len(self.entrance)
+            shopper._grid = self
+            shopper.state.x, shopper.state.y = spawn_cells[index % len(spawn_cells)]
             self.place_requirements(shopper)
             self.refresh(shopper)
         return shoppers
@@ -271,24 +257,10 @@ class Grid:
         )
 
     def apply(self, shopper, step, product_id=None):
-        """Run one Shopper step or Decision, but never through a shelf or a wall."""
-        if hasattr(step, "step"):
-            product_id = step.product_id
-            step = step.step
-        state = shopper.state
-        if step in MOVES:
-            dx, dy = MOVES[step]
-            if not self.walkable(state.x + dx, state.y + dy):
-                shopper.record(step, state.x, state.y, False)
-                return False
-            done = shopper.perform(step, product_id)
-        elif step == "checkout" and (state.x, state.y) not in self.checkout:
-            if type(state).__name__ == "BrowsingState":
-                shopper.record(step, state.x, state.y, False)
-                return False
-            done = shopper.perform(step, product_id)
-        else:
-            done = shopper.perform(step, product_id)
+        """The single physical action application boundary."""
+        from core.actions import apply_action
+        shopper._grid = self
+        done = apply_action(shopper, step, product_id, grid=self)
         self.refresh(shopper)
         return done
 

@@ -1,5 +1,6 @@
 import sys
 import threading
+import tempfile
 import unittest
 from concurrent.futures import Future
 from pathlib import Path
@@ -21,8 +22,14 @@ from agents.llm import (
 )
 from agents.shopper import Shopper
 from agents.state import CheckoutState, FinishedState
-from core.config import RESULTS_PATH, TRAJECTORY_DIR, VENV_PYTHON
-from core.customers import instantiate_agents, load_customers, spawn_agents
+from core.config import DECISION_RUNS_DIR, RESULTS_PATH, TRAJECTORY_DIR, VENV_PYTHON
+from core.customers import (
+    instantiate_agents,
+    instantiate_all_agents,
+    load_customers,
+    spawn_agents,
+)
+from core.decision_log import build_decision_record, observation_to_dict, write_jsonl
 from core.env import python_is_venv
 from core.grid import build_store
 from core.rounds import RoundCoordinator
@@ -33,6 +40,10 @@ class SimulationContractTests(unittest.TestCase):
     def setUp(self):
         self.grid = build_store()
         self.shopper = self.grid.spawn(instantiate_agents(count=1))[0]
+
+    def test_instantiate_all_agents_loads_every_customer(self):
+        shoppers = instantiate_all_agents()
+        self.assertEqual(len(shoppers), len(load_customers()))
 
     def test_customer_data_builds_agents_with_shopping_lists(self):
         customers = load_customers()
@@ -97,8 +108,8 @@ class SimulationContractTests(unittest.TestCase):
         allowed = ("move_left", "grab")
 
         self.assertEqual(
-            parse_decision('```json\n{"step": "grab", "product_id": ""}\n```', allowed),
-            parse_decision('{"step": "grab"}', allowed),
+            parse_decision('```json\n{"step": "grab", "product_id": "", "reason": ""}\n```', allowed),
+            Decision("grab"),
         )
         self.assertIsNone(parse_decision('{"step": "checkout"}', allowed))
         self.assertIsNone(parse_decision("not json", allowed))
@@ -132,7 +143,7 @@ class SimulationContractTests(unittest.TestCase):
         self.assertFalse(auto_step(self.grid, self.shopper))
         self.assertEqual((self.shopper.state.x, self.shopper.state.y), (5, 6))
 
-    def test_round_waits_for_all_decisions_before_ordered_commits(self):
+    def test_fast_shopper_commits_while_a_slower_peer_is_still_pending(self):
         shoppers = self.grid.spawn(instantiate_agents(count=2))
         first_observation = self.grid.observe(shoppers[0])
         first_prompt = shoppers[0].prompt(first_observation)
@@ -164,8 +175,13 @@ class SimulationContractTests(unittest.TestCase):
         self.grid.apply = record_apply
         coordinator = RoundCoordinator(decide)
 
+        first_applied = threading.Event()
+
         def run_round():
-            coordinator.run(self.grid, shoppers)
+            coordinator.tick(self.grid, shoppers, wait_all=False)
+            first_applied.set()
+            self.assertTrue(release_first.wait(timeout=2))
+            coordinator.settle(self.grid)
             round_finished.set()
 
         thread = threading.Thread(target=run_round)
@@ -176,20 +192,19 @@ class SimulationContractTests(unittest.TestCase):
         thread.start()
         self.assertTrue(first_started.wait(timeout=2))
         self.assertTrue(second_finished.wait(timeout=2))
+        self.assertTrue(first_applied.wait(timeout=2))
         self.assertFalse(round_finished.is_set())
         self.assertEqual(
-            [
-                (shopper.state.x, shopper.state.y, shopper.step_count, tuple(shopper.trajectory))
-                for shopper in shoppers
-            ],
-            initial_states,
+            (shoppers[0].state.x, shoppers[0].state.y, shoppers[0].step_count),
+            initial_states[0][:3],
         )
+        self.assertEqual(shoppers[1].step_count, 1)
 
         release_first.set()
         thread.join(timeout=2)
         self.assertFalse(thread.is_alive())
         self.assertTrue(round_finished.is_set())
-        self.assertEqual(commits, shoppers)
+        self.assertEqual(commits, [shoppers[1], shoppers[0]])
         self.assertEqual([shopper.step_count for shopper in shoppers], [1, 1])
         self.assertEqual([len(shopper.trajectory) for shopper in shoppers], [1, 1])
         self.assertEqual(len(worker_inputs), 2)
@@ -355,6 +370,55 @@ class SimulationContractTests(unittest.TestCase):
         self.assertEqual(self.shopper.turns_used, 0)
         self.assertEqual(len(self.shopper.decision_history), 1)
 
+    def test_decision_log_jsonl_round_trip(self):
+        observation = self.grid.observe(self.shopper)
+        proposal = ProposalResult(
+            raw_response='{"step": "' + observation.allowed_steps[0] + '", "reason": "test"}',
+            decision=Decision(observation.allowed_steps[0], reason="test"),
+        )
+        record = build_decision_record(
+            self.shopper,
+            observation,
+            proposal,
+            layout_id=self.grid.layout_name,
+            prompt="prompt text",
+            run_id="run-test",
+        )
+        with tempfile.TemporaryDirectory() as folder:
+            path = write_jsonl(Path(folder) / "test_decisions.jsonl", [record])
+            lines = path.read_text(encoding="utf-8").strip().splitlines()
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(record["agent_id"], self.shopper.customer_id)
+        self.assertEqual(record["observation"], observation_to_dict(observation))
+        self.assertEqual(record["action"]["step"], observation.allowed_steps[0])
+        self.assertEqual(record["llm"]["raw_response"], proposal.raw_response)
+
+    def test_run_py_collects_one_record_per_agent_with_mocked_gemini(self):
+        import run as decision_run
+
+        grid = build_store()
+        shoppers = grid.spawn(instantiate_all_agents())
+        allowed = grid.observe(shoppers[0]).allowed_steps[0]
+
+        def fake_decide(prompt, allowed_steps):
+            step = allowed_steps[0]
+            return ProposalResult(
+                raw_response='{"step": "' + step + '", "reason": "mock"}',
+                decision=Decision(step, reason="mock"),
+            )
+
+        with patch("run.decide_prompt_with_gemini", side_effect=fake_decide):
+            records = decision_run.collect_decision_records(
+                grid,
+                shoppers,
+                "run-mock",
+                concurrency=1,
+            )
+
+        self.assertEqual(len(records), len(shoppers))
+        self.assertTrue(all(row["run_id"] == "run-mock" for row in records))
+        self.assertTrue(all(row["action"] is not None for row in records))
+
     def test_round_coordinator_uses_configured_worker_limit(self):
         shoppers = self.grid.spawn(instantiate_agents(count=5))
 
@@ -364,7 +428,7 @@ class SimulationContractTests(unittest.TestCase):
             return future
 
         with patch("core.rounds.ThreadPoolExecutor") as executor_class:
-            executor_class.return_value.__enter__.return_value.submit.side_effect = submit
+            executor_class.return_value.submit.side_effect = submit
             RoundCoordinator(
                 lambda prompt, allowed_steps: Decision(allowed_steps[0]),
                 max_workers=2,

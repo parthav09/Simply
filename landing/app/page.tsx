@@ -1,4 +1,12 @@
-import store from "../data/store_v2.json";
-import Workspace from "../ui/Workspace";
+import type { Metadata } from "next";
+import Landing from "../site/Landing";
 
-export default function Page() { return <Workspace store={store} />; }
+export const metadata: Metadata = {
+  title: "Simply · A new perspective on retail",
+  description:
+    "Explore recorded AI shopper journeys. Follow decisions, inspect baskets, and investigate store layouts with evidence behind every result.",
+};
+
+export default function Page() {
+  return <Landing />;
+}

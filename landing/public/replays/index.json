@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "runs": [
+    {
+      "run_id": "995c65c0e4b04b5ebfecf7b67c7379cd",
+      "sha256": "c1129f504900c5689c0cf9faeb1bcf89182a261866c15563fee590fc6f822c41",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-28T23:42:16.371197+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:5f5b2659bfab5c1ad0b4ecdc4b198348b7c247cd7fed3e8b33431882b9a9b913",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/995c65c0e4b04b5ebfecf7b67c7379cd.json",
+      "evidence_url": "/replays/995c65c0e4b04b5ebfecf7b67c7379cd.source.jsonl",
+      "bundle_sha256": "3762b407e2aea9cfaddc1ad6ac79c30255aaa37669a45da85db232a82dd7be3b"
+    },
+    {
+      "run_id": "7aae885ed4004235ac4c3a237440d72a",
+      "sha256": "129e8f84f771ea5e84ee1045d4ab223e101553d3ed9def04f49a4823e9c172d7",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-29T00:17:57.796161+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:5f5b2659bfab5c1ad0b4ecdc4b198348b7c247cd7fed3e8b33431882b9a9b913",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/7aae885ed4004235ac4c3a237440d72a.json",
+      "evidence_url": "/replays/7aae885ed4004235ac4c3a237440d72a.source.jsonl",
+      "bundle_sha256": "e0d5d1ca16062e78796b40bec56f3dd71846601b39fcffeb6d0c1333ef061452"
+    },
+    {
+      "run_id": "1e5be585cfcd4d09bb198967c3281d79",
+      "sha256": "392d0c58798b6ff76e0d74eb455e461f7fcb7b6f0d46ea7d73277b0e68d6535b",
+      "provider": "openai",
+      "model": "gpt-6.1-terra",
+      "status": "completed",
+      "recorded_at": "2026-10-29T19:47:48.978297+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/1e5be585cfcd4d09bb198967c3281d79.json",
+      "evidence_url": "/replays/1e5be585cfcd4d09bb198967c3281d79.source.jsonl",
+      "bundle_sha256": "6c00ffa5179d0f473030dae4cca1e16855922fa89c9f636ba7b56958fae7223c",
+      "study": {
+        "matrix_id": "48ea3402f27344af949f1002123fe826",
+        "repetition": 1
+      }
+    },
+    {
+      "run_id": "1512b82600664e66ae4db51c29841a6a",
+      "sha256": "8aae71d28d10806000bc054a8b5e96304f0922cde445c66648e9b4294389d824",
+      "provider": "openai",
+      "model": "gpt-6.1-terra",
+      "status": "completed",
+      "recorded_at": "2026-10-29T19:52:30.730222+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/1512b82600664e66ae4db51c29841a6a.json",
+      "evidence_url": "/replays/1512b82600664e66ae4db51c29841a6a.source.jsonl",
+      "bundle_sha256": "b4b031c53fb8c38a61bb39682fe535c8070f0bcf0dc9ffd9e0d525b1b2c0d012",
+      "study": {
+        "matrix_id": "48ea3402f27344af949f1002123fe826",
+        "repetition": 1
+      }
+    },
+    {
+      "run_id": "43604b0a77ca4643b6bd07be96b5a89b",
+      "sha256": "19a215c096b150d6ca4a38ceaf10a7b91f33291d05e66f4388e20e3f80bf37c0",
+      "provider": "openai",
+      "model": "gpt-6.1-terra",
+      "status": "completed",
+      "recorded_at": "2026-10-29T20:05:31.714607+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/43604b0a77ca4643b6bd07be96b5a89b.json",
+      "evidence_url": "/replays/43604b0a77ca4643b6bd07be96b5a89b.source.jsonl",
+      "bundle_sha256": "e0d36b69de8af93245730f9d1ee6d7cb520e48dd22b52088f391b148cd2e71af",
+      "study": {
+        "matrix_id": "48ea3402f27344af949f1002123fe826",
+        "repetition": 2
+      }
+    },
+    {
+      "run_id": "6be24fc157fc4ff699114695bb002184",
+      "sha256": "535cf4ec4bbd124e67084f3043f623ac64f0e992987c1db1f49f27c6b3ddf46c",
+      "provider": "openai",
+      "model": "gpt-6.1-terra",
+      "status": "completed",
+      "recorded_at": "2026-10-29T20:19:02.928224+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/6be24fc157fc4ff699114695bb002184.json",
+      "evidence_url": "/replays/6be24fc157fc4ff699114695bb002184.source.jsonl",
+      "bundle_sha256": "be362ea8efafd7164e85ba1162560d3f8b74b57d0c9df25aeb9c71721d25e7e6",
+      "study": {
+        "matrix_id": "48ea3402f27344af949f1002123fe826",
+        "repetition": 2
+      }
+    },
+    {
+      "run_id": "45c58a6162f4450091c3caa16e0e701c",
+      "sha256": "d47fe9d3ae0e97158c04b7639c6818f86d6f389369b52d72fcfc77ef10fc2473",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-29T19:40:55.657987+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/45c58a6162f4450091c3caa16e0e701c.json",
+      "evidence_url": "/replays/45c58a6162f4450091c3caa16e0e701c.source.jsonl",
+      "bundle_sha256": "3c54d4cba88c7d7c5be8c97a00a69bde5b50d79f0f09c2a13102b80cba922d36",
+      "study": {
+        "matrix_id": "48ea3402f27344af949f1002123fe826",
+        "repetition": 1
+      }
+    },
+    {
+      "run_id": "e3109929c9ce49ecbf80f170a51b4f6a",
+      "sha256": "8f6b24d4a8a4ad2b28866f8e09c6d9e73810f72f62d7f3a66e85c24f6c4b2f23",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-29T19:58:26.558835+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/e3109929c9ce49ecbf80f170a51b4f6a.json",
+      "evidence_url": "/replays/e3109929c9ce49ecbf80f170a51b4f6a.source.jsonl",
+      "bundle_sha256": "efc09f21576f94d910aae39e827e71a934f467d331f4d57e0475398809077881",
+      "study": {
+        "matrix_id": "48ea3402f27344af949f1002123fe826",
+        "repetition": 1
+      }
+    },
+    {
+      "run_id": "9488c19617e1432d85be3e1ec2ba4e2c",
+      "sha256": "b06703a48a1d97b6835ceb28065fa03b41eb5808e23b37049356bbd7bd3ae102",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-29T20:11:34.701836+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/9488c19617e1432d85be3e1ec2ba4e2c.json",
+      "evidence_url": "/replays/9488c19617e1432d85be3e1ec2ba4e2c.source.jsonl",
+      "bundle_sha256": "e7226edcd12e3da005ade37578a1969043ccf683c4f5043989e1fcffc16a0548",
+      "study": {
+        "matrix_id": "48ea3402f27344af949f1002123fe826",
+        "repetition": 2
+      }
+    },
+    {
+      "run_id": "2e4b328864cf47ab9edb49b9b44f8956",
+      "sha256": "8dbc09a1996adb511481ff2b433eab505be6fdd6074b1d73b1bc9c687f8e426f",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "aborted",
+      "recorded_at": "2026-10-29T20:23:43.163212+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/2e4b328864cf47ab9edb49b9b44f8956.json",
+      "evidence_url": "/replays/2e4b328864cf47ab9edb49b9b44f8956.source.jsonl",
+      "bundle_sha256": "ee5d628df1afdac1129e1f5cf7b0d7d4b530a62e18a3c01f29d5802361d8a9eb",
+      "study": {
+        "matrix_id": "48ea3402f27344af949f1002123fe826",
+        "repetition": 2
+      }
+    },
+    {
+      "run_id": "96caa4c88a3044e6bd2c21065fe05642",
+      "sha256": "87b1165b3a16a920e63a66718cfb0b0b96cddbcfbcb5c86e28e66f87437c192d",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "aborted",
+      "recorded_at": "2026-10-30T02:58:56.076604+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/96caa4c88a3044e6bd2c21065fe05642.json",
+      "evidence_url": "/replays/96caa4c88a3044e6bd2c21065fe05642.source.jsonl",
+      "bundle_sha256": "27f6fc1b266f46f926422eb6ff9379aa6d8a935b943f3c9b15c4994fd17df82c"
+    },
+    {
+      "run_id": "2d81adccb9d64be98e196d046aac7e82",
+      "sha256": "1717d45863da33579ec464c72adc898fddb5f67d46077c87e763f981a7b460af",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-29T19:34:40.121431+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/2d81adccb9d64be98e196d046aac7e82.json",
+      "evidence_url": "/replays/2d81adccb9d64be98e196d046aac7e82.source.jsonl",
+      "bundle_sha256": "5f1d44ab127867829c8fe95d73ceef8ca15fb57285c2fdfed0871b152da02a36"
+    },
+    {
+      "run_id": "fde2de5cf2824b30adc47c9174bd764d",
+      "sha256": "42c62d2502b2742b89b2a3dbbf8ff960f03d5d40c96fa3cb37e34e7517febf62",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-29T19:29:12.244363+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/fde2de5cf2824b30adc47c9174bd764d.json",
+      "evidence_url": "/replays/fde2de5cf2824b30adc47c9174bd764d.source.jsonl",
+      "bundle_sha256": "bc2c506b09e03ec8d8a7f5b8440752139b88da596965e78c8a52218e222be746"
+    }
+  ],
+  "reports": [
+    {
+      "url": "/replays/study-811f270386344bbcaa1e6d854bdca61d.json",
+      "title": "layout \u00b7 openai \u00b7 pilot_or_incomplete \u00b7 811f2703",
+      "sha256": "cbcbfd2592d00079752ce0b8b64b84b13790a682a6b8c72171132afd67732205"
+    },
+    {
+      "url": "/replays/study-0da091f418c14fa1ac703437b2ae72e1.json",
+      "title": "layout \u00b7 openai \u00b7 pilot_or_incomplete \u00b7 0da091f4",
+      "sha256": "f91f7d89ada2ae80b508ed608bb1355e3f301f4209fcea964546d38e21063cec"
+    }
+  ],
+  "history": {
+    "url": "/replays/history.json",
+    "sha256": "e14d43df71d42d21dbca82c625fccdf4f4b0a27d341da5474dd9457a3609179c"
+  },
+  "matrix": {
+    "url": "/replays/matrix-48ea3402f27344af949f1002123fe826.json",
+    "sha256": "41d46150aab192aa31947f66a4235904e2811a0e535cdfdd22b8e629faf28b83",
+    "protocol_url": "/replays/matrix-48ea3402f27344af949f1002123fe826.protocol.json"
+  },
+  "dashboard": {
+    "url": "/replays/evidence-dashboard.json",
+    "sha256": "09d84bca1b6ebe1e9db4e6f96bfdc6b921f739cb4f1bdb0608e2ef9c11431ed8"
+  }
+}

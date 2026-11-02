@@ -1,0 +1,157 @@
+{
+  "dataset": "simply_offline_synthetic_demo_v1",
+  "synthetic": true,
+  "purpose": "Fine-tuning format and engine integration demo; not human behavior or model evidence",
+  "label_source": "offline_rule_teacher_v1",
+  "model_requests": 0,
+  "shopping_rules": "unique_single_checkout_v1",
+  "navigation_policy": "model_only",
+  "split_unit": "synthetic shopper/mission group, both layouts together",
+  "examples": {
+    "train": 234,
+    "validation": 58,
+    "test": 60
+  },
+  "actions": {
+    "train": {
+      "move_right": 112,
+      "move_up": 22,
+      "grab": 16,
+      "move_down": 46,
+      "checkout": 8,
+      "move_left": 30
+    },
+    "validation": {
+      "move_left": 1,
+      "move_up": 10,
+      "move_right": 31,
+      "grab": 4,
+      "move_down": 10,
+      "checkout": 2
+    },
+    "test": {
+      "move_right": 32,
+      "move_up": 10,
+      "grab": 4,
+      "move_left": 2,
+      "move_down": 10,
+      "checkout": 2
+    }
+  },
+  "source_catalogue_sha256": "6ff9c0d199fd30a2db6cfd26e857c2a9692b5a8165fed499c2cb327d5b78f7cf",
+  "generator_sha256": "6b3fd23c8aae24e1ccdf16e1cfcaf059b280da19831270379afd81763de3c92b",
+  "limitations": [
+    "Six synthetic shopper/mission groups; validation and test are demonstration splits only.",
+    "Both layouts and shared catalog appear in every split; no unseen-layout or SKU generalization claim.",
+    "Profile templates derive from repository CSVs; not independent external validation.",
+    "One training mission starts inside the store to demonstrate leftward navigation.",
+    "Labels imitate a narrow map-based list collector; no impulse, removal, rejection recovery, or realistic preference calibration.",
+    "Soft-budget overspending examples are deliberate preferences, not a universal instruction to overspend.",
+    "Do not publish these offline fixtures as model output or use their success as evidence of Qwen ability."
+  ],
+  "fixtures": [
+    {
+      "mission_group": "DEMO-M01",
+      "split": "train",
+      "layout": "costco_back_anchor",
+      "decisions": 28,
+      "finished": true,
+      "fixture": "fixtures/mission_01_costco_back_anchor.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M01",
+      "split": "train",
+      "layout": "neighborhood_express",
+      "decisions": 20,
+      "finished": true,
+      "fixture": "fixtures/mission_01_neighborhood_express.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M02",
+      "split": "train",
+      "layout": "costco_back_anchor",
+      "decisions": 28,
+      "finished": true,
+      "fixture": "fixtures/mission_02_costco_back_anchor.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M02",
+      "split": "train",
+      "layout": "neighborhood_express",
+      "decisions": 20,
+      "finished": true,
+      "fixture": "fixtures/mission_02_neighborhood_express.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M03",
+      "split": "train",
+      "layout": "costco_back_anchor",
+      "decisions": 37,
+      "finished": true,
+      "fixture": "fixtures/mission_03_costco_back_anchor.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M03",
+      "split": "train",
+      "layout": "neighborhood_express",
+      "decisions": 45,
+      "finished": true,
+      "fixture": "fixtures/mission_03_neighborhood_express.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M04",
+      "split": "train",
+      "layout": "costco_back_anchor",
+      "decisions": 36,
+      "finished": true,
+      "fixture": "fixtures/mission_04_costco_back_anchor.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M04",
+      "split": "train",
+      "layout": "neighborhood_express",
+      "decisions": 20,
+      "finished": true,
+      "fixture": "fixtures/mission_04_neighborhood_express.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M05",
+      "split": "validation",
+      "layout": "costco_back_anchor",
+      "decisions": 38,
+      "finished": true,
+      "fixture": "fixtures/mission_05_costco_back_anchor.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M05",
+      "split": "validation",
+      "layout": "neighborhood_express",
+      "decisions": 20,
+      "finished": true,
+      "fixture": "fixtures/mission_05_neighborhood_express.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M06",
+      "split": "test",
+      "layout": "costco_back_anchor",
+      "decisions": 40,
+      "finished": true,
+      "fixture": "fixtures/mission_06_costco_back_anchor.jsonl"
+    },
+    {
+      "mission_group": "DEMO-M06",
+      "split": "test",
+      "layout": "neighborhood_express",
+      "decisions": 20,
+      "finished": true,
+      "fixture": "fixtures/mission_06_neighborhood_express.jsonl"
+    }
+  ],
+  "files": {
+    "train.jsonl": "74dc3439618af460fb15bacc086d20f597be30845bdff985409ab7d5d6366283",
+    "validation.jsonl": "5164c8c848d2a2e03ac78a6c8eed22702b5f792a5b0d91e29a83e03e6680e3c3",
+    "test.jsonl": "4ecaa7b0414e9269871f1be3f4d716b11e9d78a9f5bda4dd4bcb8a5655e59b3e",
+    "preview.json": "21402af16aea27db00088b2f2059ed81d4ca950b8e556c95c1c4bf658516836a",
+    "provenance.jsonl": "ccbd3e090827f9893ae1f5272e1bf5ac6401eb22b08e150bf744b3baa531c0c9"
+  }
+}

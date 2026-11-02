@@ -1,3 +1,5 @@
+"""Load CSV fixtures and instantiate independent customer shopper agents."""
+
 import csv
 from collections import defaultdict
 
@@ -70,3 +72,8 @@ def instantiate_agents(count=15, start=0, turn_budget=120):
         start=start,
         turn_budget=turn_budget,
     )
+
+
+def instantiate_all_agents(turn_budget=120):
+    customers = load_customers()
+    return spawn_agents(customers, count=len(customers), turn_budget=turn_budget)

@@ -1,6 +1,6 @@
-@import "tailwindcss";
-
-:root { --ink:#10201c; --muted:#5f6f6a; --line:#d7e0dc; --canvas:#f4f7f5; --surface:#fff; --green:#087a5c; }
-* { box-sizing: border-box; }
-body { margin:0; background:var(--canvas); color:var(--ink); font-family:Arial, Helvetica, sans-serif; }
-button { font: inherit; }
+@import '../styles/tokens.css';
+@import '../styles/base.css';
+@import '../styles/components.css';
+@import '../styles/marketing.css';
+@import '../styles/workspace.css';
+@import '../styles/evidence.css';

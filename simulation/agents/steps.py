@@ -1,3 +1,5 @@
+"""The allowed action names and their human-readable descriptions."""
+
 MOVES = {
     "move_left": (-1, 0),
     "move_right": (1, 0),

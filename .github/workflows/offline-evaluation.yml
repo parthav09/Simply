@@ -1,0 +1,67 @@
+name: Shared engine and replay contract
+
+on:
+  push:
+    paths: ['simulation/**', 'landing/**', 'data/**', 'requirements.txt', 'AGENTS.md', '.github/workflows/offline-evaluation.yml']
+  pull_request:
+    paths: ['simulation/**', 'landing/**', 'data/**', 'requirements.txt', 'AGENTS.md', '.github/workflows/offline-evaluation.yml']
+  workflow_dispatch:
+
+jobs:
+  authoritative-simulation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: landing/package-lock.json
+      - run: python -m pip install -r requirements.txt
+      - run: npm ci --prefix landing
+      - name: Core, controls, metering, compatibility and architecture checks (no real API)
+        run: python -m unittest discover -s simulation/tests -v
+      - name: Independent TypeScript replay matches every Python fixture frame
+        run: npm run verify:replay --prefix landing
+      - name: Live Python messages match browser state and final replay
+        run: npm run verify:live --prefix landing
+      - name: Terminal live runs survive reload without starting a new session
+        run: npm run verify:live-session --prefix landing
+      - name: Run history preserves Python metrics, differences, unknown values and integrity
+        run: npm run verify:history --prefix landing
+      - name: Frozen controlled studies and React report rendering without real API calls
+        run: npm run verify:study --prefix landing
+      - name: Balanced model/layout experiments, independent metric audits and React summary
+        run: npm run verify:matrix --prefix landing
+      - name: Source-backed model/layout table, all retained distributions and honest pending models
+        run: npm run verify:dashboard --prefix landing
+      - name: Full offline workflow at 10 and 15 shoppers in both layouts
+        run: python simulation/tests/verify_product_workflow.py /tmp/offline-workflow
+      - name: Browser replay and published reports match full-trip evidence
+        run: node landing/scripts/verify-workflow.cjs /tmp/offline-workflow
+      - name: Full five-repetition orchestration with explicit fake provider
+        run: python -m simulation.evaluation.run campaign --provider fake --shoppers 10 --directory /tmp/offline-campaign/study --ledger /tmp/offline-campaign/ledger.sqlite3
+      - name: Verify pairing, uncertainty, failed-shopper outcomes and zero API calls
+        run: python simulation/tests/verify_campaign.py /tmp/offline-campaign/study
+      - run: npm run typecheck --prefix landing
+      - run: npm run lint --prefix landing
+      - run: npm run build --prefix landing
+      - name: Python CLI runs without a display or desktop dependency
+        run: python simulation/main.py --provider fake --shoppers 15 --max-rounds 2 --output /tmp/offline-trip.jsonl
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: engine-and-react-replay-contract
+          path: |
+            /tmp/offline-trip.jsonl
+            /tmp/offline-workflow/verification.json
+            /tmp/offline-workflow/cohort-*/*.jsonl
+            /tmp/offline-workflow/public/replays/study-*.json
+            /tmp/offline-workflow/public/replays/study-*.behavior.jsonl
+            /tmp/offline-campaign/study/campaign.json
+            /tmp/offline-campaign/study/report.json
+            /tmp/offline-campaign/study/orchestration-verification.json
+            simulation/tests/fixtures/
