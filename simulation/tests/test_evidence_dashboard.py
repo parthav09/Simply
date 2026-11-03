@@ -77,6 +77,30 @@ class EvidenceDashboardTests(unittest.TestCase):
             self.assertEqual(row['distributions']['moves']['known'],10)
             self.assertEqual(row['distributions']['moves']['unknown'],0)
 
+    def test_qwen_view_uses_its_frozen_study_only_and_keeps_charges_separate(self):
+        from test_openrouter_provider import OpenRouterTests
+        directory=self.root/'qwen'
+        protocol=study.prepare(directory,provider='openrouter',kind='layout',models=['qwen2.5-7b-instruct'],
+            repetitions=1,turn_budget=1)
+        with patch('agents.openrouter_provider.api_key',return_value='OFFLINE'),patch('urllib.request.urlopen',side_effect=OpenRouterTests.response),patch('evaluation.study.DECISION_RUNS_DIR',self.root/'accounting'):
+            study.execute(directory)
+        rows=[dashboard.record(p,[*self.protocols,protocol]) for p in sorted(directory.glob('*.jsonl'))]
+        self.assertTrue(all(r['group']=='qwen_baseline' for r in rows))
+        result=dashboard.assemble([*self.records,*rows],self.plan['study_id'])
+        self.assertEqual(result['default_view'],'qwen_baseline')
+        self.assertEqual(result['views'][0]['runs'],4)
+        qwen=result['views'][-1]
+        self.assertEqual((qwen['runs'],qwen['trips']),(2,20))
+        for c in qwen['models'][0]['cells'].values():
+            self.assertEqual(c['trips'],10)
+            self.assertAlmostEqual(c['metrics']['provider_reported_cost_per_run_usd'],.00013)
+            self.assertIsNone(c['metrics']['provider_reported_cost_per_checkout_usd'])
+            self.assertNotEqual(c['metrics']['estimated_cost_per_run_usd'],.00013)
+        self.assertEqual(qwen['models'][1]['status'],'not_evaluated')
+        # A Qwen attempt without the selected protocol is only a separate transport recording.
+        unselected=dashboard.record(next(directory.glob('*.jsonl')),self.protocols)
+        self.assertEqual(unselected['group'],'openrouter')
+
     def test_published_dashboard_reconstructs_and_detects_changed_table_values(self):
         public=self.root/'public';public.mkdir()
         def save(name,value):

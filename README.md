@@ -104,6 +104,23 @@ collection coverage and the provider interruption. Individual recordings,
 diagnostics and full reports are collapsed. Python computes every outcome and
 difference; React displays the saved values.
 
+The Qwen2.5 7B view is separate from the historical direct-OpenAI matrix. Its
+frozen OpenRouter / Phala protocol schedules one run on each layout with ten
+fixed profiles, one decision per action, and the same Python navigation assist.
+Collection is prepared but has not started: automatic approval review rejected
+paid execution against the older Qwen-pending scope. The view reports N/A until
+canonical recordings exist; fine-tuned Qwen remains unevaluated. Token-price
+estimates and OpenRouter-reported charges are displayed separately.
+
+After renewed approval, execute and export the prepared study:
+
+```bash
+.venv/bin/python simulation/evaluation/study.py run --directory simulation/runs/studies/qwen25-7b-ab-20261102
+.venv/bin/python simulation/evaluation/study.py publish --directory simulation/runs/studies/qwen25-7b-ab-20261102
+.venv/bin/python simulation/evaluation/dashboard.py publish
+.venv/bin/python simulation/evaluation/dashboard.py verify
+```
+
 The local history refreshes every 15 seconds while the page is visible and makes
 no model calls. An explicitly exported, integrity-checked history snapshot works
 without the local Python service. Saving a replay updates its published summary;

@@ -1,0 +1,388 @@
+{
+  "report_version": 1,
+  "study_kind": "layout",
+  "study_id": "a16f989767b34b4e9ce525607e076e05",
+  "protocol_sha256": "3890bc6a429a8c764c0788bc8c77a2f63f8b573831959e37ca63823ae4d31672",
+  "status": "pilot_or_incomplete",
+  "cohort_size": 10,
+  "repetitions": 1,
+  "provider": "openrouter",
+  "metric_definitions": {
+    "checkout_completion": {
+      "label": "Checkout completion",
+      "unit": "rate"
+    },
+    "purchased_unit_fulfillment": {
+      "label": "Requested units purchased",
+      "unit": "rate"
+    },
+    "sales_cents": {
+      "label": "Simulated checkout sales",
+      "unit": "cents"
+    },
+    "mean_successful_moves": {
+      "label": "Average moves per shopper",
+      "unit": "number"
+    },
+    "turns_used": {
+      "label": "Action attempts",
+      "unit": "integer"
+    },
+    "invalid_decision_count": {
+      "label": "Invalid replies",
+      "unit": "integer"
+    },
+    "grid_rejection_count": {
+      "label": "Rejected actions",
+      "unit": "integer"
+    },
+    "provider_failure_count": {
+      "label": "Provider failures",
+      "unit": "integer"
+    },
+    "navigation_adjustments": {
+      "label": "Assisted actions",
+      "unit": "integer"
+    },
+    "overspending_fraction": {
+      "label": "Shoppers over budget in final basket",
+      "unit": "rate"
+    },
+    "checkout_overshoot_cents": {
+      "label": "Simulated purchases above shopper budgets",
+      "unit": "cents"
+    },
+    "purchased_off_list_units": {
+      "label": "Off-list units purchased",
+      "unit": "integer"
+    },
+    "loop_detections": {
+      "label": "Repeated loops",
+      "unit": "integer"
+    },
+    "model_requests": {
+      "label": "Model requests",
+      "unit": "integer"
+    },
+    "run_duration_ms": {
+      "label": "Recorded run duration",
+      "unit": "milliseconds"
+    },
+    "request_latency_p50_ms": {
+      "label": "Model request latency \u00b7 median",
+      "unit": "milliseconds"
+    },
+    "request_latency_p95_ms": {
+      "label": "Model request latency \u00b7 95th percentile",
+      "unit": "milliseconds"
+    },
+    "known_estimated_cost_usd": {
+      "label": "Known API estimate \u00b7 run",
+      "unit": "usd"
+    },
+    "cost_per_completed_trip_usd": {
+      "label": "API estimate per checkout",
+      "unit": "usd"
+    },
+    "unknown_usage_requests": {
+      "label": "Unknown-usage attempts",
+      "unit": "integer"
+    },
+    "provider_reported_cost_usd": {
+      "label": "OpenRouter-reported charges \u00b7 run",
+      "unit": "usd"
+    },
+    "provider_reported_cost_per_checkout_usd": {
+      "label": "OpenRouter-reported charge per checkout",
+      "unit": "usd"
+    }
+  },
+  "arms": [
+    {
+      "arm_id": "arm-0",
+      "layout_id": "arm-0",
+      "model": "qwen2.5-7b-instruct",
+      "policy": "gary2_v2",
+      "label": "costco_back_anchor",
+      "store_layout_id": "costco_back_anchor",
+      "completed_runs": 0,
+      "recorded_runs": 0,
+      "metrics": {
+        "checkout_completion": null,
+        "purchased_unit_fulfillment": null,
+        "sales_cents": null,
+        "mean_successful_moves": null,
+        "turns_used": null,
+        "invalid_decision_count": null,
+        "grid_rejection_count": null,
+        "provider_failure_count": null,
+        "navigation_adjustments": null,
+        "overspending_fraction": null,
+        "checkout_overshoot_cents": null,
+        "purchased_off_list_units": null,
+        "loop_detections": null,
+        "model_requests": null,
+        "run_duration_ms": null,
+        "request_latency_p50_ms": null,
+        "request_latency_p95_ms": null,
+        "known_estimated_cost_usd": null,
+        "cost_per_completed_trip_usd": null,
+        "unknown_usage_requests": null,
+        "provider_reported_cost_usd": null,
+        "provider_reported_cost_per_checkout_usd": null
+      }
+    },
+    {
+      "arm_id": "arm-1",
+      "layout_id": "arm-1",
+      "model": "qwen2.5-7b-instruct",
+      "policy": "gary2_v2",
+      "label": "neighborhood_express",
+      "store_layout_id": "neighborhood_express",
+      "completed_runs": 0,
+      "recorded_runs": 0,
+      "metrics": {
+        "checkout_completion": null,
+        "purchased_unit_fulfillment": null,
+        "sales_cents": null,
+        "mean_successful_moves": null,
+        "turns_used": null,
+        "invalid_decision_count": null,
+        "grid_rejection_count": null,
+        "provider_failure_count": null,
+        "navigation_adjustments": null,
+        "overspending_fraction": null,
+        "checkout_overshoot_cents": null,
+        "purchased_off_list_units": null,
+        "loop_detections": null,
+        "model_requests": null,
+        "run_duration_ms": null,
+        "request_latency_p50_ms": null,
+        "request_latency_p95_ms": null,
+        "known_estimated_cost_usd": null,
+        "cost_per_completed_trip_usd": null,
+        "unknown_usage_requests": null,
+        "provider_reported_cost_usd": null,
+        "provider_reported_cost_per_checkout_usd": null
+      }
+    }
+  ],
+  "paired": [
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "checkout_completion",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "purchased_unit_fulfillment",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "sales_cents",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "mean_successful_moves",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "turns_used",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "invalid_decision_count",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "grid_rejection_count",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "provider_failure_count",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "navigation_adjustments",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "overspending_fraction",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "checkout_overshoot_cents",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "purchased_off_list_units",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "loop_detections",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "model_requests",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "run_duration_ms",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "request_latency_p50_ms",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "request_latency_p95_ms",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "known_estimated_cost_usd",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "cost_per_completed_trip_usd",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "unknown_usage_requests",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "provider_reported_cost_usd",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    },
+    {
+      "comparison": "arm-1 minus arm-0",
+      "metric": "provider_reported_cost_per_checkout_usd",
+      "mean_difference": null,
+      "ci95": null,
+      "blocks": 0,
+      "missing_blocks": 1,
+      "status": "unassessed"
+    }
+  ],
+  "runs": [],
+  "missing_evidence": [
+    "repeat-01-arm-1.jsonl",
+    "repeat-01-arm-0.jsonl"
+  ],
+  "limitations": [
+    "Compare simulated outcomes conditional on this frozen cohort. No prediction of real customers or retail revenue.",
+    "Arm means include all retained attempts, including stopped runs and unfinished shoppers. Paired differences use only intact completed run pairs; missing pairs stay counted.",
+    "Completed run means the configured action window ended; it does not mean every shopper checked out.",
+    "Fewer than five paired repetitions provide descriptive differences without a confidence interval. Five is a starting point, not a power calculation.",
+    "95% intervals use 10,000 repetition-block bootstrap samples, conditional on this fixed derived cohort. Actions and shoppers within a run are not independent repetitions.",
+    "OpenAI request seeds are unsupported. The frozen seed controls run pairing and order, not deterministic model output.",
+    "Both arms request exactly one model decision per action. Model-only and assisted runs are separate policies; report the assistance count.",
+    "Shopper budgets are soft preferences; overspending and off-list purchases are measured rather than blocked.",
+    "Unknown API costs remain unknown. Arm cost per checkout pools all retained run costs divided by all completed checkouts, including costs of failed and unfinished trips; other arm metrics are run means.",
+    "Inventory is replenished; movement is independent; crowd blocking and checkout queues are not modeled."
+  ],
+  "protocol_url": "/replays/study-a16f989767b34b4e9ce525607e076e05.protocol.json"
+}

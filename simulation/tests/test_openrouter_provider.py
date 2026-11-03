@@ -30,7 +30,7 @@ class OpenRouterTests(unittest.TestCase):
     def response(request,timeout=60):
         body=json.loads(request.data)
         step=body['response_format']['json_schema']['schema']['properties']['step']['enum'][0]
-        return io.BytesIO(json.dumps({'id':'OFFLINE-RESPONSE','model':body['model'],'provider':'OpenAI',
+        return io.BytesIO(json.dumps({'id':'OFFLINE-RESPONSE','model':body['model'],'provider':'Phala' if body['model'].startswith('qwen/') else 'OpenAI',
             'choices':[{'finish_reason':'stop','message':{'content':json.dumps({'step':step,'product_id':'','reason':'Explicit offline OpenRouter test'})}}],
             'usage':{'prompt_tokens':100,'completion_tokens':10,'total_tokens':110,
                 'prompt_tokens_details':{'cached_tokens':20,'cache_write_tokens':0},
@@ -44,12 +44,14 @@ class OpenRouterTests(unittest.TestCase):
             request=transport.call_args.args[0];body=json.loads(request.data)
             self.assertEqual(request.full_url,'https://openrouter.ai/api/v1/chat/completions')
             self.assertEqual(body['model'],MODEL_SLUGS[model]);self.assertFalse(body['provider']['allow_fallbacks'])
-            self.assertEqual(body['provider']['only'],['openai']);self.assertTrue(body['provider']['require_parameters'])
+            self.assertEqual(body['provider']['only'],['phala'] if model=='qwen2.5-7b-instruct' else ['openai']);self.assertTrue(body['provider']['require_parameters'])
+            if model=='qwen2.5-7b-instruct':
+                self.assertNotIn('reasoning',body);self.assertNotIn('service_tier',body)
             self.assertTrue(body['response_format']['json_schema']['strict']);self.assertEqual(body['plugins'],[])
             self.assertNotIn('temperature',body);self.assertEqual(result.decision.step,'move_left')
             self.assertEqual(result.telemetry['provider_reported_cost_usd'],.000013)
             self.assertNotIn('OFFLINE-TEST-KEY',json.dumps(result.telemetry))
-        self.assertEqual(self.ledger.snapshot()['requests'],2)
+        self.assertEqual(self.ledger.snapshot()['requests'],len(MODEL_SLUGS))
         with self.assertRaisesRegex(ValueError,'no model substitution'):
             OpenRouterProvider(self.ledger,'OFFLINE',model='qwen/qwen3-4b-instruct-2507')
 
@@ -115,6 +117,27 @@ class OpenRouterTests(unittest.TestCase):
         self.key.stop()
         with patch.dict(os.environ,{},clear=True),patch('agents.openrouter_provider.load_env_file',return_value={'OPEN_ROUTER_KEY':'OFFLINE-ALIAS'}):
             self.assertEqual(api_key(),'OFFLINE-ALIAS')
+
+    def test_qwen_study_freezes_endpoint_and_preserves_paid_identity_drift(self):
+        directory=self.root/'qwen'
+        plan=study.prepare(directory,provider='openrouter',kind='layout',models=['qwen2.5-7b-instruct'],
+            repetitions=1,turn_budget=1)
+        self.assertEqual(len(plan['schedule']),2)
+        for contract in plan['contracts'].values():
+            self.assertEqual(contract['config']['generation']['provider']['only'],['phala'])
+            self.assertEqual(contract['pricing']['serving_provider'],'Phala')
+        with patch('urllib.request.urlopen',side_effect=self.response),patch('evaluation.study.DECISION_RUNS_DIR',self.root/'accounting'):
+            result=study.execute(directory)
+        self.assertEqual(result['status'],'completed')
+        self.assertEqual(len(result['runs']),2)
+        self.assertTrue(all(r['model_versions']==['qwen/qwen-2.5-7b-instruct'] for r in result['runs']))
+        def wrong(request,timeout):
+            payload=json.load(self.response(request));payload['provider']='Other'
+            return io.BytesIO(json.dumps(payload).encode())
+        with patch('urllib.request.urlopen',side_effect=wrong):
+            with self.assertRaisesRegex(OpenRouterRequestError,'drift') as caught:
+                OpenRouterProvider(self.ledger,'OFFLINE',model='qwen2.5-7b-instruct').request('test',['move_left'],'one')
+        self.assertIsNotNone(caught.exception.telemetry['estimated_cost_micros'])
 
 
 if __name__=='__main__':unittest.main()

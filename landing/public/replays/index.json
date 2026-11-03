@@ -252,6 +252,11 @@
       "url": "/replays/study-0da091f418c14fa1ac703437b2ae72e1.json",
       "title": "layout \u00b7 openai \u00b7 pilot_or_incomplete \u00b7 0da091f4",
       "sha256": "f91f7d89ada2ae80b508ed608bb1355e3f301f4209fcea964546d38e21063cec"
+    },
+    {
+      "url": "/replays/study-a16f989767b34b4e9ce525607e076e05.json",
+      "title": "layout \u00b7 openrouter \u00b7 pilot_or_incomplete \u00b7 a16f9897",
+      "sha256": "7310eb8e78d11ddc05b86d8631a175da4275373f72bdd75d8c4770ae986811df"
     }
   ],
   "history": {
@@ -265,6 +270,10 @@
   },
   "dashboard": {
     "url": "/replays/evidence-dashboard.json",
-    "sha256": "09d84bca1b6ebe1e9db4e6f96bfdc6b921f739cb4f1bdb0608e2ef9c11431ed8"
+    "sha256": "95324ce787b041cd51ad97276b9929c8bd9fc1a6bf66385cb859635fc1f7ad3e"
+  },
+  "qwen_baseline": {
+    "protocol_url": "/replays/study-a16f989767b34b4e9ce525607e076e05.protocol.json",
+    "sha256": "3890bc6a429a8c764c0788bc8c77a2f63f8b573831959e37ca63823ae4d31672"
   }
 }

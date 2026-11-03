@@ -60,7 +60,8 @@ def template(protocol, arm, repetition):
         model=arm['model'], max_rounds=protocol['turn_budget'] * protocol['cohort_size'],
         concurrency=protocol['concurrency'], propose_only=False, prompt_variant='informed',
         seed=protocol['seed'] + repetition, requests_per_minute=protocol['requests_per_minute'],
-        generation_settings=provider.generation_settings if protocol['provider'] != 'fake' else {'decision_source': 'explicit_fixture'},
+        generation_settings=(provider.settings_for_model(arm['model']) if hasattr(provider,'settings_for_model') else
+            provider.generation_settings) if protocol['provider'] != 'fake' else {'decision_source': 'explicit_fixture'},
         pricing=prices[arm['model']] if protocol['provider'] != 'fake' else None,
         navigation_policy=arm['policy'],shopping_rules=protocol['shopping_rules'])
     header['config'].update(api_budget_enforced=False, decision_mode='single_action', action_limit=protocol['turn_budget'])

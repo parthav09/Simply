@@ -31,6 +31,8 @@ MEASURES=[
     {'id':'requests_per_trip','label':'API requests / trip','unit':'number','primary':True},
     {'id':'estimated_cost_per_checkout_usd','label':'Estimated API cost / checkout','unit':'usd','primary':True},
     {'id':'estimated_cost_per_run_usd','label':'Estimated API cost / run','unit':'usd','primary':True},
+    {'id':'provider_reported_cost_per_run_usd','label':'OpenRouter-reported charge / run','unit':'usd','primary':True},
+    {'id':'provider_reported_cost_per_checkout_usd','label':'OpenRouter-reported charge / checkout','unit':'usd','primary':False},
     {'id':'simulated_sales_per_run_usd','label':'Simulated checkout sales / run','unit':'usd','primary':False},
     {'id':'actions_per_trip','label':'Action attempts / trip','unit':'number','primary':False},
     {'id':'adjusted_request_fraction','label':'Requests adjusted by assistance','unit':'rate','primary':False},
@@ -47,7 +49,8 @@ DISTRIBUTIONS=[{'id':'moves','label':'Movement steps / trip','unit':'number'},
     {'id':'requests','label':'Submitted API requests / trip','unit':'number'},
     {'id':'estimated_cost_usd','label':'Estimated API cost / attempted trip','unit':'usd'}]
 GROUPS={'main':'Main controlled OpenAI study','pilot':'Separate OpenAI pilots',
-        'historical':'Historical OpenAI demonstrations','openrouter':'OpenRouter · separate transport'}
+        'historical':'Historical OpenAI demonstrations','openrouter':'OpenRouter · separate transport',
+        'qwen_baseline':'Qwen2.5 7B · controlled OpenRouter baseline'}
 
 
 def distribution(values):
@@ -66,9 +69,9 @@ def record(path, main_protocols):
         arm=next(a for a in protocol['arms'] if a['arm_id']==experiment['arm_id'])
         if study.controls(header)!=study.expected(protocol,arm,experiment['repetition']):
             raise ValueError('Dashboard source differs from frozen main-study controls')
-        if experiment.get('protocol_sha256')!=protocol['sha256'] or header['provider']!='openai':
+        if experiment.get('protocol_sha256')!=protocol['sha256'] or header['provider']!=protocol['provider']:
             raise ValueError('Invalid main-study source identity')
-        group='main'
+        group='qwen_baseline' if protocol['provider']=='openrouter' else 'main'
     elif header['provider']=='openrouter':group='openrouter'
     elif experiment.get('stage')=='main':group='pilot'
     else:group='historical'
@@ -109,6 +112,8 @@ def cell(rows, status='recorded'):
     costs=[r['run_metrics']['known_estimated_cost_usd'] for r in rows]
     complete_cost=bool(rows) and all(r['cost_complete'] and c is not None for r,c in zip(rows,costs))
     total_cost=sum(costs) if complete_cost else None
+    charges=[r['run_metrics'].get('provider_reported_cost_usd') for r in rows]
+    total_charge=sum(charges) if rows and all(n is not None for n in charges) else None
     requests=[p['values']['requests'] for p in points]
     request_count=sum(requests) if points and all(n is not None for n in requests) else None
     latency=[n for r in rows for n in r['latencies_ms']]
@@ -122,6 +127,8 @@ def cell(rows, status='recorded'):
             requests_per_trip=request_count/trips if request_count is not None else None,
             estimated_cost_per_checkout_usd=total_cost/finished if finished and total_cost is not None else None,
             estimated_cost_per_run_usd=total_cost/len(rows) if total_cost is not None else None,
+            provider_reported_cost_per_run_usd=total_charge/len(rows) if total_charge is not None else None,
+            provider_reported_cost_per_checkout_usd=total_charge/finished if total_charge is not None and finished else None,
             simulated_sales_per_run_usd=total('sales_cents')/100/len(rows) if total('sales_cents') is not None else None,
             actions_per_trip=total('turns_used')/trips if total('turns_used') is not None else None,
             adjusted_request_fraction=total('navigation_adjustments')/request_count if request_count else None,
@@ -155,8 +162,17 @@ def assemble(records, main_study_id):
         views.append({'id':key,'label':label,'note':note,'runs':len(rows),'trips':sum(len(r['points']) for r in rows),
             'models':[{**m,'cells':{l['id']:cell([r for r in rows if r['model']==m['id'] and r['layout_id']==l['id']],
                 status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in MODELS]})
+    qwen=[r for r in records if r['group']=='qwen_baseline']
+    models=[{'id':'qwen2.5-7b-instruct','label':'Qwen2.5 7B Instruct · OpenRouter / Phala','status':'recorded' if qwen else 'not_evaluated'},
+        {'id':'qwen2.5-7b-instruct-finetuned','label':'Qwen2.5 7B · fine-tuned','status':'not_evaluated'}]
+    views.append({'id':'qwen_baseline','label':'Qwen2.5 7B · one run per layout · OpenRouter',
+        'note':('One repetition with ten fixed profiles per layout, the same benchmark and Python navigation assistance. Separate provider and collection date from the historical OpenAI matrix; descriptive results only. Interrupted attempts remain included.' if qwen else
+            'Prepared for one run per layout with ten fixed profiles. Collection has not started. No model performance has been measured.'),
+        'runs':len(qwen),'trips':sum(len(r['points']) for r in qwen),
+        'models':[{**m,'cells':{l['id']:cell([r for r in qwen if r['model']==m['id'] and r['layout_id']==l['id']],
+            status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in models]})
     counts=Counter(r['group'] for r in records)
-    return {'dashboard_version':1,'main_study_id':main_study_id,'default_view':'matched_first',
+    return {'dashboard_version':1,'main_study_id':main_study_id,'default_view':'qwen_baseline' if qwen else 'matched_first',
         'layouts':LAYOUTS,'measures':MEASURES,'distribution_measures':DISTRIBUTIONS,'views':views,'runs':records,
         'coverage':{'retained_runs':len(records),'retained_trips':sum(len(r['points']) for r in records),
             'completed_runs':sum(r['status']=='completed' and not r['warnings'] for r in records),
@@ -196,6 +212,16 @@ def load_main(public):
         if len(matches)!=1 or fingerprint({k:v for k,v in matches[0].items() if k!='sha256'})!=child['sha256']:
             raise ValueError('Missing or invalid frozen main protocol')
         children.append(matches[0])
+    baseline=index.get('qwen_baseline')
+    if baseline:
+        qwen=json.loads((public/Path(baseline['protocol_url']).name).read_text())
+        if (fingerprint({k:v for k,v in qwen.items() if k!='sha256'})!=qwen['sha256']
+            or qwen['sha256']!=baseline['sha256'] or qwen['provider']!='openrouter'
+            or qwen['kind']!='layout' or qwen['cohort_size']!=10 or qwen['repetitions']!=1
+            or len(qwen['arms'])!=2 or any(a['model']!='qwen2.5-7b-instruct' for a in qwen['arms'])
+            or {a['layout_id'] for a in qwen['arms']}!={l['id'] for l in LAYOUTS}):
+            raise ValueError('Invalid frozen Qwen baseline protocol')
+        children.append(qwen)
     return protocol,children
 
 

@@ -15,7 +15,8 @@ from core.env import load_env_file
 
 MODEL='gpt-6-luna'
 MODEL_SLUGS={'gpt-6-luna':'openai/gpt-6-luna-20260922',
-             'gpt-6.1-terra':'openai/gpt-6.1-terra-20261026'}
+             'gpt-6.1-terra':'openai/gpt-6.1-terra-20261026',
+             'qwen2.5-7b-instruct':'qwen/qwen-2.5-7b-instruct'}
 MODEL_PRICING={model:{'model':model,'as_of':'2026-10-29',
     'source':f'https://openrouter.ai/api/v1/models/{model_slug}/endpoints',
     'input_usd_per_million':input_price,'cached_usd_per_million':cached,
@@ -26,6 +27,14 @@ MODEL_PRICING={model:{'model':model,'as_of':'2026-10-29',
     for model,model_slug,input_price,cached,output_price in
     [('gpt-6-luna',MODEL_SLUGS['gpt-6-luna'],.1,.01,.5),
      ('gpt-6.1-terra',MODEL_SLUGS['gpt-6.1-terra'],1.,.05,5.)]}
+MODEL_PRICING['qwen2.5-7b-instruct']={
+    'model':'qwen2.5-7b-instruct','as_of':'2026-11-02',
+    'source':'https://openrouter.ai/api/v1/models/qwen/qwen-2.5-7b-instruct/endpoints',
+    'input_usd_per_million':.1,'cached_usd_per_million':.1,
+    'cache_write_usd_per_million':.1,'cache_write_12h_usd_per_million':.1,
+    'output_usd_per_million':.2,'serving_provider':'Phala','endpoint':'phala',
+    'service_tier':'default','checkpoint':'Qwen/Qwen2.5-7B-Instruct',
+    'cost_basis':'frozen token-price estimate; OpenRouter-reported charge recorded separately'}
 
 
 def api_key():
@@ -65,9 +74,20 @@ class OpenRouterProvider:
         'provider':{'only':['openai'],'order':['openai'],'ignore':['openai/flex','openai/fast'],
                     'allow_fallbacks':False,'require_parameters':True},'plugins':[]}
 
+    @classmethod
+    def settings_for_model(cls,model):
+        if model not in MODEL_SLUGS:raise ValueError('Unsupported OpenRouter shopper model; no model substitution')
+        settings=json.loads(json.dumps(cls.generation_settings))
+        if model=='qwen2.5-7b-instruct':
+            settings.pop('reasoning');settings.pop('service_tier')
+            settings['provider']={'only':['phala'],'order':['phala'],
+                'allow_fallbacks':False,'require_parameters':True}
+        return settings
+
     def __init__(self,ledger,run_id,seed=42,bucket='manual',stage_limit_usd=None,requests_per_minute=0,*,model=MODEL):
         if model not in MODEL_SLUGS:raise ValueError('Unsupported OpenRouter shopper model; no model substitution')
         self.model=model; self.pricing=dict(MODEL_PRICING[model])
+        self.generation_settings=self.settings_for_model(model)
         self.ledger,self.run_id,self.seed=ledger,run_id,seed
         self.bucket,self.stage_limit_usd=bucket,stage_limit_usd
         self.requests_per_minute=requests_per_minute;self.cancelled=threading.Event();self.round_number=1
@@ -111,7 +131,8 @@ class OpenRouterProvider:
         if type(reported) not in (int,float) or not math.isfinite(reported) or reported<0:reported=None
         choice=(payload.get('choices') or [{}])[0];raw=(choice.get('message') or {}).get('content') or ''
         actual_model=payload.get('model');upstream=payload.get('provider')
-        identity_ok=actual_model in (MODEL_SLUGS[self.model],'openai/'+self.model) and upstream=='OpenAI'
+        accepted_models=(MODEL_SLUGS[self.model],'openai/'+self.model) if self.pricing['serving_provider']=='OpenAI' else (MODEL_SLUGS[self.model],)
+        identity_ok=actual_model in accepted_models and upstream==self.pricing['serving_provider']
         telemetry={'request_submitted':True,'request_id':request_id,'reserved_micros':reserved,
             'estimated_cost_micros':cost,'usage':usage,'provider_usage':provider_usage,
             'provider_reported_cost_usd':reported,'model_version':actual_model,'serving_provider':upstream,

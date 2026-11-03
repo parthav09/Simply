@@ -5,9 +5,9 @@ import {loadCatalog} from '../lib/recordings';
 import {decodeDashboard,type Dashboard,type DashboardRun,type TripPoint} from '../lib/dashboard';
 import {formatHistoryMetric as format} from '../lib/evidence';
 
-const modelName=(id:string)=>({'gpt-6-luna':'Luna','gpt-6.1-terra':'Terra'} as Record<string,string>)[id]??id;
+const modelName=(id:string)=>({'gpt-6-luna':'Luna','gpt-6.1-terra':'Terra','qwen2.5-7b-instruct':'Qwen2.5 7B'} as Record<string,string>)[id]??id;
 const layoutName=(id:string)=>id==='costco_back_anchor'?'A':'B';
-const groupName=(run:DashboardRun)=>run.group==='main'?`Main · R${run.repetition}`:run.group==='pilot'?'Separate pilot':run.group==='historical'?'Historical demo':'OpenRouter';
+const groupName=(run:DashboardRun)=>run.group==='main'?`Main · R${run.repetition}`:run.group==='pilot'?'Separate pilot':run.group==='historical'?'Historical demo':run.group==='qwen_baseline'?'Qwen baseline':'OpenRouter';
 
 export default function EvidenceDashboard(){
   const [data,setData]=useState<Dashboard|null>(null);const [error,setError]=useState('');
@@ -29,9 +29,10 @@ export default function EvidenceDashboard(){
 export function DashboardContent({data}:{data:Dashboard}){
   const [viewId,setViewId]=useState(data.default_view);const [expanded,setExpanded]=useState(false);
   const view=data.views.find(v=>v.id===viewId)??data.views[0];
-  const measures=data.measures.filter(m=>expanded||m.primary);
+  const qwen=view.id==='qwen_baseline';
+  const measures=data.measures.filter(m=>(expanded||m.primary)&&(qwen||!m.id.startsWith('provider_reported_')));
   return <section className="model-evidence" aria-label="Model by layout comparison">
-    <div className="evidence-results-heading"><div><p className="eyebrow">Recorded outcomes · direct OpenAI</p><h2>Models × layouts</h2></div><span className="evidence-status is-complete">Existing recordings · no new API calls</span></div>
+    <div className="evidence-results-heading"><div><p className="eyebrow">Recorded outcomes · {qwen?'OpenRouter / Phala':'direct OpenAI'}</p><h2>Models × layouts</h2></div><span className="evidence-status is-complete">Recorded evidence · replay makes no API calls</span></div>
     <div className="evidence-selectors dashboard-selectors">
       <label>Results shown<select value={view.id} onChange={e=>setViewId(e.target.value)}>{data.views.map(v=><option key={v.id} value={v.id}>{v.label}</option>)}</select></label>
       <label className="evidence-toggle"><input type="checkbox" checked={expanded} onChange={e=>setExpanded(e.target.checked)}/>Show detailed metrics</label>
@@ -40,7 +41,7 @@ export function DashboardContent({data}:{data:Dashboard}){
     <p className="evidence-footnote">The same products, prices, profiles, lists and navigation assistance are frozen across the main study. Only shelf placement changes for a layout comparison. These results describe simulations, not measured human behavior.</p>
     <div className="report-table model-layout-table"><table aria-label="Model metrics for Layout A and Layout B"><thead><tr><th scope="col">Model / measure</th>{data.layouts.map(layout=><th scope="col" key={layout.id}>{layout.label}<small>{layout.description}</small></th>)}</tr></thead>
       {view.models.map(model=><tbody key={model.id} aria-label={model.label}>
-        <tr className="model-group"><th scope="rowgroup"><strong>{model.label}</strong><small>{model.status==='not_evaluated'?'Not evaluated · results pending':'Measured · direct OpenAI API'}</small></th>{data.layouts.map(layout=>{const c=model.cells[layout.id];return <td key={layout.id}>{c.status==='not_evaluated'?'N/A':`${c.runs} ${c.runs===1?'run':'runs'} · ${c.trips} trips`}<small>{c.status==='not_evaluated'?'No recording available':`${c.finished}/${c.trips} checked out${c.stopped_runs?` · ${c.stopped_runs} interrupted`:''}`}</small></td>;})}</tr>
+        <tr className="model-group"><th scope="rowgroup"><strong>{model.label}</strong><small>{model.status==='not_evaluated'?'Not evaluated · results pending':qwen?'Measured · OpenRouter / Phala':'Measured · direct OpenAI API'}</small></th>{data.layouts.map(layout=>{const c=model.cells[layout.id];return <td key={layout.id}>{c.status==='not_evaluated'?'N/A':`${c.runs} ${c.runs===1?'run':'runs'} · ${c.trips} trips`}<small>{c.status==='not_evaluated'?'No recording available':`${c.finished}/${c.trips} checked out${c.stopped_runs?` · ${c.stopped_runs} interrupted`:''}`}</small></td>;})}</tr>
         {measures.map(measure=><tr key={measure.id}><th scope="row">{measure.label}</th>{data.layouts.map(layout=>{const c=model.cells[layout.id];return <td key={layout.id}>{c.status==='not_evaluated'||c.status==='missing'?'N/A':format(c.metrics[measure.id],measure.unit)}{measure.id==='purchased_unit_fulfillment'&&c.status==='recorded'&&<small>{c.purchased}/{c.requested} requested units paid</small>}</td>;})}</tr>)}
       </tbody>)}
     </table></div>
