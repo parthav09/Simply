@@ -100,3 +100,17 @@ Luna and Terra run on each layout), with explicit completed/all-attempt averages
 Show Qwen 4B baseline and fine-tuned Qwen as N/A until real records exist.
 Distribution views retain every existing recording separately; never pool pilots,
 historical cohorts or the OpenRouter rate-limit attempt into headline estimates.
+
+## November 3 Qwen authorization (supersedes earlier Qwen-pending scope)
+The user explicitly authorized replacing the earlier Qwen-pending restriction
+and executing exactly TWO paid OpenRouter Qwen2.5 7B Instruct baseline runs:
+one on Layout A and one on Layout B, ten fixed synthetic shopper profiles per
+run, one repetition. Sending these synthetic simulation profiles and prompts
+to OpenRouter / Phala is authorized. Use the prepared frozen study
+`simulation/runs/studies/qwen25-7b-ab-20261102` if its controls still match.
+Retain all attempts and charges. Compare the recorded results with existing
+direct-OpenAI Luna/Terra evidence, explicitly identifying transport and collection
+date differences; do not launch new Luna/Terra runs. The downloaded pilot LoRA
+adapter is not part of hosted OpenRouter inference. This authorization replaces
+the conflicting earlier statements that Qwen must remain pending or that only
+the four Luna/Terra OpenRouter runs are authorized.

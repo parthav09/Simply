@@ -240,6 +240,38 @@
       "url": "/replays/fde2de5cf2824b30adc47c9174bd764d.json",
       "evidence_url": "/replays/fde2de5cf2824b30adc47c9174bd764d.source.jsonl",
       "bundle_sha256": "bc2c506b09e03ec8d8a7f5b8440752139b88da596965e78c8a52218e222be746"
+    },
+    {
+      "run_id": "10fd15cb8f634223b56652b0ea284251",
+      "sha256": "170a1285219ebafe285036a49a005feb70de8943e01b678220eb89c16676289f",
+      "provider": "openrouter",
+      "model": "qwen2.5-7b-instruct",
+      "status": "completed",
+      "recorded_at": "2026-11-04T06:32:47.225077+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/10fd15cb8f634223b56652b0ea284251.json",
+      "evidence_url": "/replays/10fd15cb8f634223b56652b0ea284251.source.jsonl",
+      "bundle_sha256": "4f8b1560d41d9f8222c7392d15190f8b0bc22ac35705cc5387633b9f720b7647"
+    },
+    {
+      "run_id": "c5c26fb5137a40bc9d8ebfdd12dfcaa9",
+      "sha256": "6302ea3a842f787c1bbe4cb9920fc450a2b1a2bf6a1e5db3baa4e01135486964",
+      "provider": "openrouter",
+      "model": "qwen2.5-7b-instruct",
+      "status": "completed",
+      "recorded_at": "2026-11-04T06:43:25.253041+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/c5c26fb5137a40bc9d8ebfdd12dfcaa9.json",
+      "evidence_url": "/replays/c5c26fb5137a40bc9d8ebfdd12dfcaa9.source.jsonl",
+      "bundle_sha256": "6e5bd1c21f43be4c597fd52772b68cbe51eaa2210a8ab3ecb4c0643b6eb744ae"
     }
   ],
   "reports": [
@@ -255,13 +287,13 @@
     },
     {
       "url": "/replays/study-a16f989767b34b4e9ce525607e076e05.json",
-      "title": "layout \u00b7 openrouter \u00b7 pilot_or_incomplete \u00b7 a16f9897",
-      "sha256": "7310eb8e78d11ddc05b86d8631a175da4275373f72bdd75d8c4770ae986811df"
+      "title": "layout \u00b7 openrouter \u00b7 completed \u00b7 a16f9897",
+      "sha256": "0836bb8ec5164ae981394e0d3f410fddc73ad6558b3eab495039bae69a7d8552"
     }
   ],
   "history": {
     "url": "/replays/history.json",
-    "sha256": "e14d43df71d42d21dbca82c625fccdf4f4b0a27d341da5474dd9457a3609179c"
+    "sha256": "e65ae84c4641484951ece62acad18f82168e1b37064a5db47084ea2b89546937"
   },
   "matrix": {
     "url": "/replays/matrix-48ea3402f27344af949f1002123fe826.json",
@@ -270,7 +302,7 @@
   },
   "dashboard": {
     "url": "/replays/evidence-dashboard.json",
-    "sha256": "95324ce787b041cd51ad97276b9929c8bd9fc1a6bf66385cb859635fc1f7ad3e"
+    "sha256": "ecfc13cdd04eab60fd63ff33285cee9b0ad5bf19853f7db5a0e7913a7525d5c1"
   },
   "qwen_baseline": {
     "protocol_url": "/replays/study-a16f989767b34b4e9ce525607e076e05.protocol.json",

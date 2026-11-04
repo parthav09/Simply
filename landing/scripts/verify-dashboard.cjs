@@ -11,7 +11,8 @@ function compile(file,dependencies={}){
  const text=fs.readFileSync(path.join(root,'public/replays/evidence-dashboard.json'),'utf8');
  const replay=compile('lib/replay.ts'),reader=compile('lib/dashboard.ts',{'./replay':replay});
  const data=await reader.decodeDashboard(text,index.dashboard);
- assert.equal(data.coverage.retained_runs,13);assert.equal(data.coverage.retained_trips,130);
+ const qwenRuns=data.runs.filter(r=>r.group==='qwen_baseline');
+ assert.equal(data.coverage.retained_runs,13+qwenRuns.length);assert.equal(data.coverage.retained_trips,130+qwenRuns.length*10);
  assert.equal(data.views[0].runs,4);assert.equal(data.views[0].trips,40);
  assert.equal(data.views[1].runs,7);assert.equal(data.views[2].runs,8);
  const entry=value=>({url:index.dashboard.url,sha256:crypto.createHash('sha256').update(value).digest('hex')});
@@ -30,7 +31,7 @@ function compile(file,dependencies={}){
  const html=renderer.renderToStaticMarkup(React.createElement(ui.DashboardContent,{data}));
  assert.match(html,/GPT-6 Luna/);assert.match(html,/GPT-6[.]1 Terra/);assert.match(html,/Qwen3-4B-Instruct-2507/);assert.match(html,/Qwen 4B · fine-tuned/);
  assert.match(html,/4 recorded runs · 40 simulated trips/);assert.match(html,/1 run · 10 trips/);assert.match(html,/N\/A/);
- assert.match(html,/\$0[.]5454/);assert.match(html,/\$4[.]8757/);assert.match(html,/13 retained runs · 130 attempted trips/);
+ assert.match(html,/\$0[.]5454/);assert.match(html,/\$4[.]8757/);assert.ok(html.includes(`${data.coverage.retained_runs} retained runs · ${data.coverage.retained_trips} attempted trips`));
  assert.match(html,/Distribution measure/);assert.match(html,/Source|source|Original recording/);
  states=['all_attempts',true];
  const all=renderer.renderToStaticMarkup(React.createElement(ui.DashboardContent,{data}));
@@ -39,21 +40,24 @@ function compile(file,dependencies={}){
  states=['qwen_baseline',true];
  const pending=renderer.renderToStaticMarkup(React.createElement(ui.DashboardContent,{data}));
  assert.match(pending,/Qwen2[.]5 7B Instruct/);assert.match(pending,/OpenRouter \/ Phala/);
- assert.match(pending,/Collection has not started/);assert.match(pending,/0 recorded runs · 0 simulated trips/);
+ if(qwenRuns.length)assert.match(pending,/Measured · OpenRouter \/ Phala/);else assert.match(pending,/Collection has not started/);
+ assert.ok(pending.includes(`${4+qwenRuns.length} recorded runs · ${40+qwenRuns.length*10} simulated trips`));
+ assert.match(pending,/GPT-6 Luna/);assert.match(pending,/GPT-6[.]1 Terra/);
  assert.match(pending,/OpenRouter-reported charge/);assert.match(pending,/N\/A/);
  // Explicit offline fixture exercises the measured Qwen reader and React path.
  const measured=JSON.parse(text),qview=measured.views.find(v=>v.id==='qwen_baseline');
  const source=measured.runs.find(r=>r.group==='openrouter');
  source.group='qwen_baseline';source.model='qwen2.5-7b-instruct';
- const model=qview.models[0];model.status='recorded';
+ const model=qview.models[2];model.status='recorded';
+ for(const cell of Object.values(model.cells)){Object.assign(cell,{status:'missing',runs:0,trips:0,finished:0,requested:0,purchased:0,stopped_runs:0,run_ids:[]});for(const key of Object.keys(cell.metrics))cell.metrics[key]=null;}
  const c=model.cells[source.layout_id];
  Object.assign(c,{status:'recorded',runs:1,trips:10,finished:0,requested:source.points.reduce((n,p)=>n+p.requested,0),purchased:0,stopped_runs:1,run_ids:[source.run_id]});
  c.metrics.checkout_completion=0;c.metrics.provider_reported_cost_per_run_usd=.001;
- qview.runs=1;qview.trips=10;
+ qview.runs=5;qview.trips=50;
  const measuredText=JSON.stringify(measured),decoded=await reader.decodeDashboard(measuredText,entry(measuredText));
  states=['qwen_baseline',true];
  const qhtml=renderer.renderToStaticMarkup(React.createElement(ui.DashboardContent,{data:decoded}));
- assert.match(qhtml,/Measured · OpenRouter \/ Phala/);assert.match(qhtml,/\$0[.]0010/);assert.match(qhtml,/1 recorded runs · 10 simulated trips/);
+ assert.match(qhtml,/Measured · OpenRouter \/ Phala/);assert.match(qhtml,/\$0[.]0010/);assert.match(qhtml,/5 recorded runs · 50 simulated trips/);
  source.group='main';const mixed=JSON.stringify(measured);
  await assert.rejects(reader.decodeDashboard(mixed,entry(mixed)));
  console.log('Dashboard passed: real source coverage, four-row model hierarchy, measured versus N/A/unknown, all-attempt controls and React rendering. No model calls.');

@@ -43,16 +43,17 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
   check(Array.isArray(d.views)&&[3,4].includes(d.views.length)&&d.views.some(v=>v.id===d.default_view)&&new Set(d.views.map(v=>v.id)).size===d.views.length,'Invalid comparison views');
   for(const v of d.views){
     const qwen=v.id==='qwen_baseline';
-    check(count(v.runs)&&count(v.trips)&&typeof v.note==='string'&&v.models?.length===(qwen?2:4),'Invalid comparison sample');
-    check(v.models.map(m=>m.id).join(',')===(qwen?'qwen2.5-7b-instruct,qwen2.5-7b-instruct-finetuned':'gpt-6-luna,gpt-6.1-terra,qwen3-4b-instruct-2507,qwen3-4b-instruct-2507-finetuned'),'Invalid model comparison rows');
+    check(count(v.runs)&&count(v.trips)&&typeof v.note==='string'&&v.models?.length===4,'Invalid comparison sample');
+    check(v.models.map(m=>m.id).join(',')===(qwen?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct,qwen2.5-7b-instruct-finetuned':'gpt-6-luna,gpt-6.1-terra,qwen3-4b-instruct-2507,qwen3-4b-instruct-2507-finetuned'),'Invalid model comparison rows');
     for(const model of v.models)for(const layout of d.layouts){const c=model.cells[layout.id];
       check(c&&[c.runs,c.trips,c.finished,c.requested,c.purchased,c.stopped_runs].every(count)&&c.finished<=c.trips&&c.purchased<=c.requested&&c.stopped_runs<=c.runs,'Invalid model/layout coverage');
       check(c.run_ids.length===c.runs&&new Set(c.run_ids).size===c.runs&&c.run_ids.every(id=>runIds.has(id)),'Invalid model/layout sources');
       check(d.measures.every(m=>nullable(c.metrics[m.id])),'Invalid Python table metric');
       if(model.status==='not_evaluated')check(c.status==='not_evaluated'&&!c.runs&&!c.trips&&Object.values(c.metrics).every(n=>n===null),'Unevaluated Qwen has fabricated results');
       for(const id of c.run_ids){const r=d.runs.find(r=>r.run_id===id)!;
-        check(r.group===(qwen?'qwen_baseline':'main')&&r.provider===(qwen?'openrouter':'openai')&&r.model===model.id&&r.layout_id===layout.id,'Non-comparable source in headline table');
-        if(!qwen&&v.id!=='all_attempts')check(r.status==='completed'&&!r.warnings.length,'Stopped source in completed-run view');
+        const qwenModel=qwen&&model.id==='qwen2.5-7b-instruct';
+        check(r.group===(qwenModel?'qwen_baseline':'main')&&r.provider===(qwenModel?'openrouter':'openai')&&r.model===model.id&&r.layout_id===layout.id,'Non-comparable source in headline table');
+        if(!qwenModel&&v.id!=='all_attempts')check(r.status==='completed'&&!r.warnings.length,'Stopped source in completed-run view');
       }
     }
   }

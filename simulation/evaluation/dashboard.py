@@ -163,13 +163,14 @@ def assemble(records, main_study_id):
             'models':[{**m,'cells':{l['id']:cell([r for r in rows if r['model']==m['id'] and r['layout_id']==l['id']],
                 status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in MODELS]})
     qwen=[r for r in records if r['group']=='qwen_baseline']
-    models=[{'id':'qwen2.5-7b-instruct','label':'Qwen2.5 7B Instruct · OpenRouter / Phala','status':'recorded' if qwen else 'not_evaluated'},
+    comparison=[*first,*qwen]
+    models=[*MODELS[:2],{'id':'qwen2.5-7b-instruct','label':'Qwen2.5 7B Instruct · OpenRouter / Phala','status':'recorded' if qwen else 'not_evaluated'},
         {'id':'qwen2.5-7b-instruct-finetuned','label':'Qwen2.5 7B · fine-tuned','status':'not_evaluated'}]
-    views.append({'id':'qwen_baseline','label':'Qwen2.5 7B · one run per layout · OpenRouter',
-        'note':('One repetition with ten fixed profiles per layout, the same benchmark and Python navigation assistance. Separate provider and collection date from the historical OpenAI matrix; descriptive results only. Interrupted attempts remain included.' if qwen else
+    views.append({'id':'qwen_baseline','label':'Luna, Terra & Qwen · one run per layout',
+        'note':('Qwen uses one OpenRouter / Phala run per layout, beside the earliest intact historical Luna/Terra repetition through direct OpenAI. These are separate collections with different providers and dates; descriptive comparison only. The same benchmark and navigation assistance are used. Interrupted Qwen attempts remain included.' if qwen else
             'Prepared for one run per layout with ten fixed profiles. Collection has not started. No model performance has been measured.'),
-        'runs':len(qwen),'trips':sum(len(r['points']) for r in qwen),
-        'models':[{**m,'cells':{l['id']:cell([r for r in qwen if r['model']==m['id'] and r['layout_id']==l['id']],
+        'runs':len(comparison),'trips':sum(len(r['points']) for r in comparison),
+        'models':[{**m,'cells':{l['id']:cell([r for r in comparison if r['model']==m['id'] and r['layout_id']==l['id']],
             status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in models]})
     counts=Counter(r['group'] for r in records)
     return {'dashboard_version':1,'main_study_id':main_study_id,'default_view':'qwen_baseline' if qwen else 'matched_first',
@@ -181,9 +182,9 @@ def assemble(records, main_study_id):
             'groups':[{'id':g,'label':GROUPS[g],'runs':counts[g],'trips':sum(len(r['points']) for r in records if r['group']==g)} for g in GROUPS]},
         'limitations':[
             'These are simulated shopping trips, not independent people or predictions validated against human behavior.',
-            'The default table uses four matched runs. One repetition provides descriptive results, not a confidence interval or statistical significance.',
+            'The historical table uses four matched OpenAI runs. The Qwen comparison adds its two separate OpenRouter runs. One repetition provides descriptive results, not a confidence interval or statistical significance.',
             'The same ten profiles repeat in the main study. Distribution points are observed trips; they are not independent experimental repetitions.',
-            'Only the main controlled OpenAI study enters the headline table. Pilots, historical demonstrations and OpenRouter attempts stay separate.',
+            'Historical OpenAI views exclude other collections. The explicit Luna/Terra/Qwen view shows model cells separately across providers and collection dates; it does not pool them into one estimate. Pilots, demonstrations and unrelated OpenRouter attempts stay separate.',
             'Purchased-list fulfillment counts requested units in paid carts. Unfinished shoppers retain zero purchased units; unpaid baskets are not sales.',
             'Known cost estimates use each recording’s frozen token prices, including cache charges. A missing charge keeps the full cost estimate unknown.',
             'API cost per checkout pools all selected costs and divides by completed checkouts, retaining costs from unfinished trips. Other per-trip rates pool their numerators and denominators.',

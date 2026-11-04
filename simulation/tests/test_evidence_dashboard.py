@@ -90,13 +90,13 @@ class EvidenceDashboardTests(unittest.TestCase):
         self.assertEqual(result['default_view'],'qwen_baseline')
         self.assertEqual(result['views'][0]['runs'],4)
         qwen=result['views'][-1]
-        self.assertEqual((qwen['runs'],qwen['trips']),(2,20))
-        for c in qwen['models'][0]['cells'].values():
+        self.assertEqual((qwen['runs'],qwen['trips']),(6,60))
+        for c in qwen['models'][2]['cells'].values():
             self.assertEqual(c['trips'],10)
             self.assertAlmostEqual(c['metrics']['provider_reported_cost_per_run_usd'],.00013)
             self.assertIsNone(c['metrics']['provider_reported_cost_per_checkout_usd'])
             self.assertNotEqual(c['metrics']['estimated_cost_per_run_usd'],.00013)
-        self.assertEqual(qwen['models'][1]['status'],'not_evaluated')
+        self.assertEqual(qwen['models'][3]['status'],'not_evaluated')
         # A Qwen attempt without the selected protocol is only a separate transport recording.
         unselected=dashboard.record(next(directory.glob('*.jsonl')),self.protocols)
         self.assertEqual(unselected['group'],'openrouter')

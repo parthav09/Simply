@@ -104,15 +104,21 @@ collection coverage and the provider interruption. Individual recordings,
 diagnostics and full reports are collapsed. Python computes every outcome and
 difference; React displays the saved values.
 
-The Qwen2.5 7B view is separate from the historical direct-OpenAI matrix. Its
-frozen OpenRouter / Phala protocol schedules one run on each layout with ten
-fixed profiles, one decision per action, and the same Python navigation assist.
-Collection is prepared but has not started: automatic approval review rejected
-paid execution against the older Qwen-pending scope. The view reports N/A until
-canonical recordings exist; fine-tuned Qwen remains unevaluated. Token-price
-estimates and OpenRouter-reported charges are displayed separately.
+The Qwen2.5 7B baseline has one completed OpenRouter / Phala run on each
+layout, with ten fixed profiles, one decision per action, and the same Python
+navigation assistance. Layout A recorded 6/10 checkouts and 15/53 requested
+products purchased; Layout B recorded 9/10 checkouts and 17/53 purchased.
+OpenRouter-reported charges were $0.5633789 and $0.5397728 respectively.
 
-After renewed approval, execute and export the prepared study:
+Evidence's “Luna, Terra & Qwen” view displays these two runs beside the earliest
+intact historical direct-OpenAI Luna/Terra repetition. Model cells remain
+separate; provider and collection-date differences prevent a controlled model
+ranking. This is one descriptive repetition. The hosted Qwen baseline does not
+use the downloaded pilot LoRA adapter; fine-tuned full-trip metrics remain N/A.
+Frozen token-price estimates and OpenRouter-reported charges stay separate.
+
+The completed study is retained below. `run` validates and skips its completed
+slots; it does not collect another repetition:
 
 ```bash
 .venv/bin/python simulation/evaluation/study.py run --directory simulation/runs/studies/qwen25-7b-ab-20261102
