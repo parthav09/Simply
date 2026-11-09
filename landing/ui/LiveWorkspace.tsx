@@ -8,7 +8,7 @@ import {Icon} from './Icons';
 import {productEmoji} from './map-theme';
 import {invalidateCatalog} from '../lib/recordings';
 import {liveEndNotice,liveStatusLabel,liveSessionStorage,readRememberedRun,rememberRun,restoreRunSelection} from '../lib/live-session';
-const modelName=(id:string)=>({'gpt-6-luna':'GPT-6 Luna','gpt-6.1-terra':'GPT-6.1 Terra'} as Record<string,string>)[id]??id;
+const modelName=(id:string)=>({'gpt-6-luna':'GPT-6 Luna','gpt-6.1-terra':'GPT-6.1 Terra','qwen2.5-7b-pilot-mps':'Qwen pilot · MPS','qwen2.5-7b-pilot-mlx':'Qwen pilot · MLX'} as Record<string,string>)[id]??id;
 const layoutShort=(id:string)=>({costco_back_anchor:'A',neighborhood_express:'B'} as Record<string,string>)[id]??id;
 
 type Run={run_id:string;layout_id:string;shopper_count:number;model:string;status:string;controllable:boolean};
@@ -34,6 +34,7 @@ export default function LiveWorkspace(){
   const [feedFilter,setFeedFilter]=useState<'all'|'purchases'|'failures'>('all');
   const [accounting,setAccounting]=useState<ApiAccounting|null>(null);
   const [budgetEnforced,setBudgetEnforced]=useState<boolean|null>(null);
+  const [mpsReady,setMpsReady]=useState(false);const [mlxReady,setMlxReady]=useState(false);
   useEffect(()=>{
     if(mode!=='live'||runId)return;
     let cancelled=false;
@@ -55,7 +56,7 @@ export default function LiveWorkspace(){
       try{
         const [value,health]=await Promise.all([api('runs'),api('health').catch(()=>null)]);
         if(!cancelled){setRuns(value.runs);setServiceReady(true);
-          setAccounting(health?.budget??null);setBudgetEnforced(typeof health?.api_budget_enforced==='boolean'?health.api_budget_enforced:null);
+          setMpsReady(health?.local_mps_available===true);setMlxReady(health?.local_mlx_available===true);setAccounting(health?.budget??null);setBudgetEnforced(typeof health?.api_budget_enforced==='boolean'?health.api_budget_enforced:null);
           setRunId(previous=>restoreRunSelection(previous,value.runs,readRememberedRun(liveSessionStorage())));}
         failures=0;
       }catch{if(!cancelled)setServiceReady(false);failures++;}
@@ -78,7 +79,7 @@ export default function LiveWorkspace(){
       const next=liveSnapshot(message,current.current);if(next.source.run_id!==runId)throw new Error('Live run identity changed');
       current.current=next;setData(next);setLastUpdate(Date.now());setControl(message.control);setError('');
       rememberRun(liveSessionStorage(),runId);
-      if(['gpt-6-luna','gpt-6.1-terra'].includes(next.source.model))setModel(next.source.model);
+      if(['gpt-6-luna','gpt-6.1-terra','qwen2.5-7b-pilot-mps','qwen2.5-7b-pilot-mlx'].includes(next.source.model))setModel(next.source.model);
       if(['costco_back_anchor','neighborhood_express'].includes(next.layout.id))setLayout(next.layout.id);
       if(next.shoppers.length>=10)setCount(next.shoppers.length);
       const ended=next.source.status!=='incomplete';setConnection(ended?'ended':'connected');if(ended)source.close();
@@ -96,9 +97,10 @@ export default function LiveWorkspace(){
     return()=>{active=false;source.close();};
   },[mode,runId,reconnect]);
   const choose=(id:string)=>{rememberRun(liveSessionStorage(),id);current.current=null;setData(null);setRunId(id);setSaved(false);setError('');setConnection('connecting');};
-  const start=async()=>{setBusy(true);setError('');try{const result=await api('runs',{layout,shoppers:count,model,provider:'openrouter'});choose(result.run_id);setControl(result);}catch(cause){setError((cause as Error).message);}finally{setBusy(false);}};
+  const start=async()=>{setBusy(true);setError('');try{const result=await api('runs',{layout,shoppers:count,model,provider:model.startsWith('qwen2.5-7b-pilot-')?'local_mps':'openrouter'});choose(result.run_id);setControl(result);}catch(cause){setError((cause as Error).message);}finally{setBusy(false);}};
   const command=async(command:string)=>{setBusy(true);setError('');try{setControl(await api(`runs/${runId}/control`,{command}));}catch(cause){setError((cause as Error).message);}finally{setBusy(false);}};
   const save=async()=>{setBusy(true);setError('');try{await api(`runs/${runId}/export`,{allow_partial:data?.source.status!=='completed'});invalidateCatalog();setSaved(true);}catch(cause){setError((cause as Error).message);}finally{setBusy(false);}};
+  const localMps=(data?.source.provider??(model.startsWith('qwen2.5-7b-pilot-')?'local_mps':'openrouter'))==='local_mps';
   const ended=!!data&&data.source.status!=='incomplete';
   const activeRun=!!runId&&!ended;
   const owned=activeRun&&control.controllable;
@@ -114,7 +116,7 @@ export default function LiveWorkspace(){
   const pickModel=(id:string)=>{if(model===id&&!runId)return;newSetup();setModel(id);};
   const pickLayout=(id:string)=>{if(layout===id&&!runId)return;newSetup();setLayout(id);};
   const pickCount=(n:number)=>{if(count===n&&!runId)return;newSetup();setCount(n);};
-  const followRun=(run:Run)=>{if(['gpt-6-luna','gpt-6.1-terra'].includes(run.model))setModel(run.model);setLayout(run.layout_id);if(run.shopper_count>=10)setCount(run.shopper_count);choose(run.run_id);};
+  const followRun=(run:Run)=>{if(['gpt-6-luna','gpt-6.1-terra','qwen2.5-7b-pilot-mps','qwen2.5-7b-pilot-mlx'].includes(run.model))setModel(run.model);setLayout(run.layout_id);if(run.shopper_count>=10)setCount(run.shopper_count);choose(run.run_id);};
   return <>
     <header className="lab-toolbar">
       <div className="lab-mode-switch" role="group" aria-label="Lab mode">
@@ -125,6 +127,8 @@ export default function LiveWorkspace(){
         <div className="seg" role="group" aria-label="Shopper model">
           <button aria-pressed={model==='gpt-6-luna'} onClick={()=>pickModel('gpt-6-luna')}>Luna</button>
           <button aria-pressed={model==='gpt-6.1-terra'} onClick={()=>pickModel('gpt-6.1-terra')}>Terra</button>
+          <button aria-pressed={model==='qwen2.5-7b-pilot-mlx'} disabled={!mlxReady} title={mlxReady?'Your saved pilot adapter on MLX':'Start the local Qwen MLX server'} onClick={()=>pickModel('qwen2.5-7b-pilot-mlx')}>Qwen pilot · MLX</button>
+          <button aria-pressed={model==='qwen2.5-7b-pilot-mps'} disabled={!mpsReady} title={mpsReady?'Your saved pilot adapter on this Mac':'Start the local Qwen MPS server to use the pilot adapter'} onClick={()=>pickModel('qwen2.5-7b-pilot-mps')}>Qwen pilot · MPS</button>
         </div>
         <div className="seg" role="group" aria-label="Live layout">
           <button aria-pressed={layout==='costco_back_anchor'} onClick={()=>pickLayout('costco_back_anchor')}>A · Anchor</button>
@@ -135,7 +139,7 @@ export default function LiveWorkspace(){
           <span>{count}</span>
           <button aria-label="More shoppers" disabled={count>=15} onClick={()=>pickCount(count+1)}>+</button>
         </div>
-        <button className="product-primary" disabled={!serviceReady||busy||activeRun} onClick={start}><Icon name="play" size={15}/>{busy?'Starting…':'Start'}</button>
+        <button className="product-primary" disabled={!serviceReady||busy||activeRun||(model==='qwen2.5-7b-pilot-mps'&&!mpsReady)||(model==='qwen2.5-7b-pilot-mlx'&&!mlxReady)} onClick={start}><Icon name="play" size={15}/>{busy?'Starting…':'Start'}</button>
       </div>}
       {mode==='live'&&runId&&<div className="live-session-controls">
         <span className={`run-state ${waiting?'is-waiting':''}`} role="status"><span className="live-dot"/>{connection==='connected'?`${statusLabel}${waiting&&waitSeconds>0?` · ${waitSeconds}s`:''}`:connection==='ended'?liveStatusLabel(data?.source.status??'ended'):connection==='reconnecting'?'Reconnecting':connection}</span>
@@ -154,7 +158,7 @@ export default function LiveWorkspace(){
       </div>}
     </header>
     {mode==='replay'?<ReplayWorkspace/>:<>
-      <p className="lab-note api-accounting" role="status">{data?`Recorded transport: ${data.source.provider} · `:'New sessions use OpenRouter · '}{budgetEnforced===false?'API cost tracking only · no app spending cap':budgetEnforced===true?'This session has an explicit API budget':'Checking API cost tracking…'}{accounting&&<> · Known estimate ${accounting.known_estimated_usd.toFixed(4)} · Unresolved reservations ${accounting.unresolved_reserved_usd.toFixed(4)}</>}. Provider rate and quota limits still apply.</p>
+      <p className="lab-note api-accounting" role="status">{data?`Recorded transport: ${data.source.provider} · `:localMps?(model==='qwen2.5-7b-pilot-mlx'?'Local MLX Metal · ':'Local PyTorch MPS · '):'New sessions use OpenRouter · '}{localMps?'No per-token API fee · local hardware and electricity costs unmeasured':budgetEnforced===false?'API cost tracking only · no app spending cap':budgetEnforced===true?'This session has an explicit API budget':'Checking API cost tracking…'}{accounting&&!localMps&&<> · Known estimate ${accounting.known_estimated_usd.toFixed(4)} · Unresolved reservations ${accounting.unresolved_reserved_usd.toFixed(4)}</>}. {localMps?'One inference at a time on this Mac.':'Provider rate and quota limits still apply.'}</p>
       {endNotice&&<section className={`live-end-notice ${endNotice.warning?'is-warning':''}`} role="status"><strong>{endNotice.title}</strong><p>{endNotice.detail}</p></section>}
       {mode==='live'&&!activeRun&&!runId&&runs.length>0&&<details className="lab-history"><summary>Recent runs <span>{runs.length}</span></summary><div className="lab-picker" role="group" aria-label="Follow Python run">{runs.slice(0,8).map(run=><button key={run.run_id} aria-pressed={run.run_id===runId} onClick={()=>followRun(run)}>{layoutShort(run.layout_id)} · {modelName(run.model)} · {run.status} · {run.run_id.slice(0,8)}</button>)}</div></details>}
       {serviceReady===false&&<div className="live-banner" role="alert">Live simulation is offline. Saved recordings are available to explore.</div>}

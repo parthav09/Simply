@@ -107,7 +107,7 @@ def run_row(path):
     return {
         'run_id': header['run_id'], 'recorded_at': header['recorded_at'],
         'provider': header['provider'], 'model': header['model'], 'model_versions': versions,
-        'kind': 'model' if header['provider'] in ('openai', 'gemini', 'openrouter') else 'fixture',
+        'kind': 'model' if header['provider'] in ('openai', 'gemini', 'openrouter','local_mps') else 'fixture',
         'layout_id': layout['id'], 'shopper_count': len(header['shoppers']),
         'status': summary['status'], 'warnings': run['warnings'], 'navigation_policy': policy,
         'shopping_rules': config.get('shopping_rules', 'quantity_two_phase_v1'),

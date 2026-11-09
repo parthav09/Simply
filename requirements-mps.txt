@@ -1,0 +1,6 @@
+# Optional local Apple Silicon inference. Install inside .venv only.
+torch==2.15.0
+transformers==4.57.6
+peft==0.21.2
+accelerate==1.15.0
+optimum-quanto==0.2.7

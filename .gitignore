@@ -42,6 +42,7 @@ test-results/
 /simulation/results.json
 /simulation/trajectory/
 /simulation/runs/
+/simulation/models/
 *.sqlite
 *.sqlite3
 *.sqlite-wal

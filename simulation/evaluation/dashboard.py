@@ -50,7 +50,10 @@ DISTRIBUTIONS=[{'id':'moves','label':'Movement steps / trip','unit':'number'},
     {'id':'estimated_cost_usd','label':'Estimated API cost / attempted trip','unit':'usd'}]
 GROUPS={'main':'Main controlled OpenAI study','pilot':'Separate OpenAI pilots',
         'historical':'Historical OpenAI demonstrations','openrouter':'OpenRouter · separate transport',
-        'qwen_baseline':'Qwen2.5 7B · controlled OpenRouter baseline'}
+        'qwen_baseline':'Qwen2.5 7B · controlled OpenRouter baseline',
+        'qwen_pilot':'Qwen pilot · controlled local MPS study',
+        'qwen_mlx':'Qwen pilot · controlled local MLX study',
+        'local_mps':'Qwen pilot · local recordings'}
 
 
 def distribution(values):
@@ -71,8 +74,10 @@ def record(path, main_protocols):
             raise ValueError('Dashboard source differs from frozen main-study controls')
         if experiment.get('protocol_sha256')!=protocol['sha256'] or header['provider']!=protocol['provider']:
             raise ValueError('Invalid main-study source identity')
-        group='qwen_baseline' if protocol['provider']=='openrouter' else 'main'
+        group=('qwen_baseline' if protocol['provider']=='openrouter' else
+            ('qwen_mlx' if header['model']=='qwen2.5-7b-pilot-mlx' else 'qwen_pilot') if protocol['provider']=='local_mps' else 'main')
     elif header['provider']=='openrouter':group='openrouter'
+    elif header['provider']=='local_mps':group='local_mps'
     elif experiment.get('stage')=='main':group='pilot'
     else:group='historical'
     points=[]
@@ -92,10 +97,18 @@ def record(path, main_protocols):
     latencies=[e['telemetry'].get('api_latency_ms',e['telemetry']['provider_latency_ms']) for e in run['events']
         if e.get('telemetry',{}).get('request_submitted') is True]
     unknown_usage=summary['resources']['unknown_usage_requests']
+    continuation = None
+    if experiment.get('stage') == 'continuation':
+        import re
+        continuation = {key: experiment.get(key) for key in ('source_run_id', 'source_sha256', 'source_event_count')}
+        if (not re.fullmatch(r'[a-f0-9]{32}', continuation['source_run_id'] or '')
+            or not re.fullmatch(r'[a-f0-9]{64}', continuation['source_sha256'] or '')
+            or type(continuation['source_event_count']) is not int or continuation['source_event_count'] < 1):
+            raise ValueError('Invalid continuation provenance')
     return {'run_id':row['run_id'],'source_sha256':row['source_sha256'],'provider':row['provider'],
         'model':row['model'],'layout_id':row['layout_id'],'recorded_at':row['recorded_at'],
         'status':row['status'],'warnings':row['warnings'],'group':group,
-        'repetition':experiment.get('repetition'),'cohort_sha256':header['input_fingerprints']['shoppers'],
+        'repetition':experiment.get('repetition'),'continuation':continuation,'cohort_sha256':header['input_fingerprints']['shoppers'],
         'shopping_rules':row['shopping_rules'],'policy':row['navigation_policy'],
         'run_metrics':row['metrics'],'cost_complete':row['cost_complete'],
         'known_input_tokens':summary['resources']['usage']['promptTokenCount'],
@@ -104,6 +117,23 @@ def record(path, main_protocols):
         'points':points,'source_url':f"/replays/{row['run_id']}.source.jsonl",
         'replay_url':f"/replays/{row['run_id']}.json",
         'distributions':{m['id']:distribution([p['values'][m['id']] for p in points]) for m in DISTRIBUTIONS}}
+
+
+def validate_continuations(rows, paths):
+    """The continuation must include the exact immutable source prefix, not a second trip."""
+    for row in rows:
+        link = row.get('continuation')
+        if not link:
+            continue
+        source_id = link['source_run_id']
+        if source_id not in paths or row['run_id'] not in paths:
+            raise ValueError('Continuation source is not retained')
+        original = read_run(paths[source_id]); resumed = read_run(paths[row['run_id']])
+        if (hashlib.sha256(Path(paths[source_id]).read_bytes()).hexdigest() != link['source_sha256']
+            or original['end'] is not None or len(original['events']) != link['source_event_count']
+            or resumed['events'][:len(original['events'])] != original['events']
+            or study.controls(original['start']) != study.controls(resumed['start'])):
+            raise ValueError('Continuation differs from the retained source prefix')
 
 
 def cell(rows, status='recorded'):
@@ -142,7 +172,7 @@ def cell(rows, status='recorded'):
         'stopped_runs':sum(r['status']!='completed' or bool(r['warnings']) for r in rows),'metrics':metrics}
 
 
-def assemble(records, main_study_id):
+def assemble(records, main_study_id, mlx_selected=False):
     ids=[r['run_id'] for r in records]
     if len(ids)!=len(set(ids)):raise ValueError('Duplicate retained run ID')
     records=sorted(records,key=lambda r:(r['recorded_at'],r['run_id']))
@@ -163,12 +193,17 @@ def assemble(records, main_study_id):
             'models':[{**m,'cells':{l['id']:cell([r for r in rows if r['model']==m['id'] and r['layout_id']==l['id']],
                 status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in MODELS]})
     qwen=[r for r in records if r['group']=='qwen_baseline']
-    comparison=[*first,*qwen]
+    pilot=[r for r in records if r['group']=='qwen_pilot']
+    mlx=[r for r in records if r['group']=='qwen_mlx']
+    comparison=[*first,*qwen,*pilot,*mlx]
     models=[*MODELS[:2],{'id':'qwen2.5-7b-instruct','label':'Qwen2.5 7B Instruct · OpenRouter / Phala','status':'recorded' if qwen else 'not_evaluated'},
-        {'id':'qwen2.5-7b-instruct-finetuned','label':'Qwen2.5 7B · fine-tuned','status':'not_evaluated'}]
+        {'id':'qwen2.5-7b-pilot-mps','label':'Qwen2.5 7B pilot · local MPS','status':'recorded' if pilot else 'not_evaluated'}]
+    if mlx_selected:
+        models.append({'id':'qwen2.5-7b-pilot-mlx','label':'Qwen2.5 7B pilot · local MLX 4-bit','status':'recorded' if mlx else 'not_evaluated'})
     views.append({'id':'qwen_baseline','label':'Luna, Terra & Qwen · one run per layout',
-        'note':('Qwen uses one OpenRouter / Phala run per layout, beside the earliest intact historical Luna/Terra repetition through direct OpenAI. These are separate collections with different providers and dates; descriptive comparison only. The same benchmark and navigation assistance are used. Interrupted Qwen attempts remain included.' if qwen else
-            'Prepared for one run per layout with ten fixed profiles. Collection has not started. No model performance has been measured.'),
+        'note':(('Qwen baseline uses one OpenRouter / Phala run per layout, beside the earliest intact historical Luna/Terra repetition through direct OpenAI. The pilot rows use separate frozen local studies. Providers, dates and quantization differ, so this is descriptive and does not isolate the effect of fine-tuning. The same benchmark, action limits and navigation assistance are used; interrupted Qwen attempts remain included. Local API fees are zero; hardware and compute costs are unmeasured.' if qwen else
+            'Prepared for one run per layout with ten fixed profiles. Collection has not started. No model performance has been measured.') +
+            (' The MLX Layout B attempt was interrupted; its partial outcomes are not comparable with a completed run and do not form a completed layout pair.' if any(r['layout_id']=='neighborhood_express' and (r['status']!='completed' or r['warnings']) for r in mlx) else '')),
         'runs':len(comparison),'trips':sum(len(r['points']) for r in comparison),
         'models':[{**m,'cells':{l['id']:cell([r for r in comparison if r['model']==m['id'] and r['layout_id']==l['id']],
             status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in models]})
@@ -179,17 +214,18 @@ def assemble(records, main_study_id):
             'completed_runs':sum(r['status']=='completed' and not r['warnings'] for r in records),
             'stopped_runs':sum(r['status']!='completed' or bool(r['warnings']) for r in records),
             'main_runs':len(main),'main_trips':sum(len(r['points']) for r in main),
-            'groups':[{'id':g,'label':GROUPS[g],'runs':counts[g],'trips':sum(len(r['points']) for r in records if r['group']==g)} for g in GROUPS]},
+            'groups':[{'id':g,'label':GROUPS[g],'runs':counts[g],'trips':sum(len(r['points']) for r in records if r['group']==g)} for g in GROUPS if g not in ('local_mps','qwen_pilot','qwen_mlx') or counts[g]]},
         'limitations':[
             'These are simulated shopping trips, not independent people or predictions validated against human behavior.',
             'The historical table uses four matched OpenAI runs. The Qwen comparison adds its two separate OpenRouter runs. One repetition provides descriptive results, not a confidence interval or statistical significance.',
             'The same ten profiles repeat in the main study. Distribution points are observed trips; they are not independent experimental repetitions.',
+            'A continued recording includes its linked interrupted prefix. It is shown separately and must not be counted as another independent set of shoppers.',
             'Historical OpenAI views exclude other collections. The explicit Luna/Terra/Qwen view shows model cells separately across providers and collection dates; it does not pool them into one estimate. Pilots, demonstrations and unrelated OpenRouter attempts stay separate.',
             'Purchased-list fulfillment counts requested units in paid carts. Unfinished shoppers retain zero purchased units; unpaid baskets are not sales.',
             'Known cost estimates use each recording’s frozen token prices, including cache charges. A missing charge keeps the full cost estimate unknown.',
             'API cost per checkout pools all selected costs and divides by completed checkouts, retaining costs from unfinished trips. Other per-trip rates pool their numerators and denominators.',
             'Simulated checkout sales are not real revenue. Both models use recorded Python navigation assistance; this does not isolate unassisted model intelligence.',
-            'Qwen3-4B-Instruct-2507 and fine-tuned Qwen have not been evaluated here. N/A means no results; it never means zero performance.']}
+            'Qwen3-4B-Instruct-2507 is unevaluated. Local MPS and MLX pilot cells contain only exported attempts from their respective selected frozen studies. N/A means no exported evaluation, never zero performance.']}
 
 
 def load_main(public):
@@ -223,16 +259,42 @@ def load_main(public):
             or {a['layout_id'] for a in qwen['arms']}!={l['id'] for l in LAYOUTS}):
             raise ValueError('Invalid frozen Qwen baseline protocol')
         children.append(qwen)
+    selected=index.get('qwen_pilot')
+    if selected:
+        pilot=json.loads((public/Path(selected['protocol_url']).name).read_text())
+        if (fingerprint({k:v for k,v in pilot.items() if k!='sha256'})!=pilot['sha256']
+            or pilot['sha256']!=selected['sha256'] or pilot['provider']!='local_mps'
+            or pilot['kind']!='layout' or pilot['cohort_size']!=10 or pilot['repetitions']!=1
+            or pilot['concurrency']!=1 or len(pilot['arms'])!=2
+            or any(a['model']!='qwen2.5-7b-pilot-mps' for a in pilot['arms'])
+            or {a['layout_id'] for a in pilot['arms']}!={l['id'] for l in LAYOUTS}):
+            raise ValueError('Invalid frozen local Qwen pilot protocol')
+        children.append(pilot)
+    selected_mlx=index.get('qwen_mlx')
+    if selected_mlx:
+        mlx=json.loads((public/Path(selected_mlx['protocol_url']).name).read_text())
+        if (fingerprint({k:v for k,v in mlx.items() if k!='sha256'})!=mlx['sha256']
+            or mlx['sha256']!=selected_mlx['sha256'] or mlx['provider']!='local_mps'
+            or mlx['kind']!='layout' or mlx['cohort_size']!=10 or mlx['repetitions']!=1
+            or mlx['concurrency']!=1 or mlx['turn_budget']!=120 or len(mlx['arms'])!=2
+            or mlx['shopping_rules']!='unique_single_checkout_v1'
+            or any(a['model']!='qwen2.5-7b-pilot-mlx' or a['policy']!='gary2_v2' for a in mlx['arms'])
+            or {a['layout_id'] for a in mlx['arms']}!={l['id'] for l in LAYOUTS}):
+            raise ValueError('Invalid frozen local MLX pilot protocol')
+        children.append(mlx)
     return protocol,children
 
 
-def publish(runs_root, public):
+def publish(runs_root, public, *, closed_only=False, closed_paths=()):
     public=Path(public);plan,protocols=load_main(public);records=[];paths={}
+    closed_paths={Path(path).resolve() for path in closed_paths}
     for path in sorted(Path(runs_root).rglob('*.jsonl')):
         with path.open('rb') as handle:header=json.loads(handle.readline())
-        if header.get('type')!='run_start' or header.get('provider') not in ('openai','openrouter','gemini') or header.get('config',{}).get('mode')!='actions':continue
+        if header.get('type')!='run_start' or header.get('provider') not in ('openai','openrouter','gemini','local_mps') or header.get('config',{}).get('mode')!='actions':continue
+        if closed_only and read_run(path)['end'] is None and path.resolve() not in closed_paths:continue
         row=record(path,protocols);records.append(row);paths[row['run_id']]=path
-    result=assemble(records,plan['study_id'])
+    validate_continuations(records,paths)
+    result=assemble(records,plan['study_id'],any(a['model']=='qwen2.5-7b-pilot-mlx' for p in protocols for a in p['arms']))
     index_path=public/'index.json';index=json.loads(index_path.read_text())
     catalogue={r['run_id']:r for r in index['runs']}
     for row in records:
@@ -259,7 +321,8 @@ def verify(public):
         path=public/f"{row['run_id']}.source.jsonl"
         if hashlib.sha256(path.read_bytes()).hexdigest()!=row['source_sha256']:raise ValueError('Dashboard source integrity mismatch')
         rows.append(record(path,protocols))
-    if assemble(rows,plan['study_id'])!=saved:raise ValueError('Dashboard differs from canonical source reconstruction')
+    validate_continuations(rows,{row['run_id']:public/f"{row['run_id']}.source.jsonl" for row in rows})
+    if assemble(rows,plan['study_id'],any(a['model']=='qwen2.5-7b-pilot-mlx' for p in protocols for a in p['arms']))!=saved:raise ValueError('Dashboard differs from canonical source reconstruction')
     return {'verified_runs':len(rows),'verified_trips':saved['coverage']['retained_trips'],'api_calls':0}
 
 

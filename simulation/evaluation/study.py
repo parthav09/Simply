@@ -31,7 +31,11 @@ BENCHMARK = SIMULATION_DIR / 'benchmarks/two_layouts_15_v2.json'
 KINDS = ('layout', 'model', 'assistance')
 
 
-def provider_spec(name):
+def provider_spec(name, model=None):
+    if name=='local_mps':
+        from agents.mps_provider import MPSProvider,MODEL as local_model,PRICING as local_price
+        from agents.mlx_provider import MLXProvider,MODEL as mlx_model,PRICING as mlx_price
+        return (MLXProvider if model==mlx_model else MPSProvider),{local_model:local_price,mlx_model:mlx_price}
     if name=='openrouter':
         from agents.openrouter_provider import OpenRouterProvider, MODEL_PRICING as prices
         return OpenRouterProvider, prices
@@ -55,7 +59,7 @@ def controls(header):
 def template(protocol, arm, repetition):
     grid = build_store(arm['layout_id'])
     shoppers = instantiate_benchmark(protocol['benchmark'], protocol['cohort_size'], grid, protocol['turn_budget'], protocol['shopping_rules'])
-    provider, prices = provider_spec(protocol['provider'])
+    provider, prices = provider_spec(protocol['provider'], arm['model'])
     header = build_run_start(grid, shoppers, run_id='prepared-not-started', provider=protocol['provider'],
         model=arm['model'], max_rounds=protocol['turn_budget'] * protocol['cohort_size'],
         concurrency=protocol['concurrency'], propose_only=False, prompt_variant='informed',
@@ -71,7 +75,7 @@ def template(protocol, arm, repetition):
 
 def prepare(directory, *, kind='layout', models=None, layout=ACTIVE_LAYOUT_IDS[0], policy=GARY2_CURRENT,
             shoppers=10, repetitions=5, turn_budget=120, concurrency=2, seed=42, provider='openai', requests_per_minute=0):
-    if kind not in KINDS or provider not in ('openai', 'openrouter', 'fake'):
+    if kind not in KINDS or provider not in ('openai', 'openrouter', 'fake','local_mps'):
         raise ValueError('Unsupported study kind or provider')
     if any(type(v) is not int for v in (shoppers, repetitions, turn_budget, concurrency, seed, requests_per_minute)):
         raise ValueError('Study settings must be integers')
@@ -79,6 +83,11 @@ def prepare(directory, *, kind='layout', models=None, layout=ACTIVE_LAYOUT_IDS[0
         raise ValueError('Invalid study settings')
     if layout not in ACTIVE_LAYOUT_IDS or policy not in (GARY2_CURRENT, MODEL_ONLY):
         raise ValueError('Unsupported layout or policy')
+    if provider=='local_mps':
+        if concurrency!=1:raise ValueError('Local MPS studies require concurrency 1')
+        if models is None:
+            from agents.mps_runtime import MODEL as local_model
+            models=[local_model]
     models = list(models or ([MODEL, 'gpt-6.1-terra'] if kind == 'model' else [MODEL]))
     if provider == 'fake':
         models = ['fake']  # Explicit engineering fixture; never label fake behavior as a model.
@@ -168,7 +177,7 @@ def report(directory):
             raise ValueError(f'Saved run differs from frozen study: {path.name}')
         row = run_row(path)
         observed = set(row['model_versions'])
-        if protocol['provider'] in ('openai','openrouter'):
+        if protocol['provider'] in ('openai','openrouter','local_mps'):
             responses = [e for e in run['events'] if e['outcome'] != 'provider_exception']
             if any(not e.get('telemetry', {}).get('model_version') for e in responses):
                 raise ValueError('Returned decisions lack actual model version evidence')
@@ -224,7 +233,7 @@ def report(directory):
     return result
 
 
-def execute(directory, *, max_new_runs=None):
+def execute(directory, *, max_new_runs=None, skip_stopped=False):
     if max_new_runs is not None and (type(max_new_runs) is not int or max_new_runs < 1):
         raise ValueError('max_new_runs must be a positive integer')
     directory = Path(directory); protocol = load_protocol(directory)
@@ -240,7 +249,8 @@ def execute(directory, *, max_new_runs=None):
             if path.exists():
                 run = read_run(path)
                 if run['summary']['status'] != 'completed' or run['warnings']:
-                    raise ValueError('Stopped attempt retained; no automatic retry. Inspect it and prepare a separate replacement study.')
+                    if not skip_stopped:
+                        raise ValueError('Stopped attempt retained; no automatic retry. Inspect it and prepare a separate replacement study.')
                 continue
             arm = next(a for a in protocol['arms'] if a['arm_id'] == slot['arm_id'])
             grid = build_store(arm['layout_id'])
@@ -298,7 +308,7 @@ def main(argv=None):
     parser.add_argument('--models', nargs='+')
     parser.add_argument('--layout', choices=ACTIVE_LAYOUT_IDS, default=ACTIVE_LAYOUT_IDS[0])
     parser.add_argument('--policy', choices=(GARY2_CURRENT, MODEL_ONLY), default=GARY2_CURRENT)
-    parser.add_argument('--provider', choices=('openai', 'openrouter', 'fake'), default='openai')
+    parser.add_argument('--provider', choices=('openai', 'openrouter', 'fake','local_mps'), default='openai')
     parser.add_argument('--shoppers', type=int, default=10)
     parser.add_argument('--repetitions', type=int, default=5)
     parser.add_argument('--turn-budget', type=int, default=120)

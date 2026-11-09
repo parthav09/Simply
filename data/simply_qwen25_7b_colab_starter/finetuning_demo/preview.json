@@ -1,0 +1,1052 @@
+[
+  {
+    "example_id": "train-00001",
+    "note": "Readable summary only; training files retain the full exact prompt.",
+    "observation_excerpt": {
+      "position": [
+        1,
+        12
+      ],
+      "cart": [],
+      "remaining_items": [
+        {
+          "product_id": "P0001",
+          "name": "Bananas",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 76,
+          "preferred_brand": "Dole"
+        },
+        {
+          "product_id": "P0008",
+          "name": "Lemons",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 87,
+          "preferred_brand": "Sunkist"
+        }
+      ],
+      "grabbable_products": [],
+      "remaining_budget_cents": 222,
+      "allowed_steps": [
+        "move_left",
+        "move_right",
+        "move_up",
+        "move_down"
+      ]
+    },
+    "target": {
+      "step": "move_right",
+      "product_id": "",
+      "reason": "Follow an open corridor toward Bananas in Produce."
+    }
+  },
+  {
+    "example_id": "train-00004",
+    "note": "Readable summary only; training files retain the full exact prompt.",
+    "observation_excerpt": {
+      "position": [
+        4,
+        12
+      ],
+      "cart": [],
+      "remaining_items": [
+        {
+          "product_id": "P0001",
+          "name": "Bananas",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 76,
+          "preferred_brand": "Dole"
+        },
+        {
+          "product_id": "P0008",
+          "name": "Lemons",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 87,
+          "preferred_brand": "Sunkist"
+        }
+      ],
+      "grabbable_products": [],
+      "remaining_budget_cents": 222,
+      "allowed_steps": [
+        "move_left",
+        "move_right",
+        "move_up",
+        "move_down"
+      ]
+    },
+    "target": {
+      "step": "move_up",
+      "product_id": "",
+      "reason": "Follow an open corridor toward Bananas in Produce."
+    }
+  },
+  {
+    "example_id": "train-00010",
+    "note": "Readable summary only; training files retain the full exact prompt.",
+    "observation_excerpt": {
+      "position": [
+        5,
+        7
+      ],
+      "cart": [],
+      "remaining_items": [
+        {
+          "product_id": "P0001",
+          "name": "Bananas",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 76,
+          "preferred_brand": "Dole"
+        },
+        {
+          "product_id": "P0008",
+          "name": "Lemons",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 87,
+          "preferred_brand": "Sunkist"
+        }
+      ],
+      "grabbable_products": [
+        {
+          "product_id": "P0001",
+          "name": "Bananas",
+          "unit_price_cents": 69,
+          "company": "Dole",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 1,
+          "matches_remaining_list": true,
+          "within_item_price_limit": true,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0002",
+          "name": "Gala Apples",
+          "unit_price_cents": 399,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0003",
+          "name": "Organic Fuji Apples",
+          "unit_price_cents": 549,
+          "company": "Earthbound Farm",
+          "dietary_tags": "vegan;vegetarian;gluten_free;organic",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0004",
+          "name": "Navel Oranges",
+          "unit_price_cents": 499,
+          "company": "Sunkist",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0005",
+          "name": "Strawberries",
+          "unit_price_cents": 449,
+          "company": "Driscoll's",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0006",
+          "name": "Blueberries",
+          "unit_price_cents": 399,
+          "company": "Driscoll's",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0007",
+          "name": "Seedless Red Grapes",
+          "unit_price_cents": 349,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0008",
+          "name": "Lemons",
+          "unit_price_cents": 79,
+          "company": "Sunkist",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 1,
+          "matches_remaining_list": true,
+          "within_item_price_limit": true,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0009",
+          "name": "Hass Avocados",
+          "unit_price_cents": 129,
+          "company": "Mission Produce",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0010",
+          "name": "Seedless Watermelon",
+          "unit_price_cents": 599,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0011",
+          "name": "Pineapple",
+          "unit_price_cents": 399,
+          "company": "Dole",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0012",
+          "name": "Mangoes",
+          "unit_price_cents": 149,
+          "company": "Mission Produce",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0013",
+          "name": "Roma Tomatoes",
+          "unit_price_cents": 199,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0014",
+          "name": "Yellow Onions",
+          "unit_price_cents": 349,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0015",
+          "name": "Russet Potatoes",
+          "unit_price_cents": 499,
+          "company": "Idaho Spuds",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0016",
+          "name": "Baby Carrots",
+          "unit_price_cents": 199,
+          "company": "Grimmway Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0017",
+          "name": "Broccoli Crowns",
+          "unit_price_cents": 229,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0018",
+          "name": "Baby Spinach",
+          "unit_price_cents": 399,
+          "company": "Earthbound Farm",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0019",
+          "name": "Organic Baby Spinach",
+          "unit_price_cents": 499,
+          "company": "Earthbound Farm",
+          "dietary_tags": "vegan;vegetarian;gluten_free;organic",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0020",
+          "name": "Romaine Hearts",
+          "unit_price_cents": 379,
+          "company": "Taylor Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0021",
+          "name": "Red Bell Peppers",
+          "unit_price_cents": 149,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0022",
+          "name": "English Cucumber",
+          "unit_price_cents": 129,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0023",
+          "name": "Garlic Bulbs",
+          "unit_price_cents": 79,
+          "company": "Christopher Ranch",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0024",
+          "name": "Sweet Potatoes",
+          "unit_price_cents": 149,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0025",
+          "name": "Zucchini",
+          "unit_price_cents": 169,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0026",
+          "name": "White Mushrooms",
+          "unit_price_cents": 299,
+          "company": "Monterey Mushrooms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0027",
+          "name": "Fresh Cilantro",
+          "unit_price_cents": 99,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": true
+        },
+        {
+          "product_id": "P0252",
+          "name": "Avocados",
+          "unit_price_cents": 399,
+          "company": "Simply Demo",
+          "dietary_tags": "unspecified",
+          "allergens": "unspecified",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0253",
+          "name": "Baby Spinach",
+          "unit_price_cents": 299,
+          "company": "Simply Demo",
+          "dietary_tags": "unspecified",
+          "allergens": "unspecified",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0280",
+          "name": "Persian Cucumbers",
+          "unit_price_cents": 299,
+          "company": "Simply Demo",
+          "dietary_tags": "unspecified",
+          "allergens": "unspecified",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0281",
+          "name": "Mini Sweet Peppers",
+          "unit_price_cents": 349,
+          "company": "Simply Demo",
+          "dietary_tags": "unspecified",
+          "allergens": "unspecified",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        }
+      ],
+      "remaining_budget_cents": 222,
+      "allowed_steps": [
+        "move_left",
+        "move_right",
+        "move_down",
+        "grab"
+      ]
+    },
+    "target": {
+      "step": "grab",
+      "product_id": "P0001",
+      "reason": "Collect the requested Bananas."
+    }
+  },
+  {
+    "example_id": "train-00023",
+    "note": "Readable summary only; training files retain the full exact prompt.",
+    "observation_excerpt": {
+      "position": [
+        16,
+        7
+      ],
+      "cart": [
+        {
+          "product_id": "P0001",
+          "name": "Bananas",
+          "quantity": 1
+        },
+        {
+          "product_id": "P0008",
+          "name": "Lemons",
+          "quantity": 1
+        }
+      ],
+      "remaining_items": [],
+      "grabbable_products": [],
+      "remaining_budget_cents": 74,
+      "allowed_steps": [
+        "move_left",
+        "move_right",
+        "move_up",
+        "move_down",
+        "remove"
+      ]
+    },
+    "target": {
+      "step": "move_down",
+      "product_id": "",
+      "reason": "My list is complete; follow the open corridor to checkout."
+    }
+  },
+  {
+    "example_id": "train-00028",
+    "note": "Readable summary only; training files retain the full exact prompt.",
+    "observation_excerpt": {
+      "position": [
+        16,
+        12
+      ],
+      "cart": [
+        {
+          "product_id": "P0001",
+          "name": "Bananas",
+          "quantity": 1
+        },
+        {
+          "product_id": "P0008",
+          "name": "Lemons",
+          "quantity": 1
+        }
+      ],
+      "remaining_items": [],
+      "grabbable_products": [],
+      "remaining_budget_cents": 74,
+      "allowed_steps": [
+        "move_left",
+        "move_right",
+        "move_up",
+        "move_down",
+        "remove",
+        "checkout"
+      ]
+    },
+    "target": {
+      "step": "checkout",
+      "product_id": "",
+      "reason": "My requested items are collected; pay once and finish the trip."
+    }
+  },
+  {
+    "example_id": "train-00058",
+    "note": "Readable summary only; training files retain the full exact prompt.",
+    "observation_excerpt": {
+      "position": [
+        5,
+        7
+      ],
+      "cart": [],
+      "remaining_items": [
+        {
+          "product_id": "P0014",
+          "name": "Yellow Onions",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 384,
+          "preferred_brand": "Local Farms"
+        },
+        {
+          "product_id": "P0021",
+          "name": "Red Bell Peppers",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 164,
+          "preferred_brand": "Local Farms"
+        }
+      ],
+      "grabbable_products": [
+        {
+          "product_id": "P0001",
+          "name": "Bananas",
+          "unit_price_cents": 69,
+          "company": "Dole",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0002",
+          "name": "Gala Apples",
+          "unit_price_cents": 399,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0003",
+          "name": "Organic Fuji Apples",
+          "unit_price_cents": 549,
+          "company": "Earthbound Farm",
+          "dietary_tags": "vegan;vegetarian;gluten_free;organic",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0004",
+          "name": "Navel Oranges",
+          "unit_price_cents": 499,
+          "company": "Sunkist",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0005",
+          "name": "Strawberries",
+          "unit_price_cents": 449,
+          "company": "Driscoll's",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0006",
+          "name": "Blueberries",
+          "unit_price_cents": 399,
+          "company": "Driscoll's",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0007",
+          "name": "Seedless Red Grapes",
+          "unit_price_cents": 349,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0008",
+          "name": "Lemons",
+          "unit_price_cents": 79,
+          "company": "Sunkist",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0009",
+          "name": "Hass Avocados",
+          "unit_price_cents": 129,
+          "company": "Mission Produce",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0010",
+          "name": "Seedless Watermelon",
+          "unit_price_cents": 599,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0011",
+          "name": "Pineapple",
+          "unit_price_cents": 399,
+          "company": "Dole",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0012",
+          "name": "Mangoes",
+          "unit_price_cents": 149,
+          "company": "Mission Produce",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0013",
+          "name": "Roma Tomatoes",
+          "unit_price_cents": 199,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0014",
+          "name": "Yellow Onions",
+          "unit_price_cents": 349,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 1,
+          "matches_remaining_list": true,
+          "within_item_price_limit": true,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0015",
+          "name": "Russet Potatoes",
+          "unit_price_cents": 499,
+          "company": "Idaho Spuds",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0016",
+          "name": "Baby Carrots",
+          "unit_price_cents": 199,
+          "company": "Grimmway Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0017",
+          "name": "Broccoli Crowns",
+          "unit_price_cents": 229,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0018",
+          "name": "Baby Spinach",
+          "unit_price_cents": 399,
+          "company": "Earthbound Farm",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0019",
+          "name": "Organic Baby Spinach",
+          "unit_price_cents": 499,
+          "company": "Earthbound Farm",
+          "dietary_tags": "vegan;vegetarian;gluten_free;organic",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0020",
+          "name": "Romaine Hearts",
+          "unit_price_cents": 379,
+          "company": "Taylor Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0021",
+          "name": "Red Bell Peppers",
+          "unit_price_cents": 149,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 1,
+          "matches_remaining_list": true,
+          "within_item_price_limit": true,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0022",
+          "name": "English Cucumber",
+          "unit_price_cents": 129,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0023",
+          "name": "Garlic Bulbs",
+          "unit_price_cents": 79,
+          "company": "Christopher Ranch",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0024",
+          "name": "Sweet Potatoes",
+          "unit_price_cents": 149,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0025",
+          "name": "Zucchini",
+          "unit_price_cents": 169,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0026",
+          "name": "White Mushrooms",
+          "unit_price_cents": 299,
+          "company": "Monterey Mushrooms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0027",
+          "name": "Fresh Cilantro",
+          "unit_price_cents": 99,
+          "company": "Local Farms",
+          "dietary_tags": "vegan;vegetarian;gluten_free",
+          "allergens": "none",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0252",
+          "name": "Avocados",
+          "unit_price_cents": 399,
+          "company": "Simply Demo",
+          "dietary_tags": "unspecified",
+          "allergens": "unspecified",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0253",
+          "name": "Baby Spinach",
+          "unit_price_cents": 299,
+          "company": "Simply Demo",
+          "dietary_tags": "unspecified",
+          "allergens": "unspecified",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0280",
+          "name": "Persian Cucumbers",
+          "unit_price_cents": 299,
+          "company": "Simply Demo",
+          "dietary_tags": "unspecified",
+          "allergens": "unspecified",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        },
+        {
+          "product_id": "P0281",
+          "name": "Mini Sweet Peppers",
+          "unit_price_cents": 349,
+          "company": "Simply Demo",
+          "dietary_tags": "unspecified",
+          "allergens": "unspecified",
+          "remaining_requested_quantity": 0,
+          "matches_remaining_list": false,
+          "within_item_price_limit": null,
+          "affordable_with_remaining_budget": false
+        }
+      ],
+      "remaining_budget_cents": 50,
+      "allowed_steps": [
+        "move_left",
+        "move_right",
+        "move_down",
+        "grab"
+      ]
+    },
+    "target": {
+      "step": "grab",
+      "product_id": "P0014",
+      "reason": "Prioritize the requested Yellow Onions despite exceeding my spending target."
+    }
+  },
+  {
+    "example_id": "train-00097",
+    "note": "Readable summary only; training files retain the full exact prompt.",
+    "observation_excerpt": {
+      "position": [
+        20,
+        0
+      ],
+      "cart": [],
+      "remaining_items": [
+        {
+          "product_id": "P0027",
+          "name": "Fresh Cilantro",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Produce",
+          "max_unit_price_cents": 109,
+          "preferred_brand": "Local Farms"
+        },
+        {
+          "product_id": "P0034",
+          "name": "Half & Half",
+          "quantity": 1,
+          "remaining": 1,
+          "priority": "high",
+          "department": "Dairy & Eggs",
+          "max_unit_price_cents": 307,
+          "preferred_brand": "Land O'Lakes"
+        }
+      ],
+      "grabbable_products": [],
+      "remaining_budget_cents": 567,
+      "allowed_steps": [
+        "move_left",
+        "move_right",
+        "move_down"
+      ]
+    },
+    "target": {
+      "step": "move_left",
+      "product_id": "",
+      "reason": "Follow an open corridor toward Half & Half in Dairy & Eggs."
+    }
+  }
+]

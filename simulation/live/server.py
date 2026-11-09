@@ -17,6 +17,8 @@ from core.grid import build_store
 from live.protocol import LiveProjection
 from agents.openai_provider import MODEL,MODEL_PRICING,OpenAIProvider
 from agents.openrouter_provider import OpenRouterProvider,MODEL_PRICING as ROUTER_PRICING
+from agents.mps_runtime import MODEL as MPS_MODEL,PRICING as MPS_PRICING,SETTINGS as MPS_SETTINGS
+from agents.mlx_runtime import MODEL as MLX_MODEL,PRICING as MLX_PRICING,SETTINGS as MLX_SETTINGS
 from core.integrity import fingerprint
 from core.navigation import GARY2_CURRENT, MODEL_ONLY
 from core.shopping import SIMPLE_SHOPPING
@@ -40,7 +42,7 @@ class RunManager:
                 with path.open('rb') as handle:
                     header=json.loads(handle.readline())
                     if header.get('type')!='run_start' or header.get('config',{}).get('mode')!='actions':continue
-                    if not self.allow_test and header.get('provider') not in ('openai','gemini','openrouter'):continue
+                    if not self.allow_test and header.get('provider') not in ('openai','gemini','openrouter','local_mps'):continue
                     if not ID.fullmatch(header.get('run_id','')):continue
                     handle.seek(max(0,path.stat().st_size-524288));tail=handle.read().split(b'\n')
                     last=json.loads(tail[-2]) if len(tail)>1 and tail[-1]==b'' else {}
@@ -81,12 +83,12 @@ class RunManager:
     def create(self,body):
         if set(body)-{'layout','shoppers','provider','max_rounds','model'}:raise ValueError('Unsupported run configuration')
         layout=body.get('layout',ACTIVE_LAYOUT_IDS[0]);count=body.get('shoppers',10);provider=body.get('provider','openrouter')
-        model=body.get('model',MODEL)
-        if model not in MODEL_PRICING:raise ValueError('Choose GPT-6 Luna or GPT-6.1 Terra')
+        model=body.get('model',MPS_MODEL if provider=='local_mps' else MODEL)
+        if model not in ((MPS_MODEL,MLX_MODEL) if provider=='local_mps' else MODEL_PRICING):raise ValueError('Choose a model supported by the selected provider')
         rounds=body.get('max_rounds',120)
         if layout not in ACTIVE_LAYOUT_IDS:raise ValueError('Choose layout A or B')
         if type(count) is not int or not (1 if self.allow_test and provider=='fake' else 10)<=count<=15:raise ValueError('Choose 10–15 shoppers')
-        if provider not in ('openai','openrouter') and not (self.allow_test and provider=='fake'):raise ValueError('Live runs require OpenRouter or direct OpenAI')
+        if provider not in ('openai','openrouter','local_mps') and not (self.allow_test and provider=='fake'):raise ValueError('Unsupported live model provider')
         if type(rounds) is not int or not 1<=rounds<=120:raise ValueError('Invalid round limit')
         with self.lock:
             if any(not s.closed for s in self.sessions.values()):raise RuntimeError('A live session is already running; attach to it')
@@ -94,7 +96,7 @@ class RunManager:
             benchmark=load_benchmark(Path(__file__).resolve().parents[1]/'benchmarks/two_layouts_15_v2.json')
             shoppers=instantiate_benchmark(benchmark,count,grid,shopping_rules=SIMPLE_SHOPPING)
             from agents.providers import FakeDecisionProvider
-            session=SimulationSession(layout,count,rounds,120,DEFAULT_CONCURRENCY,grid=grid,shoppers=shoppers,
+            session=SimulationSession(layout,count,rounds,120,1 if provider=='local_mps' else DEFAULT_CONCURRENCY,grid=grid,shoppers=shoppers,
                 provider_name=provider,model_name=model,decide=FakeDecisionProvider() if provider=='fake' else None,
                 navigation_policy=GARY2_CURRENT if provider!='fake' else MODEL_ONLY,
                 shopping_rules=SIMPLE_SHOPPING,
@@ -105,15 +107,71 @@ class RunManager:
             return {'run_id':session.run_id,**self.state(session.run_id)}
 
     def preview(self,layout,count,model):
-        if layout not in ACTIVE_LAYOUT_IDS or type(count) is not int or not 10<=count<=15 or model not in MODEL_PRICING:raise ValueError('Invalid preview configuration')
+        if layout not in ACTIVE_LAYOUT_IDS or type(count) is not int or not 10<=count<=15 or model not in (*MODEL_PRICING,MPS_MODEL,MLX_MODEL):raise ValueError('Invalid preview configuration')
         grid=build_store(layout);benchmark=load_benchmark(Path(__file__).resolve().parents[1]/'benchmarks/two_layouts_15_v2.json')
         shoppers=instantiate_benchmark(benchmark,count,grid,shopping_rules=SIMPLE_SHOPPING)
         header=build_run_start(grid,shoppers,run_id='preview',provider='not-started',model=model,
             max_rounds=120,concurrency=DEFAULT_CONCURRENCY,propose_only=False,prompt_variant='informed',
-            generation_settings=OpenRouterProvider.generation_settings,pricing=ROUTER_PRICING[model],navigation_policy=GARY2_CURRENT,
+            generation_settings=MLX_SETTINGS if model==MLX_MODEL else MPS_SETTINGS if model==MPS_MODEL else OpenRouterProvider.generation_settings,
+            pricing=MLX_PRICING if model==MLX_MODEL else MPS_PRICING if model==MPS_MODEL else ROUTER_PRICING[model],navigation_policy=GARY2_CURRENT,
             shopping_rules=SIMPLE_SHOPPING)
         projection=LiveProjection();projection.append((json.dumps(header)+'\n').encode())
         return projection.snapshot()
+
+    def mps_available(self):
+        from agents.mps_provider import health
+        try:health();return True
+        except (OSError,ValueError):return False
+
+    def mlx_available(self):
+        from agents.mlx_provider import health
+        try:health();return True
+        except (OSError,ValueError):return False
+
+    def pilot_progress(self, key='qwen_pilot'):
+        """Read only flushed canonical records; never export a changing replay snapshot."""
+        from core.run_log import read_run
+        from evaluation import study
+        try:
+            index=json.loads((self.destination/'index.json').read_text())
+            if key not in ('qwen_pilot','qwen_mlx'):raise ValueError('Unknown pilot study')
+            entry=index.get(key)
+            if not entry:return {'progress_version':1,'available':False}
+            published=json.loads((self.destination/Path(entry['protocol_url']).name).read_text())
+            directory=None
+            for path in self.root.rglob('protocol.json'):
+                if json.loads(path.read_text()).get('study_id')==published['study_id']:
+                    directory=path.parent;break
+            if directory is None:return {'progress_version':1,'available':False}
+            protocol=study.load_protocol(directory)
+            if (protocol['sha256']!=entry['sha256'] or protocol['provider']!='local_mps'
+                or protocol['kind']!='layout' or len(protocol['schedule'])!=2
+                or any(a['model']!=('qwen2.5-7b-pilot-mlx' if key=='qwen_mlx' else 'qwen2.5-7b-pilot-mps') for a in protocol['arms'])):
+                raise ValueError('Pilot progress differs from selected protocol')
+            interrupted_path=directory/'interrupted-slots.json'
+            interrupted=json.loads(interrupted_path.read_text()) if key=='qwen_mlx' and interrupted_path.exists() else []
+            allowed={study.slot_path(directory,slot).name for slot in protocol['schedule']}
+            if not isinstance(interrupted,list) or any(name not in allowed for name in interrupted):
+                raise ValueError('Invalid interrupted slot list')
+            runs=[]
+            for slot in protocol['schedule']:
+                arm=next(a for a in protocol['arms'] if a['arm_id']==slot['arm_id'])
+                row={'layout_id':arm['layout_id'],'model':arm['model'],'status':'queued',
+                    'decision_count':0,'finished_count':0,'shopper_count':protocol['cohort_size'],'run_id':None}
+                path=study.slot_path(directory,slot)
+                if path.exists():
+                    run=read_run(path);header=run['start'];experiment=header.get('experiment') or {}
+                    if (study.controls(header)!=study.expected(protocol,arm,slot['repetition'])
+                        or experiment.get('study_id')!=protocol['study_id']
+                        or experiment.get('protocol_sha256')!=protocol['sha256']):
+                        raise ValueError('Pilot recording differs from frozen protocol')
+                    row.update(run_id=header['run_id'],status=run['summary']['status'] if run['end'] else 'incomplete' if path.name in interrupted else 'recording',
+                        decision_count=len(run['events']),finished_count=run['summary']['finished_count'])
+                runs.append(row)
+            return {'progress_version':1,'available':True,'study_id':protocol['study_id'],
+                'protocol_sha256':protocol['sha256'],'scheduled_runs':2,
+                'completed_runs':sum(r['status']=='completed' for r in runs),'runs':runs}
+        except FileNotFoundError:return {'progress_version':1,'available':False}
 
     def control(self,identifier,command):
         session=self.sessions.get(identifier)
@@ -155,13 +213,15 @@ def handler_for(manager):
                 if self.headers.get('Host') not in (f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'):return self.reply(403,{'error':'Local host required'})
                 if mutating and self.headers.get('Origin'):return self.reply(403,{'error':'Use the same-origin web proxy'})
                 path=urlparse(self.path).path.strip('/').split('/')
-                if not mutating and path==['health']:return self.reply(200,{'status':'ready','provider':'openrouter','models':list(ROUTER_PRICING),'budget':read_ledger_snapshot(manager.root/'gemini_campaign.sqlite3'),'api_budget_enforced':False})
+                if not mutating and path==['health']:return self.reply(200,{'status':'ready','provider':'openrouter','models':list(ROUTER_PRICING),'local_mps_available':manager.mps_available(),'local_mlx_available':manager.mlx_available(),'budget':read_ledger_snapshot(manager.root/'gemini_campaign.sqlite3'),'api_budget_enforced':False})
                 if not mutating and path==['preview']:
                     from urllib.parse import parse_qs
                     query=parse_qs(urlparse(self.path).query)
                     return self.reply(200,manager.preview(query.get('layout',[ACTIVE_LAYOUT_IDS[0]])[0],int(query.get('shoppers',['10'])[0]),query.get('model',[MODEL])[0]))
                 if not mutating and path==['runs']:return self.reply(200,{'runs':[{k:v for k,v in r.items() if k!='_path'} for r in manager.records()]})
                 if not mutating and path==['evidence']:return self.reply(200,manager.history())
+                if not mutating and path==['pilot-progress']:return self.reply(200,manager.pilot_progress())
+                if not mutating and path==['mlx-progress']:return self.reply(200,manager.pilot_progress('qwen_mlx'))
                 if mutating:
                     length=int(self.headers.get('Content-Length','0'))
                     if not 0<length<=8192 or self.headers.get_content_type()!='application/json':return self.reply(400,{'error':'JSON body required (maximum 8 KB)'})

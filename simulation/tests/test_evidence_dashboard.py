@@ -77,6 +77,20 @@ class EvidenceDashboardTests(unittest.TestCase):
             self.assertEqual(row['distributions']['moves']['known'],10)
             self.assertEqual(row['distributions']['moves']['unknown'],0)
 
+    def test_selected_mps_pilot_has_real_cells_and_unselected_runs_stay_separate(self):
+        from test_mps_provider import MPSTests
+        directory=self.root/'mps'
+        with patch('agents.mps_provider.local_json',side_effect=MPSTests.response):
+            protocol=study.prepare(directory,provider='local_mps',concurrency=1,repetitions=1,turn_budget=1)
+            with patch('evaluation.study.DECISION_RUNS_DIR',self.root/'accounting'):study.execute(directory)
+        rows=[dashboard.record(p,[*self.protocols,protocol]) for p in directory.glob('*.jsonl')]
+        result=dashboard.assemble([*self.records,*rows],self.plan['study_id'])
+        model=result['views'][-1]['models'][3]
+        self.assertEqual(model['id'],'qwen2.5-7b-pilot-mps');self.assertEqual(model['status'],'recorded')
+        self.assertTrue(all(r['group']=='qwen_pilot' for r in rows))
+        self.assertTrue(all(c['runs']==1 and c['trips']==10 and c['metrics']['estimated_cost_per_run_usd']==0 for c in model['cells'].values()))
+        self.assertEqual(dashboard.record(next(directory.glob('*.jsonl')),self.protocols)['group'],'local_mps')
+
     def test_qwen_view_uses_its_frozen_study_only_and_keeps_charges_separate(self):
         from test_openrouter_provider import OpenRouterTests
         directory=self.root/'qwen'

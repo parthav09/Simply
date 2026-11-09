@@ -5,7 +5,7 @@ type Context={params:Promise<{path:string[]}>};
 async function forward(request:NextRequest,context:Context){
   const {path}=await context.params;
   const endpoint=path.join('/');
-  if(!/^(health|preview|evidence|runs|runs\/[a-f0-9]{32}\/(events|control|export))$/.test(endpoint))return Response.json({error:'Unknown simulation endpoint'},{status:404});
+  if(!/^(health|preview|evidence|pilot-progress|mlx-progress|runs|runs\/[a-f0-9]{32}\/(events|control|export))$/.test(endpoint))return Response.json({error:'Unknown simulation endpoint'},{status:404});
   const origin=request.headers.get('origin');
   let matchingOrigin=!origin;
   if(origin){try{const parsed=new URL(origin);matchingOrigin=parsed.protocol===request.nextUrl.protocol&&parsed.host===request.headers.get('host');}catch{matchingOrigin=false;}}

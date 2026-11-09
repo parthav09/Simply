@@ -7,7 +7,7 @@ export type DashboardModel={id:string;label:string;status:'recorded'|'not_evalua
 export type DashboardView={id:string;label:string;note:string;runs:number;trips:number;models:DashboardModel[]};
 export type Distribution={known:number;unknown:number;min:number|null;q1:number|null;median:number|null;q3:number|null;max:number|null};
 export type TripPoint={profile_id:string;finished:boolean;requested:number;purchased:number;values:Record<string,number|null>};
-export type DashboardRun={run_id:string;source_sha256:string;provider:string;model:string;layout_id:string;recorded_at:string;status:string;warnings:string[];group:string;repetition:number|null;cohort_sha256:string;shopping_rules:string;policy:string;source_url:string;replay_url:string;points:TripPoint[];distributions:Record<string,Distribution>};
+export type DashboardRun={run_id:string;source_sha256:string;provider:string;model:string;layout_id:string;recorded_at:string;status:string;warnings:string[];group:string;repetition:number|null;cohort_sha256:string;shopping_rules:string;policy:string;source_url:string;replay_url:string;run_metrics:Record<string,number|null>;continuation?:{source_run_id:string;source_sha256:string;source_event_count:number}|null;points:TripPoint[];distributions:Record<string,Distribution>};
 export type Dashboard={dashboard_version:number;main_study_id:string;default_view:string;layouts:{id:string;label:string;description:string}[];measures:Measure[];distribution_measures:Measure[];views:DashboardView[];runs:DashboardRun[];
   coverage:{retained_runs:number;retained_trips:number;completed_runs:number;stopped_runs:number;main_runs:number;main_trips:number;groups:{id:string;label:string;runs:number;trips:number}[]};limitations:string[]};
 
@@ -26,8 +26,10 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
   const runIds=new Set(d.runs.map(r=>r.run_id));
   for(const r of d.runs){
     check(/^[a-f0-9]{32}$/.test(r.run_id)&&/^[a-f0-9]{64}$/.test(r.source_sha256)&&/^[a-f0-9]{64}$/.test(r.cohort_sha256),'Invalid source identity');
-    check(['main','pilot','historical','openrouter','qwen_baseline'].includes(r.group)&&['openai','openrouter','gemini'].includes(r.provider)&&d.layouts.some(l=>l.id===r.layout_id),'Invalid source scope');
+    check(['main','pilot','historical','openrouter','qwen_baseline','qwen_pilot','qwen_mlx','local_mps'].includes(r.group)&&['openai','openrouter','gemini','local_mps'].includes(r.provider)&&d.layouts.some(l=>l.id===r.layout_id),'Invalid source scope');
     check(r.source_url===`/replays/${r.run_id}.source.jsonl`&&r.replay_url===`/replays/${r.run_id}.json`,'Invalid evidence source link');
+    if(r.continuation){const c=r.continuation;const source=d.runs.find(x=>x.run_id===c.source_run_id);
+      check(source&&source.source_sha256===c.source_sha256&&source.layout_id===r.layout_id&&source.model===r.model&&count(c.source_event_count)&&c.source_event_count>0,'Invalid continuation source');}
     check(Array.isArray(r.points)&&r.points.length>0&&new Set(r.points.map(p=>p.profile_id)).size===r.points.length,'Invalid trip identities');
     for(const p of r.points){
       check(typeof p.finished==='boolean'&&count(p.requested)&&count(p.purchased)&&p.purchased<=p.requested&&typeof p.profile_id==='string','Invalid trip outcome');
@@ -43,8 +45,9 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
   check(Array.isArray(d.views)&&[3,4].includes(d.views.length)&&d.views.some(v=>v.id===d.default_view)&&new Set(d.views.map(v=>v.id)).size===d.views.length,'Invalid comparison views');
   for(const v of d.views){
     const qwen=v.id==='qwen_baseline';
-    check(count(v.runs)&&count(v.trips)&&typeof v.note==='string'&&v.models?.length===4,'Invalid comparison sample');
-    check(v.models.map(m=>m.id).join(',')===(qwen?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct,qwen2.5-7b-instruct-finetuned':'gpt-6-luna,gpt-6.1-terra,qwen3-4b-instruct-2507,qwen3-4b-instruct-2507-finetuned'),'Invalid model comparison rows');
+    check(count(v.runs)&&count(v.trips)&&typeof v.note==='string'&&(v.models?.length===4||(qwen&&v.models?.length===5)),'Invalid comparison sample');
+    const expected=qwen?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct,qwen2.5-7b-pilot-mps'+(v.models.length===5?',qwen2.5-7b-pilot-mlx':''):'gpt-6-luna,gpt-6.1-terra,qwen3-4b-instruct-2507,qwen3-4b-instruct-2507-finetuned';
+    check(v.models.map(m=>m.id).join(',')===expected,'Invalid model comparison rows');
     for(const model of v.models)for(const layout of d.layouts){const c=model.cells[layout.id];
       check(c&&[c.runs,c.trips,c.finished,c.requested,c.purchased,c.stopped_runs].every(count)&&c.finished<=c.trips&&c.purchased<=c.requested&&c.stopped_runs<=c.runs,'Invalid model/layout coverage');
       check(c.run_ids.length===c.runs&&new Set(c.run_ids).size===c.runs&&c.run_ids.every(id=>runIds.has(id)),'Invalid model/layout sources');
@@ -52,8 +55,10 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
       if(model.status==='not_evaluated')check(c.status==='not_evaluated'&&!c.runs&&!c.trips&&Object.values(c.metrics).every(n=>n===null),'Unevaluated Qwen has fabricated results');
       for(const id of c.run_ids){const r=d.runs.find(r=>r.run_id===id)!;
         const qwenModel=qwen&&model.id==='qwen2.5-7b-instruct';
-        check(r.group===(qwenModel?'qwen_baseline':'main')&&r.provider===(qwenModel?'openrouter':'openai')&&r.model===model.id&&r.layout_id===layout.id,'Non-comparable source in headline table');
-        if(!qwenModel&&v.id!=='all_attempts')check(r.status==='completed'&&!r.warnings.length,'Stopped source in completed-run view');
+        const pilotModel=qwen&&model.id==='qwen2.5-7b-pilot-mps';
+        const mlxModel=qwen&&model.id==='qwen2.5-7b-pilot-mlx';
+        check(r.group===(mlxModel?'qwen_mlx':pilotModel?'qwen_pilot':qwenModel?'qwen_baseline':'main')&&r.provider===(pilotModel||mlxModel?'local_mps':qwenModel?'openrouter':'openai')&&r.model===model.id&&r.layout_id===layout.id,'Non-comparable source in headline table');
+        if(!qwenModel&&!pilotModel&&!mlxModel&&v.id!=='all_attempts')check(r.status==='completed'&&!r.warnings.length,'Stopped source in completed-run view');
       }
     }
   }

@@ -30,7 +30,14 @@ class FakeDecisionProvider:
 
 
 def build_provider(name,ledger,run_id,seed=42,bucket='manual',stage_limit_usd=None,requests_per_minute=0,model=None):
-    if model is not None and name not in ('openai','openrouter'):raise ValueError('Model selection requires OpenAI or OpenRouter')
+    if model is not None and name not in ('openai','openrouter','local_mps'):raise ValueError('Model selection requires a supported model provider')
+    if name=='local_mps':
+        from agents.mlx_runtime import MODEL as MLX_MODEL
+        if model==MLX_MODEL:
+            from agents.mlx_provider import MLXProvider
+            return MLXProvider(ledger,run_id,seed,bucket,stage_limit_usd,requests_per_minute,model=model)
+        from agents.mps_provider import MPSProvider,MODEL
+        return MPSProvider(ledger,run_id,seed,bucket,stage_limit_usd,requests_per_minute,model=model or MODEL)
     if name=='openrouter':
         from agents.openrouter_provider import OpenRouterProvider,MODEL
         return OpenRouterProvider(ledger,run_id,seed,bucket,stage_limit_usd,requests_per_minute,model=model or MODEL)

@@ -99,6 +99,14 @@ current scope and the evidence still needed before the full plan is complete.
 
 ## Run history and comparisons
 
+The saved Qwen pilot can also serve shopper proposals locally on Apple Silicon
+through PyTorch MPS. See [local Qwen MPS setup](simulation/docs/local-qwen-mps.md)
+for the loopback inference server, saved adapter verification and the lab's
+**Qwen pilot · MPS** option. This is a separate deployment from hosted baseline
+Qwen; local API fees are zero and hardware/compute costs are unmeasured. The
+same saved adapter can also use [MLX 4-bit on Apple Silicon](simulation/docs/local-qwen-mlx.md),
+with a distinct serving identity and its own **Qwen pilot · MLX** lab option.
+
 The Evidence page leads with four model/layout conditions, paired differences,
 collection coverage and the provider interruption. Individual recordings,
 diagnostics and full reports are collapsed. Python computes every outcome and

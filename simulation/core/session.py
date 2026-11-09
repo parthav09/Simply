@@ -210,7 +210,7 @@ class SimulationSession:
         if any(o.failure and o.failure.startswith('Campaign budget exhausted') for o in outcomes):
             self.finish_pending('budget_exhausted','Campaign budget exhausted')
         elif any(e['failure'] and e['failure'].startswith(('Gemini HTTP 400','Gemini HTTP 403','Gemini HTTP 404','Gemini HTTP 429','OpenAI HTTP 400','OpenAI HTTP 401','OpenAI HTTP 403','OpenAI HTTP 404','OpenAI HTTP 429',
-                    'OpenRouter HTTP 400','OpenRouter HTTP 401','OpenRouter HTTP 402','OpenRouter HTTP 403','OpenRouter HTTP 404','OpenRouter HTTP 429'))
+                    'OpenRouter HTTP 400','OpenRouter HTTP 401','OpenRouter HTTP 402','OpenRouter HTTP 403','OpenRouter HTTP 404','OpenRouter HTTP 429','MPS HTTP 503','MLX HTTP 503'))
                  and not (e['failure'].startswith('OpenAI HTTP 400') and e.get('telemetry',{}).get('provider_error_code')=='invalid_prompt')
                  for e in self.writer.events[-len(outcomes):]):
             self.finish_pending('aborted','Provider configuration or quota unavailable')

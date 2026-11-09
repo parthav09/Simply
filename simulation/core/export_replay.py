@@ -27,7 +27,7 @@ def build_bundle(path, allow_partial=False, allow_test=False):
         raise ValueError('Proposal-only runs cannot be published as shopper trips')
     if (run['summary']['status'] != 'completed' or run['warnings']) and not allow_partial:
         raise ValueError('Partial/aborted runs require --allow-partial')
-    if start['provider'] not in ('gemini','openai','openrouter') and not allow_test:
+    if start['provider'] not in ('gemini','openai','openrouter','local_mps') and not allow_test:
         raise ValueError('Non-Gemini/non-OpenAI/non-OpenRouter recordings require --allow-test and retain their fixture label')
     view = RecordingView(start)
     initial = view.snapshot()

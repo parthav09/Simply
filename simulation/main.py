@@ -18,8 +18,8 @@ def main(argv=None):
     parser.add_argument('--max-rounds',type=int,default=120)
     parser.add_argument('--turn-budget',type=int,default=120)
     parser.add_argument('--concurrency',type=int,default=DEFAULT_CONCURRENCY)
-    parser.add_argument('--provider',choices=('openrouter','openai','gemini','fake'),default='openrouter')
-    parser.add_argument('--model',choices=('gpt-6-luna','gpt-6.1-terra'),help='Shopper model (default: gpt-6-luna); provider is frozen per run')
+    parser.add_argument('--provider',choices=('openrouter','openai','gemini','fake','local_mps'),default='openrouter')
+    parser.add_argument('--model',choices=('gpt-6-luna','gpt-6.1-terra','qwen2.5-7b-instruct','qwen2.5-7b-pilot-mps','qwen2.5-7b-pilot-mlx'),help='Shopper model; provider and weights are frozen per run')
     parser.add_argument('--prompt',choices=('baseline','informed'),default='informed')
     parser.add_argument('--seed',type=int,default=42)
     parser.add_argument('--requests-per-minute',type=int,help='Admission pacing (OpenRouter default 18/min; other providers 0)')
@@ -31,6 +31,7 @@ def main(argv=None):
     args=parser.parse_args(argv)
     if args.requests_per_minute is None:
         args.requests_per_minute=18 if args.provider=='openrouter' else 0
+    if args.provider=='local_mps':args.concurrency=1
     if not args.replay and args.provider!='fake' and args.shoppers<DEFAULT_SHOPPER_COUNT:
         parser.error('Model runs require 10–15 shoppers; --provider fake permits smaller offline fixtures')
     try:

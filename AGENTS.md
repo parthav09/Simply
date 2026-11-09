@@ -114,3 +114,28 @@ date differences; do not launch new Luna/Terra runs. The downloaded pilot LoRA
 adapter is not part of hosted OpenRouter inference. This authorization replaces
 the conflicting earlier statements that Qwen must remain pending or that only
 the four Luna/Terra OpenRouter runs are authorized.
+
+## November 4 local Qwen MPS serving
+The user authorized serving their saved Qwen2.5 7B pilot LoRA locally through
+PyTorch MPS on their Mac. Keep the downloaded adapter unchanged and freeze its
+hash, tokenizer/template, training base identity, deployment base revision,
+quantization and package versions in each local run. The CUDA NF4 training base
+is not directly portable to MPS; the compatible official base with Quanto int4
+is a distinct deployment, not bit-identical to Colab or OpenRouter. Use the
+`local_mps` provider and `qwen2.5-7b-pilot-mps` model identity. No paid API fallback,
+silent CPU inference, truncated observations or invented model outcomes. Local
+API fees are zero; hardware, electricity and compute costs remain unmeasured.
+Keep inference services on loopback and one generation at a time. Previews load
+no model and make no inference requests. Local recorded trips remain distinct
+from the controlled OpenRouter baseline and the historical OpenAI studies.
+
+## November 4 MPS pilot layout study
+The user subsequently authorized exactly one recorded simulation per active
+layout using the served fine-tuned MPS pilot: ten fixed profiles, one repetition,
+120 actions per shopper, `gary2_v2` assistance and `unique_single_checkout_v1`.
+Use `evaluation.study` with `local_mps`, freeze the serving identity, and record
+every attempt. Publish finished recordings into Evidence automatically; never
+export a changing live snapshot under a final run ID. Retain stopped attempts
+and do not automatically retry a failed slot or collect additional repetitions.
+This local study makes no paid API calls. Compare it descriptively with existing
+results, explicitly preserving hardware and quantization differences.
