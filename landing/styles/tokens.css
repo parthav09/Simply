@@ -24,6 +24,8 @@
   --color-danger-soft: #fdeceb;
   --color-focus: #4f46e5;
   --color-shadow: #0e132214;
+  --chart-a: #4f46e5;
+  --chart-b: #c2570c;
   --map-floor: #f3f5fa;
   --map-grid: #e0e4ef;
   --map-fixture: #e8ecf5;
@@ -112,6 +114,8 @@
   --color-danger-soft: #3a1a1a;
   --color-focus: #abb0ff;
   --color-shadow: #00000066;
+  --chart-a: #6e76f5;
+  --chart-b: #d9692a;
   --map-floor: #131828;
   --map-grid: #252b41;
   --map-fixture: #1d2338;

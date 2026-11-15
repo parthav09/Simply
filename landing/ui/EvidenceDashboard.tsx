@@ -5,6 +5,7 @@ import {loadCatalog} from '../lib/recordings';
 import {decodeDashboard,type Dashboard,type DashboardRun,type TripPoint} from '../lib/dashboard';
 import {formatHistoryMetric as format} from '../lib/evidence';
 import PilotProgress from './PilotProgress';
+import EvidenceCharts from './EvidenceCharts';
 import {pilotCellLabel,type PilotProgress as PilotStatus} from '../lib/pilot-progress';
 
 const modelName=(id:string)=>({'gpt-6-luna':'Luna','gpt-6.1-terra':'Terra','qwen2.5-7b-instruct':'Qwen2.5 7B','qwen2.5-7b-pilot-mps':'Qwen pilot · MPS','qwen2.5-7b-pilot-mlx':'Qwen pilot · MLX'} as Record<string,string>)[id]??id;
@@ -34,6 +35,9 @@ export function DashboardContent({data}:{data:Dashboard}){
   const [mlx,setMlx]=useState<PilotStatus|null>(null);
   const view=data.views.find(v=>v.id===viewId)??data.views[0];
   const qwen=view.id==='qwen_baseline';
+  // Hide the idle local MPS pilot (nothing recording, nothing completed); it returns once a run starts or results are exported.
+  const mpsActive=pilot?.available===true&&(pilot.runs?.some(run=>run.status!=='queued')??false);
+  const models=view.models.filter(m=>!(m.id==='qwen2.5-7b-pilot-mps'&&m.status==='not_evaluated'&&!mpsActive));
   const measures=data.measures.filter(m=>(expanded||m.primary)&&(qwen||!m.id.startsWith('provider_reported_')));
   return <section className="model-evidence" aria-label="Model by layout comparison">
     <div className="evidence-results-heading"><div><p className="eyebrow">Recorded outcomes · {qwen?'OpenAI · OpenRouter · local Apple GPU':'direct OpenAI'}</p><h2>Models × layouts</h2></div><span className="evidence-status is-complete">Recorded evidence · replay makes no API calls</span></div>
@@ -43,10 +47,11 @@ export function DashboardContent({data}:{data:Dashboard}){
       <label>Results shown<select value={view.id} onChange={e=>setViewId(e.target.value)}>{data.views.map(v=><option key={v.id} value={v.id}>{v.label}</option>)}</select></label>
       <label className="evidence-toggle"><input type="checkbox" checked={expanded} onChange={e=>setExpanded(e.target.checked)}/>Show detailed metrics</label>
     </div>
+    <EvidenceCharts data={data} models={models}/>
     <p className="evidence-footnote"><strong>{view.runs} recorded runs · {view.trips} simulated trips.</strong> {view.note}</p>
     <p className="evidence-footnote">The same products, prices, profiles, lists and navigation assistance are frozen across the main study. Only shelf placement changes for a layout comparison. These results describe simulations, not measured human behavior.</p>
     <div className="report-table model-layout-table"><table aria-label="Model metrics for Layout A and Layout B"><thead><tr><th scope="col">Model / measure</th>{data.layouts.map(layout=><th scope="col" key={layout.id}>{layout.label}<small>{layout.description}</small></th>)}</tr></thead>
-      {view.models.map(model=><tbody key={model.id} aria-label={model.label}>
+      {models.map(model=><tbody key={model.id} aria-label={model.label}>
         <tr className="model-group"><th scope="rowgroup"><strong>{model.label}</strong><small>{model.status==='not_evaluated'?(model.id==='qwen2.5-7b-pilot-mps'?'Local MPS · final results pending':model.id==='qwen2.5-7b-pilot-mlx'?'Local MLX · final results pending':'Not evaluated · results pending'):model.id==='qwen2.5-7b-pilot-mps'?'Measured · local MPS pilot':model.id==='qwen2.5-7b-pilot-mlx'?'Measured · local MLX pilot':model.id==='qwen2.5-7b-instruct'?'Measured · OpenRouter / Phala':'Measured · direct OpenAI API'}</small></th>{data.layouts.map(layout=>{
           const c=model.cells[layout.id];
           const progress=model.id==='qwen2.5-7b-pilot-mlx'?mlx:model.id==='qwen2.5-7b-pilot-mps'?pilot:null;

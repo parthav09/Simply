@@ -28,9 +28,10 @@ function compile(file,dependencies={}){
  let states=[];
  const progressReader=compile('lib/pilot-progress.ts');
  const progressUI=compile('ui/PilotProgress.tsx',{react:{useState:value=>[states.length?states.shift():value,()=>{}],useEffect:()=>{}},'react/jsx-runtime':require('react/jsx-runtime'),'../lib/pilot-progress':progressReader});
+ const chartsUI=compile('ui/EvidenceCharts.tsx',{'react/jsx-runtime':require('react/jsx-runtime'),'../lib/evidence':history});
  const ui=compile('ui/EvidenceDashboard.tsx',{
   react:{useState:value=>[states.length?states.shift():value,()=>{}],useEffect:()=>{}},
-  'react/jsx-runtime':require('react/jsx-runtime'),'../lib/dashboard':reader,'../lib/recordings':{},'../lib/evidence':history,'./PilotProgress':progressUI,'../lib/pilot-progress':progressReader,
+  'react/jsx-runtime':require('react/jsx-runtime'),'../lib/dashboard':reader,'../lib/recordings':{},'../lib/evidence':history,'./PilotProgress':progressUI,'./EvidenceCharts':chartsUI,'../lib/pilot-progress':progressReader,
  });
  states=['matched_first',false];
  const html=renderer.renderToStaticMarkup(React.createElement(ui.DashboardContent,{data}));
@@ -47,6 +48,7 @@ function compile(file,dependencies={}){
  assert.match(pending,/Qwen2[.]5 7B Instruct/);assert.match(pending,/OpenRouter \/ Phala/);
  if(qwenRuns.length)assert.match(pending,/Measured · OpenRouter \/ Phala/);else assert.match(pending,/Collection has not started/);
  assert.ok(pending.includes(`${4+qwenRuns.length+pilotRuns.length+mlxRuns.length} recorded runs · ${40+(qwenRuns.length+pilotRuns.length+mlxRuns.length)*10} simulated trips`));
+ assert.match(pending,/Results at a glance/);assert.match(pending,/Higher is better/);assert.match(pending,/Lower is better/);
  assert.match(pending,/GPT-6 Luna/);assert.match(pending,/GPT-6[.]1 Terra/);
  assert.match(pending,/OpenRouter-reported charge/);assert.match(pending,/N\/A/);
  // Explicit offline fixture exercises the measured Qwen reader and React path.
