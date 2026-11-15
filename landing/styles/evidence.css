@@ -26,6 +26,7 @@
   .evidence-notice { display:flex;gap:var(--space-3);align-items:flex-start;padding:var(--space-4);margin:var(--space-4) 0;border-radius:var(--radius-md);background:var(--color-accent-soft);color:var(--color-text); }
   .evidence-notice.is-warning { background:var(--color-warning-soft); }
   .evidence-notice>svg { flex-shrink:0;margin-top:var(--space-1); }
+  .evidence-status-line { margin:var(--space-2) 0;padding:0;font-size:var(--text-xs);line-height:1.6;color:var(--color-text-muted); }
   .evidence-notice p { margin:0;font-size:var(--text-sm);line-height:1.7; }
   .evidence-footnote,.evidence-method p { font-size:var(--text-sm);color:var(--color-text-secondary);line-height:1.8; }
   .evidence-selectors { margin-bottom:var(--space-4); }

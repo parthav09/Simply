@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Newsreader, Source_Sans_3 } from "next/font/google";
+import { IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../ui/ThemeProvider";
 
-const display = Newsreader({
+const sans = Inter({
   subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-display",
-});
-
-const sans = Source_Sans_3({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
 });
 
@@ -28,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en" data-theme="light" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
       <body>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=localStorage.getItem('simply-appearance');document.documentElement.dataset.theme=p==='light'||p==='dark'?p:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}})()` }} />
         <ThemeProvider>{children}</ThemeProvider>

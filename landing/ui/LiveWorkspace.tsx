@@ -31,6 +31,8 @@ export default function LiveWorkspace(){
   const [connection,setConnection]=useState('connecting');const [error,setError]=useState('');
   const [serviceReady,setServiceReady]=useState<boolean|null>(null);const [busy,setBusy]=useState(false);
   const [reconnect,setReconnect]=useState(0);const [saved,setSaved]=useState(false);
+  // Display-only: if the Python service is offline on first contact, open the saved recordings once instead of a dead end.
+  const autoReplayed=useRef(false);
   const [feedFilter,setFeedFilter]=useState<'all'|'purchases'|'failures'>('all');
   const [accounting,setAccounting]=useState<ApiAccounting|null>(null);
   const [budgetEnforced,setBudgetEnforced]=useState<boolean|null>(null);
@@ -59,7 +61,7 @@ export default function LiveWorkspace(){
           setMpsReady(health?.local_mps_available===true);setMlxReady(health?.local_mlx_available===true);setAccounting(health?.budget??null);setBudgetEnforced(typeof health?.api_budget_enforced==='boolean'?health.api_budget_enforced:null);
           setRunId(previous=>restoreRunSelection(previous,value.runs,readRememberedRun(liveSessionStorage())));}
         failures=0;
-      }catch{if(!cancelled)setServiceReady(false);failures++;}
+      }catch{if(!cancelled){setServiceReady(false);if(!autoReplayed.current){autoReplayed.current=true;setMode('replay');}}failures++;}
       finally{
         inFlight=false;
         if(!cancelled&&!document.hidden)timer=setTimeout(refresh,Math.min(15000,3000*2**failures));
@@ -120,7 +122,7 @@ export default function LiveWorkspace(){
   return <>
     <header className="lab-toolbar">
       <div className="lab-mode-switch" role="group" aria-label="Lab mode">
-        <button aria-pressed={mode==='live'} onClick={()=>setMode('live')}><span className="live-dot"/>Live</button>
+        <button aria-pressed={mode==='live'} onClick={()=>setMode('live')} title={serviceReady===false?'Live service is offline — start it with npm run simulation:serve':undefined}><span className="live-dot"/>Live{serviceReady===false&&<span className="sr-only"> (offline)</span>}</button>
         <button aria-pressed={mode==='replay'} onClick={()=>setMode('replay')}>Replay</button>
       </div>
       {mode==='live'&&!runId&&<div className="live-config">
@@ -158,7 +160,7 @@ export default function LiveWorkspace(){
       </div>}
     </header>
     {mode==='replay'?<ReplayWorkspace/>:<>
-      <p className="lab-note api-accounting" role="status">{data?`Recorded transport: ${data.source.provider} · `:localMps?(model==='qwen2.5-7b-pilot-mlx'?'Local MLX Metal · ':'Local PyTorch MPS · '):'New sessions use OpenRouter · '}{localMps?'No per-token API fee · local hardware and electricity costs unmeasured':budgetEnforced===false?'API cost tracking only · no app spending cap':budgetEnforced===true?'This session has an explicit API budget':'Checking API cost tracking…'}{accounting&&!localMps&&<> · Known estimate ${accounting.known_estimated_usd.toFixed(4)} · Unresolved reservations ${accounting.unresolved_reserved_usd.toFixed(4)}</>}. {localMps?'One inference at a time on this Mac.':'Provider rate and quota limits still apply.'}</p>
+      <p className="lab-note api-accounting" role="status">{data?`Recorded transport: ${data.source.provider} · `:localMps?(model==='qwen2.5-7b-pilot-mlx'?'Local MLX Metal · ':'Local PyTorch MPS · '):'New sessions use OpenRouter · '}{localMps?'No per-token API fee · local hardware and electricity costs unmeasured':budgetEnforced===false?'API cost tracking only · no app spending cap':budgetEnforced===true?'This session has an explicit API budget':'Checking API cost tracking'}{accounting&&!localMps&&<> · Known estimate ${accounting.known_estimated_usd.toFixed(4)} · Unresolved reservations ${accounting.unresolved_reserved_usd.toFixed(4)}</>}. {localMps?'One inference at a time on this Mac.':'Provider rate and quota limits still apply.'}</p>
       {endNotice&&<section className={`live-end-notice ${endNotice.warning?'is-warning':''}`} role="status"><strong>{endNotice.title}</strong><p>{endNotice.detail}</p></section>}
       {mode==='live'&&!activeRun&&!runId&&runs.length>0&&<details className="lab-history"><summary>Recent runs <span>{runs.length}</span></summary><div className="lab-picker" role="group" aria-label="Follow Python run">{runs.slice(0,8).map(run=><button key={run.run_id} aria-pressed={run.run_id===runId} onClick={()=>followRun(run)}>{layoutShort(run.layout_id)} · {modelName(run.model)} · {run.status} · {run.run_id.slice(0,8)}</button>)}</div></details>}
       {serviceReady===false&&<div className="live-banner" role="alert">Live simulation is offline. Saved recordings are available to explore.</div>}

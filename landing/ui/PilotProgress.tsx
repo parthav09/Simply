@@ -23,9 +23,10 @@ export default function PilotProgress({onProgress,backend='mps'}:{onProgress?:(p
     return()=>{active=false;clearTimeout(timer);document.removeEventListener('visibilitychange',visible);};
   },[onProgress,backend]);
   const finished=progress?.available&&progress.completed_runs===2;
+  if(unavailable)return <p className="evidence-status-line" role="status">Fine-tuned Qwen · {backend.toUpperCase()}: live collection status is unavailable. The table below contains exported recordings only.</p>;
   return <aside className="evidence-notice" aria-label="Fine-tuned Qwen collection status">
     <strong>Fine-tuned Qwen · {backend.toUpperCase()} · {finished?'both runs finished':'collection progress'}</strong>
-    {unavailable?<p>Live collection status is unavailable. The table below contains exported recordings only.</p>:!progress?.available?<p>Reading the local pilot recordings…</p>:<>
+    {!progress?.available?<p>Reading the local pilot recordings…</p>:<>
       <ul>{progress.runs!.map(run=><li key={run.layout_id}><strong>{run.layout_id==='costco_back_anchor'?'Layout A':'Layout B'}</strong>: {run.status==='queued'?'Queued':run.status==='recording'?`Recording · ${run.decision_count.toLocaleString()} decisions saved`:run.status==='completed'?`Finished · ${run.finished_count}/${run.shopper_count} checked out`:`Stopped · ${run.status.replaceAll('_',' ')} · ${run.decision_count.toLocaleString()} decisions saved`}</li>)}</ul>
       <p>{finished?'Refresh this page to load the final exported metrics.':'Final metrics and replay downloads appear after each run finishes. These counts come from saved Python events; this view makes no model calls.'} <a href="/lab">Follow recordings in the shopper lab</a>.</p>
     </>}
