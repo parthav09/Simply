@@ -2,18 +2,18 @@ import {formatHistoryMetric as format} from '../lib/evidence';
 import type {Dashboard,DashboardModel,Measure} from '../lib/dashboard';
 
 /** Plain-language chart panels. Display only: every number is Python's exported metric. */
-const panels:{id:string;title:string;question:string;better:'higher'|'lower'}[]=[
+const panels:{id:string;title:string;question:string;better:'higher'|'lower'|'context'}[]=[
+  {id:'impulse_units_per_trip',title:'Impulse buys per trip',question:'How many items that weren’t on the list did each shopper pay for?',better:'context'},
+  {id:'impulse_trip_share',title:'Shoppers who bought on impulse',question:'What share of trips ended with at least one unplanned item?',better:'context'},
   {id:'checkout_completion',title:'Finished the trip',question:'How many shoppers made it to checkout?',better:'higher'},
   {id:'purchased_unit_fulfillment',title:'Got what was on the list',question:'How much of the shopping list was actually bought?',better:'higher'},
-  {id:'moves_per_trip',title:'Steps walked',question:'How far did the average shopper wander?',better:'lower'},
-  {id:'estimated_cost_per_run_usd',title:'Cost to run',question:'What did one 10-shopper run cost in model usage?',better:'lower'},
-];
+]
 
 function Panel({panel,measure,models,layouts}:{panel:typeof panels[number];measure:Measure;models:DashboardModel[];layouts:Dashboard['layouts']}){
   const values=models.flatMap(m=>layouts.map(l=>m.cells[l.id]?.metrics[panel.id])).filter((v):v is number=>typeof v==='number');
   const axis=measure.unit==='rate'?1:Math.max(...values,Number.EPSILON);
   return <figure className="chart-panel">
-    <figcaption><strong>{panel.title}</strong><span>{panel.question}</span><em className={`chart-better is-${panel.better}`}>{panel.better==='higher'?'Higher is better':'Lower is better'}</em></figcaption>
+    <figcaption><strong>{panel.title}</strong><span>{panel.question}</span><em className={`chart-better is-${panel.better}`}>{panel.better==='higher'?'Higher is better':panel.better==='lower'?'Lower is better':'Unplanned purchases'}</em></figcaption>
     <div className="chart-rows" role="list">
       {models.map(model=><div className="chart-row" role="listitem" key={model.id}>
         <span className="chart-model">{model.label}</span>
@@ -39,7 +39,7 @@ export default function EvidenceCharts({data,models}:{data:Dashboard;models:Dash
   if(!shown.length)return null;
   return <section className="evidence-charts" aria-label="Results at a glance">
     <div className="evidence-charts-head">
-      <div><h3>Results at a glance</h3><p>Each pair of bars compares one model in the two store layouts. Exact counts are in the table below.</p></div>
+      <div><h3>Results at a glance</h3><p>Each pair of bars compares one model in the two store layouts. Impulse buys are paid items that weren’t on the shopper’s list. Exact counts are in the table below.</p></div>
       <ul className="chart-legend" aria-label="Layout colors">{data.layouts.map((l,i)=><li key={l.id}><i className={`is-${i===0?'a':'b'}`}/><strong>{`Layout ${i===0?'A':'B'}`}</strong> {l.description}</li>)}</ul>
     </div>
     <div className="chart-grid">{panels.map(panel=>{const measure=data.measures.find(m=>m.id===panel.id);return measure?<Panel key={panel.id} panel={panel} measure={measure} models={shown} layouts={data.layouts}/>:null;})}</div>

@@ -1,23 +1,66 @@
 import Link from 'next/link';
-import RecordedShowcase from '../ui/RecordedShowcase';
-import LandingReplayDemos from '../ui/LandingReplayDemos';
+import ImpulseReceipt from '../ui/ImpulseReceipt';
+import ImpulseReplayDemo from '../ui/ImpulseReplayDemo';
 import SiteNav from './SiteNav';
 import { Icon } from '../ui/Icons';
 
+const steps = [
+  { n: '01', title: 'Give them a list.', body: 'Ten shoppers, each with a shopping list, a budget and a personality — from careful planners to snack grabbers.', icon: 'bag' as const },
+  { n: '02', title: 'Let them shop.', body: 'A language model makes every move, one decision at a time. Python validates and records each one.', icon: 'route' as const },
+  { n: '03', title: 'Flag the extras.', body: 'Anything that wasn’t on the list is flagged as an impulse buy — with the shelf, the price and the reason given.', icon: 'spark' as const },
+];
+
 export default function Landing() {
   return <main className="marketing-page">
-    <SiteNav labDisabled/>
-    <section className="marketing-hero" id="main-content">
-      <div className="marketing-intro"><p className="marketing-eyebrow"><span/> Retail simulation, with evidence</p><h1>Understand the<br/><em>shopper’s choices.</em></h1><p className="marketing-description">Explore how AI shoppers navigate a store, choose products, and work through their lists. Replay every decision and inspect the evidence behind the results.</p><div className="marketing-actions"><Link href="/evaluation" className="marketing-primary">Explore the evidence <Icon name="arrow" size={18}/></Link><a href="#how-it-works" className="marketing-secondary">How Simply works</a></div><div className="marketing-footnote"><span className="tiny-shoppers" aria-hidden="true"><i/><i/><i/></span><p>Different people. Different priorities.<br/><strong>Every choice on record.</strong></p></div></div>
-      <RecordedShowcase/>
+    <SiteNav/>
+    <section className="hero" id="main-content">
+      <div className="hero-copy">
+        <p className="hero-pill"><span/>Impulse-buy detection</p>
+        <h1>Spot the impulse buy.</h1>
+        <p className="hero-lede">Simply walks AI shoppers through a store with a list and a budget, then shows you exactly which items they <em>didn’t</em> plan to buy — where they grabbed it, what it cost, and the reason they gave.</p>
+        <div className="hero-actions">
+          <Link href="/lab" className="marketing-primary">Open the lab <Icon name="arrow" size={17}/></Link>
+          <Link href="/evaluation" className="marketing-secondary">See the evidence</Link>
+        </div>
+        <ul className="hero-legend" aria-label="How purchases are tagged">
+          <li><i className="dot-planned"/>On the list</li>
+          <li><i className="dot-impulse"/>Impulse buy</li>
+        </ul>
+      </div>
+      <ImpulseReceipt/>
     </section>
-    <div className="marketing-principles"><span>BUILT TO EXPLORE</span><p><Icon name="users" size={17}/> Individual shoppers</p><p><Icon name="map" size={17}/> Two store layouts</p><p><Icon name="route" size={17}/> Recorded journeys</p><p><Icon name="chart" size={17}/> Inspectable outcomes</p></div>
-    <section className="marketing-replay" id="recorded-simulation" aria-label="Replay completed store simulations">
-      <LandingReplayDemos/>
+
+    <section className="steps" aria-labelledby="how-heading">
+      <h2 id="how-heading" className="sr-only">How Simply works</h2>
+      {steps.map(step => <article key={step.n}>
+        <span className="step-icon"><Icon name={step.icon} size={18}/></span>
+        <span className="step-n">{step.n}</span>
+        <h3>{step.title}</h3>
+        <p>{step.body}</p>
+      </article>)}
     </section>
-    <section className="marketing-story" id="how-it-works"><div className="marketing-story-title"><p className="marketing-eyebrow">The idea</p><h2>One experiment.<br/><em>Every choice in view.</em></h2><p>A list gets forgotten. A budget gets stretched. An aisle gets another look. Simply lets you investigate the small decisions that make a shopping trip.</p><Link href="/evaluation" className="marketing-text-link">Meet the method <Icon name="arrow" size={17}/></Link></div><div className="marketing-steps"><article><span>01</span><div><h3>Set the scene.</h3><p>Two layouts. The same group of 10–15 shoppers, with individual lists, budgets, and supplied preferences.</p></div><Icon name="map" size={21}/></article><article><span>02</span><div><h3>Watch choices unfold.</h3><p>The model proposes each choice. The simulation records what happened, including detours, missed items, and incomplete trips.</p></div><Icon name="route" size={21}/></article><article><span>03</span><div><h3>Follow your curiosity.</h3><p>Open the lab to inspect a shopper, follow a recorded path, or read the decision behind a moment.</p></div><Icon name="spark" size={21}/></article></div></section>
-    <section className="marketing-questions"><div className="marketing-questions-heading"><p className="marketing-eyebrow">A better question</p><h2>Look a little closer.</h2><p>The most useful answer often starts with a better question.</p></div><div className="marketing-question-grid"><article><Icon name="bag" size={25}/><span>THE BASKET</span><h3>What made the cut?</h3><p>Find the list items, the off-list choices, and what was still missing at checkout.</p></article><article><Icon name="route" size={25}/><span>THE JOURNEY</span><h3>Why this way?</h3><p>Follow a shopper through the store and inspect the choices along their path.</p></article><article><Icon name="chart" size={25}/><span>THE EVIDENCE</span><h3>What can we learn?</h3><p>Connect recorded choices to saved outcomes, with the limits of each experiment in view.</p></article></div><p className="marketing-limits"><Icon name="info" size={15}/> Simulated choices help explore hypotheses. They do not establish real customer behavior or retail impact.</p></section>
-    <section className="marketing-closing"><span aria-hidden="true">↗</span><div><p className="marketing-eyebrow">There’s a story in every aisle</p><h2>Let’s see where it goes.</h2></div><Link href="/evaluation" className="marketing-primary">Explore the evidence <Icon name="arrow" size={18}/></Link></section>
-    <footer className="marketing-footer"><Link href="/" className="brand">simply.</Link><p>Small decisions. A different perspective.</p><Link href="/evaluation">Method & evidence <Icon name="arrow" size={14}/></Link></footer>
+
+    <section className="watch" aria-labelledby="watch-heading">
+      <header>
+        <p className="marketing-eyebrow">A recorded trip</p>
+        <h2 id="watch-heading">Watch the extras pile up.</h2>
+        <p>Every amber shelf is where a shopper picked up something that wasn’t on their list. This is a saved run, replayed — nothing here is generated in your browser.</p>
+      </header>
+      <ImpulseReplayDemo/>
+    </section>
+
+    <section className="cta-band">
+      <div>
+        <h2>Which stores trigger more impulse buys?</h2>
+        <p>Compare models and shelf layouts on the same ten shoppers.</p>
+      </div>
+      <Link href="/evaluation" className="marketing-primary">See the evidence <Icon name="arrow" size={17}/></Link>
+    </section>
+
+    <footer className="marketing-footer">
+      <Link href="/" className="brand">simply<span className="brand-dot">.</span></Link>
+      <p><Icon name="info" size={13}/> Simulated shoppers help explore hypotheses. They don’t predict real customer behavior.</p>
+      <Link href="/lab">Shopper lab <Icon name="arrow" size={14}/></Link>
+    </footer>
   </main>;
 }

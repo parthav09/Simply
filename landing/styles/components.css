@@ -54,4 +54,9 @@
 @media(max-width:760px) { .product-nav { padding:0 var(--space-4);height:72px;gap:var(--space-3); }.nav-end .nav-action { display:none; }.nav-links { gap:0; }.nav-links a { padding:var(--space-2);font-size:var(--text-xs); }.theme-control>svg { display:none; }.theme-control select { width:80px; }.brand { font-size:25px; }.brand-mark { width:25px;height:28px; }.product-footer,.marketing-footer { flex-wrap:wrap;padding:var(--space-6); }.replay-empty { padding:var(--space-6); } }
 @media(max-width:540px) { .product-nav { flex-wrap:wrap;height:auto;min-height:100px;padding-top:var(--space-3);padding-bottom:var(--space-3); }.product-nav .brand { order:0; }.nav-end { order:1;margin-left:auto; }.nav-links { order:2;width:100%; }.nav-links a { flex:1;justify-content:center; } }
 
+/* Planned vs impulse tags are shared by the landing receipt, lab and evidence. */
+.tag { display:inline-flex;align-items:center;gap:var(--space-1);padding:1px var(--space-2);border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.01em;white-space:nowrap; }
+.tag-planned { background:var(--color-planned-soft);color:var(--color-planned); }
+.tag-impulse { background:var(--color-impulse-soft);color:var(--color-impulse); }
+
 }

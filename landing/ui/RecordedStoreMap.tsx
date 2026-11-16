@@ -55,8 +55,20 @@ const StoreFixtures = memo(function StoreFixtures({ layout, id }: { layout: Repl
   </>;
 });
 
-export default function RecordedStoreMap({ data, states, summary, cursor, selected, filter, trail, heat, onSelect, focusProductId }: {
-  data: ReplayData; states: Record<string, ShopperState>; summary: Summary; cursor: number; selected: string; filter: string; trail: boolean; heat: boolean; onSelect?: (id: string) => void; focusProductId?: string;
+/** Display-only: shelf blocks where recorded off-list grabs happened, with a count badge. */
+function ImpulseMarks({ data, marks, flash }: { data: ReplayData; marks: Map<string, number>; flash?: string }) {
+  const blocks = data.layout.shelves.flatMap(shelfItemBlocks).map(block => ({ block, count: block.products.reduce((n, p) => n + (marks.get(p.id) ?? 0), 0), flash: !!flash && block.products.some(p => p.id === flash) })).filter(b => b.count > 0);
+  return <g className="impulse-marks" pointerEvents="none">
+    {blocks.map(({ block, count, flash: isFlash }) => <g key={`${block.cellX},${block.cellY}`} className={isFlash ? 'impulse-mark is-flash' : 'impulse-mark'}>
+      <rect x={block.x - 3} y={block.y - 3} width={block.width + 6} height={block.height + 6} rx="9" fill="none" stroke="var(--color-impulse)" strokeWidth="2.6" />
+      <circle cx={block.x + block.width} cy={block.y} r="8.5" fill="var(--color-impulse)" stroke="var(--map-floor)" strokeWidth="1.5" />
+      <text x={block.x + block.width} y={block.y + 3.2} textAnchor="middle" fontSize="9" fontWeight="700" fill="var(--color-on-impulse)">{count}</text>
+    </g>)}
+  </g>;
+}
+
+export default function RecordedStoreMap({ data, states, summary, cursor, selected, filter, trail, heat, onSelect, focusProductId, impulseMarks, impulseFlash }: {
+  data: ReplayData; states: Record<string, ShopperState>; summary: Summary; cursor: number; selected: string; filter: string; trail: boolean; heat: boolean; onSelect?: (id: string) => void; focusProductId?: string; impulseMarks?: Map<string, number>; impulseFlash?: string;
 }) {
   const id = useId().replaceAll(':', '');
   const traffic = summary.traffic ?? {};
@@ -74,6 +86,7 @@ export default function RecordedStoreMap({ data, states, summary, cursor, select
       const [x, y] = key.split(',').map(Number);
       return <rect key={key} x={x * CELL_SIZE} y={y * CELL_SIZE} width={CELL_SIZE} height={CELL_SIZE} rx="6" fill="var(--color-accent)" opacity={.1 + .7 * visits / maximum}><title>{visits} recorded visits at {key}</title></rect>;
     })}
+    {impulseMarks && impulseMarks.size > 0 && <ImpulseMarks data={data} marks={impulseMarks} flash={impulseFlash} />}
     {trail && selectedShopper && (!filter || filter === selectedShopper.id) && positions && <polyline points={positions} fill="none" stroke="var(--color-accent)" strokeWidth="2.5" strokeDasharray="4 3" strokeLinecap="round" strokeLinejoin="round" opacity=".8" />}
     {selectedShopper && [...data.shoppers].sort((a, b) => Number(a.id === selectedShopper.id) - Number(b.id === selectedShopper.id)).filter(s => !filter || s.id === filter).map(s => {
       const st = states[s.id];

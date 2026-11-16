@@ -7,6 +7,7 @@ import {validateReplay,type ReplayData} from '../lib/replay';
 import {Icon} from './Icons';
 import {productEmoji} from './map-theme';
 import {invalidateCatalog} from '../lib/recordings';
+import {isImpulseEvent} from '../lib/impulse';
 import {liveEndNotice,liveStatusLabel,liveSessionStorage,readRememberedRun,rememberRun,restoreRunSelection} from '../lib/live-session';
 const modelName=(id:string)=>({'gpt-6-luna':'GPT-6 Luna','gpt-6.1-terra':'GPT-6.1 Terra','qwen2.5-7b-pilot-mps':'Qwen pilot · MPS','qwen2.5-7b-pilot-mlx':'Qwen pilot · MLX'} as Record<string,string>)[id]??id;
 const layoutShort=(id:string)=>({costco_back_anchor:'A',neighborhood_express:'B'} as Record<string,string>)[id]??id;
@@ -21,7 +22,8 @@ async function api(path:string,body?:object){
 }
 
 export default function LiveWorkspace(){
-  const [mode,setMode]=useState<'live'|'replay'>('live');
+  // Recorded trips are the default view; live runs are opt-in and call a model.
+  const [mode,setMode]=useState<'live'|'replay'>('replay');
   const [runs,setRuns]=useState<Run[]>([]);const [runId,setRunId]=useState('');
   const [layout,setLayout]=useState('costco_back_anchor');const [count,setCount]=useState(10);
   const [model,setModel]=useState('gpt-6-luna');const [preview,setPreview]=useState<ReplayData|null>(null);
@@ -33,7 +35,7 @@ export default function LiveWorkspace(){
   const [reconnect,setReconnect]=useState(0);const [saved,setSaved]=useState(false);
   // Display-only: if the Python service is offline on first contact, open the saved recordings once instead of a dead end.
   const autoReplayed=useRef(false);
-  const [feedFilter,setFeedFilter]=useState<'all'|'purchases'|'failures'>('all');
+  const [feedFilter,setFeedFilter]=useState<'all'|'impulse'|'purchases'|'failures'>('all');
   const [accounting,setAccounting]=useState<ApiAccounting|null>(null);
   const [budgetEnforced,setBudgetEnforced]=useState<boolean|null>(null);
   const [mpsReady,setMpsReady]=useState(false);const [mlxReady,setMlxReady]=useState(false);
@@ -112,7 +114,7 @@ export default function LiveWorkspace(){
   const latest=data?.events.at(-1);
   const latestShopper=data?.shoppers.find(s=>s.id===latest?.agent_id);
   const failures=data?Object.values(data.summary.failures).reduce((a,b)=>a+b,0):0;
-  const feedRows=data?.events.filter(event=>feedFilter==='purchases'?event.action?.step==='grab'&&event.outcome==='applied':feedFilter==='failures'?event.outcome!=='applied':true)??[];
+  const feedRows=data?.events.filter(event=>feedFilter==='impulse'?isImpulseEvent(data,event):feedFilter==='purchases'?event.action?.step==='grab'&&event.outcome==='applied':feedFilter==='failures'?event.outcome!=='applied':true)??[];
   const endNotice=data?liveEndNotice(data):null;
   const newSetup=()=>{rememberRun(liveSessionStorage(),'');current.current=null;setRunId('');setData(null);setPreview(null);setError('');setSaved(false);};
   const pickModel=(id:string)=>{if(model===id&&!runId)return;newSetup();setModel(id);};
@@ -122,8 +124,8 @@ export default function LiveWorkspace(){
   return <>
     <header className="lab-toolbar">
       <div className="lab-mode-switch" role="group" aria-label="Lab mode">
-        <button aria-pressed={mode==='live'} onClick={()=>setMode('live')} title={serviceReady===false?'Live service is offline — start it with npm run simulation:serve':undefined}><span className="live-dot"/>Live{serviceReady===false&&<span className="sr-only"> (offline)</span>}</button>
-        <button aria-pressed={mode==='replay'} onClick={()=>setMode('replay')}>Replay</button>
+        <button aria-pressed={mode==='replay'} onClick={()=>setMode('replay')}>Recorded trips</button>
+        <button aria-pressed={mode==='live'} onClick={()=>setMode('live')} title={serviceReady===false?'Live service is offline — start it with npm run simulation:serve':'Start or follow a model run'}><span className="live-dot"/>Run live{serviceReady===false&&<span className="sr-only"> (offline)</span>}</button>
       </div>
       {mode==='live'&&!runId&&<div className="live-config">
         <div className="seg" role="group" aria-label="Shopper model">
@@ -160,7 +162,7 @@ export default function LiveWorkspace(){
       </div>}
     </header>
     {mode==='replay'?<ReplayWorkspace/>:<>
-      <p className="lab-note api-accounting" role="status">{data?`Recorded transport: ${data.source.provider} · `:localMps?(model==='qwen2.5-7b-pilot-mlx'?'Local MLX Metal · ':'Local PyTorch MPS · '):'New sessions use OpenRouter · '}{localMps?'No per-token API fee · local hardware and electricity costs unmeasured':budgetEnforced===false?'API cost tracking only · no app spending cap':budgetEnforced===true?'This session has an explicit API budget':'Checking API cost tracking'}{accounting&&!localMps&&<> · Known estimate ${accounting.known_estimated_usd.toFixed(4)} · Unresolved reservations ${accounting.unresolved_reserved_usd.toFixed(4)}</>}. {localMps?'One inference at a time on this Mac.':'Provider rate and quota limits still apply.'}</p>
+      <p className="lab-note api-accounting" role="status" title={localMps?'One inference at a time on this Mac. Local hardware and electricity costs are not measured.':'Provider rate and quota limits still apply.'}>{data?`${data.source.provider} · `:localMps?(model==='qwen2.5-7b-pilot-mlx'?'Local MLX · ':'Local MPS · '):'OpenRouter · '}{localMps?'no per-token fee':budgetEnforced===true?'explicit API budget':'cost tracked, no spending cap'}{accounting&&!localMps&&<> · ${accounting.known_estimated_usd.toFixed(4)} spent{accounting.unresolved_reserved_usd>0&&` · $${accounting.unresolved_reserved_usd.toFixed(4)} unresolved`}</>}</p>
       {endNotice&&<section className={`live-end-notice ${endNotice.warning?'is-warning':''}`} role="status"><strong>{endNotice.title}</strong><p>{endNotice.detail}</p></section>}
       {mode==='live'&&!activeRun&&!runId&&runs.length>0&&<details className="lab-history"><summary>Recent runs <span>{runs.length}</span></summary><div className="lab-picker" role="group" aria-label="Follow Python run">{runs.slice(0,8).map(run=><button key={run.run_id} aria-pressed={run.run_id===runId} onClick={()=>followRun(run)}>{layoutShort(run.layout_id)} · {modelName(run.model)} · {run.status} · {run.run_id.slice(0,8)}</button>)}</div></details>}
       {serviceReady===false&&<div className="live-banner" role="alert">Live simulation is offline. Saved recordings are available to explore.</div>}
@@ -169,11 +171,11 @@ export default function LiveWorkspace(){
       {data&&<section className="live-activity" aria-label="Live action feed">
         <div className="activity-heading">
           <h2>Decisions <span>{data.events.length} committed · {failures} failed</span></h2>
-          <div className="feed-filters" role="group" aria-label="Decision feed filter">{(['all','purchases','failures'] as const).map(filter=><button key={filter} aria-pressed={feedFilter===filter} onClick={()=>setFeedFilter(filter)}>{filter==='all'?'All':filter==='purchases'?'Purchases':'Failures'}</button>)}</div>
+          <div className="feed-filters" role="group" aria-label="Decision feed filter">{(['all','impulse','purchases','failures'] as const).map(filter=><button key={filter} aria-pressed={feedFilter===filter} onClick={()=>setFeedFilter(filter)}>{filter==='all'?'All':filter==='impulse'?'Impulse':filter==='purchases'?'Purchases':'Failures'}</button>)}</div>
         </div>
         {latest&&<p className="activity-latest"><strong>{latestShopper?.name}</strong> · {latest.action?.reason??latest.failure??'No valid action returned'}</p>}
-        <div className="activity-rows">{feedRows.slice(-8).reverse().map(event=><div key={event.sequence} className={event.outcome==='applied'?'':'activity-failure'}><span>#{event.sequence}</span><strong>{data.shoppers.find(s=>s.id===event.agent_id)?.name}</strong><span className="action-chip">{event.action?.step==='grab'?'Pick up':(event.action?.step??event.outcome).replaceAll('_',' ')}</span><p>{event.action?.product_id&&<b><span className="item-emoji" aria-hidden="true">{productEmoji(data.catalogue.find(product=>product.id===event.action?.product_id)??event.action.product_id)}</span>{data.catalogue.find(product=>product.id===event.action?.product_id)?.name??event.action.product_id} · </b>}{event.failure??event.action?.reason}</p><span>({event.after.x}, {event.after.y})</span></div>)}</div>
-        {!feedRows.length&&<p className="feed-empty">{feedFilter==='purchases'?'No purchases yet. Shoppers must reach a shelf before picking up an item.':feedFilter==='failures'?'No failed decisions recorded.':'The first decisions will appear here. Shopper inspection never calls the model.'}</p>}
+        <div className="activity-rows">{feedRows.slice(-8).reverse().map(event=><div key={event.sequence} className={event.outcome!=='applied'?'activity-failure':isImpulseEvent(data,event)?'activity-impulse':''}><span>#{event.sequence}</span><strong>{data.shoppers.find(s=>s.id===event.agent_id)?.name}</strong><span className={isImpulseEvent(data,event)?'tag tag-impulse':'action-chip'}>{isImpulseEvent(data,event)?'Impulse':event.action?.step==='grab'?'Pick up':(event.action?.step??event.outcome).replaceAll('_',' ')}</span><p>{event.action?.product_id&&<b><span className="item-emoji" aria-hidden="true">{productEmoji(data.catalogue.find(product=>product.id===event.action?.product_id)??event.action.product_id)}</span>{data.catalogue.find(product=>product.id===event.action?.product_id)?.name??event.action.product_id} · </b>}{event.failure??event.action?.reason}</p><span>({event.after.x}, {event.after.y})</span></div>)}</div>
+        {!feedRows.length&&<p className="feed-empty">{feedFilter==='impulse'?'No impulse buys yet. Off-list pick-ups appear here with the shopper’s reason.':feedFilter==='purchases'?'No purchases yet. Shoppers must reach a shelf before picking up an item.':feedFilter==='failures'?'No failed decisions recorded.':'The first decisions will appear here. Shopper inspection never calls the model.'}</p>}
       </section>}
     </>}
   </>;

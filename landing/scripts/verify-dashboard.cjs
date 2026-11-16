@@ -15,7 +15,10 @@ function compile(file,dependencies={}){
  const pilotRuns=data.runs.filter(r=>r.group==='qwen_pilot');
  const mlxRuns=data.runs.filter(r=>r.group==='qwen_mlx');
  const localRuns=data.runs.filter(r=>r.group==='local_mps');
- assert.equal(data.coverage.retained_runs,13+qwenRuns.length+pilotRuns.length+mlxRuns.length+localRuns.length);assert.equal(data.coverage.retained_trips,130+(qwenRuns.length+pilotRuns.length+mlxRuns.length+localRuns.length)*10);
+ // 12 fixed direct-OpenAI recordings (8 main, 2 pilot, 2 historical); OpenRouter and local recordings vary as they are collected.
+ const openrouterRuns=data.runs.filter(r=>r.group==='openrouter');
+ assert.equal(data.coverage.retained_runs,12+openrouterRuns.length+qwenRuns.length+pilotRuns.length+mlxRuns.length+localRuns.length);assert.equal(data.coverage.retained_trips,120+(openrouterRuns.length+qwenRuns.length+pilotRuns.length+mlxRuns.length+localRuns.length)*10);
+ assert(data.measures.some(m=>m.id==='impulse_units_per_trip')&&data.distribution_measures.some(m=>m.id==='impulse'),'Impulse measures missing');
  assert.equal(data.views[0].runs,4);assert.equal(data.views[0].trips,40);
  assert.equal(data.views[1].runs,7);assert.equal(data.views[2].runs,8);
  const entry=value=>({url:index.dashboard.url,sha256:crypto.createHash('sha256').update(value).digest('hex')});
@@ -48,7 +51,7 @@ function compile(file,dependencies={}){
  assert.match(pending,/Qwen2[.]5 7B Instruct/);assert.match(pending,/OpenRouter \/ Phala/);
  if(qwenRuns.length)assert.match(pending,/Measured · OpenRouter \/ Phala/);else assert.match(pending,/Collection has not started/);
  assert.ok(pending.includes(`${4+qwenRuns.length+pilotRuns.length+mlxRuns.length} recorded runs · ${40+(qwenRuns.length+pilotRuns.length+mlxRuns.length)*10} simulated trips`));
- assert.match(pending,/Results at a glance/);assert.match(pending,/Higher is better/);assert.match(pending,/Lower is better/);
+ assert.match(pending,/Results at a glance/);assert.match(pending,/Higher is better/);assert.match(pending,/Impulse buys per trip/);assert.match(pending,/Unplanned purchases/);
  assert.match(pending,/GPT-6 Luna/);assert.match(pending,/GPT-6[.]1 Terra/);
  assert.match(pending,/OpenRouter-reported charge/);assert.match(pending,/N\/A/);
  // Explicit offline fixture exercises the measured Qwen reader and React path.

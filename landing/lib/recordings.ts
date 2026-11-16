@@ -1,6 +1,6 @@
 /** Shared, bounded cache of verified recordings. No shopping decisions or mutable run state. */
 import { decodeReplay, type Catalog, type CatalogEntry, type ReplayData } from './replay';
-import demoRecordings from '../data/demo-recordings.json';
+import impulseShowcase from '../data/impulse-showcase.json';
 
 let catalogRequest: { created: number; promise: Promise<Catalog> } | undefined;
 const recordings = new Map<string, Promise<ReplayData>>();
@@ -38,22 +38,6 @@ export function completedLayoutRecording(catalog: Catalog, layoutId: string): Ca
     .sort((a, b) => b.recorded_at.localeCompare(a.recorded_at))[0];
 }
 
-/** Fixed, audited demo pair: main-study Terra repetition 1, with the same ten profiles. */
-export async function loadDemoRecording(layoutId: string): Promise<ReplayData> {
-  const runId = demoRecordings[layoutId as keyof typeof demoRecordings];
-  const catalog = await loadCatalog();
-  const entry = catalog.runs.find(run => run.run_id === runId && run.layout_id === layoutId
-    && run.provider === 'openai' && run.model === 'gpt-6.1-terra' && run.status === 'completed');
-  if (!entry) throw new Error('The verified demo recording is unavailable.');
-  const run = await loadRecording(entry);
-  if (run.source.warnings.length || run.shoppers.length !== 10 || run.summary.finished_count !== 10
-    || run.summary.mean_list_completion !== 1 || Object.values(run.summary.failures).some(count => count !== 0)
-    || run.shoppers.some(shopper => run.final.states[shopper.id].phase !== 'FinishedState')) {
-    throw new Error('The recording does not meet the completed demo requirements.');
-  }
-  return run;
-}
-
 export function loadRecording(entry: CatalogEntry): Promise<ReplayData> {
   const key = `${entry.url}:${entry.bundle_sha256}:${entry.run_id}:${entry.sha256}:${entry.provider}:${entry.model}:${entry.status}`;
   const cached = recordings.get(key);
@@ -66,4 +50,15 @@ export function loadRecording(entry: CatalogEntry): Promise<ReplayData> {
   while (recordings.size > recordingLimit) recordings.delete(recordings.keys().next().value!);
   promise.catch(() => { if (recordings.get(key) === promise) recordings.delete(key); });
   return promise;
+}
+
+/** Fixed showcase: a completed main-study Luna recording that contains recorded off-list purchases. */
+export const showcase = impulseShowcase;
+export async function loadShowcaseRecording(): Promise<{run: ReplayData; entry: CatalogEntry}> {
+  const catalog = await loadCatalog();
+  const entry = catalog.runs.find(run => run.run_id === impulseShowcase.run_id && run.status === 'completed');
+  if (!entry) throw new Error('The showcase recording is unavailable.');
+  const run = await loadRecording(entry);
+  if (run.source.warnings.length || !run.shoppers.some(s => s.id === impulseShowcase.shopper_id)) throw new Error('The showcase recording does not match its identity.');
+  return {run, entry};
 }

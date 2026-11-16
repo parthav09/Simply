@@ -322,6 +322,22 @@
       "url": "/replays/c8e6de0c076e449f97824472dfe59688.json",
       "evidence_url": "/replays/c8e6de0c076e449f97824472dfe59688.source.jsonl",
       "bundle_sha256": "ce56a5222c8da967bd55dd06324245182f30dc2c5557037c31f4f911ab6978f7"
+    },
+    {
+      "run_id": "311d63f0df3a4d2d9d94c05b3619b388",
+      "sha256": "d1a624a076a6627b5889cebc33fed1ede671257bdd6dd5e4418cb0780b4bdde9",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "cancelled",
+      "recorded_at": "2026-11-16T19:17:02.743593+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/311d63f0df3a4d2d9d94c05b3619b388.json",
+      "evidence_url": "/replays/311d63f0df3a4d2d9d94c05b3619b388.source.jsonl",
+      "bundle_sha256": "6bcc5a7d27877761c19a56a9d5bef39323af31bbda8139fba27748a14eb2840e"
     }
   ],
   "reports": [
@@ -353,7 +369,7 @@
   ],
   "history": {
     "url": "/replays/history.json",
-    "sha256": "a0fb1af2f3addf2b9ab7f43856ab632cbab6034d14bd61de1a930d4f01ce641a"
+    "sha256": "5347abcdd916656413d7484f50cb5167acd7165a8fff4d433f4b111dea3dce9f"
   },
   "matrix": {
     "url": "/replays/matrix-48ea3402f27344af949f1002123fe826.json",
@@ -362,7 +378,7 @@
   },
   "dashboard": {
     "url": "/replays/evidence-dashboard.json",
-    "sha256": "173b5200090e80b11939b35f86887ade879dd91bf88f741fa6bb5c80fb404892"
+    "sha256": "244407633026a2e360194999d2a1e4d9131a62e4774f3e6a6259c7c7ff60f795"
   },
   "qwen_baseline": {
     "protocol_url": "/replays/study-a16f989767b34b4e9ce525607e076e05.protocol.json",

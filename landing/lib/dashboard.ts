@@ -21,7 +21,7 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
   check(d.dashboard_version===1&&/^[a-f0-9]{32}$/.test(d.main_study_id),'Invalid evidence dashboard');
   check(Array.isArray(d.layouts)&&d.layouts.length===2&&new Set(d.layouts.map(l=>l.id)).size===2,'Invalid comparison layouts');
   check(Array.isArray(d.measures)&&d.measures.length>0&&new Set(d.measures.map(m=>m.id)).size===d.measures.length&&d.measures.every(m=>typeof m.label==='string'&&typeof m.unit==='string'),'Invalid metric definitions');
-  check(Array.isArray(d.distribution_measures)&&d.distribution_measures.length===4,'Missing distribution measures');
+  check(Array.isArray(d.distribution_measures)&&d.distribution_measures.length>=4&&['moves','fulfillment','requests','estimated_cost_usd'].every(id=>d.distribution_measures.some(m=>m.id===id)),'Missing distribution measures');
   check(Array.isArray(d.runs)&&new Set(d.runs.map(r=>r.run_id)).size===d.runs.length,'Duplicate dashboard sources');
   const runIds=new Set(d.runs.map(r=>r.run_id));
   for(const r of d.runs){

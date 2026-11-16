@@ -139,3 +139,17 @@ export a changing live snapshot under a final run ID. Retain stopped attempts
 and do not automatically retry a failed slot or collect additional repetitions.
 This local study makes no paid API calls. Compare it descriptively with existing
 results, explicitly preserving hardware and quantization differences.
+
+## November 16 local Qwen attempts and impulse-focused UI
+Prompts and assistance stay at their benchmarked values (`informed`, `gary2_v2`).
+An impulse-aware prompt/assist rework was tried and fully reverted at the user's
+request; do not reintroduce it without asking. Two replacement local studies were
+started and stopped at the user's request, retaining their partial records:
+`qwen25-7b-pilot-mps-ab-20261116` (13 Layout B decisions; MPS is out of scope and
+not selected in Evidence) and `qwen25-7b-pilot-mlx-ab-20261116` (32 Layout B
+decisions, force-quit; Layout A never started). Evidence still selects the Nov 8
+MLX study. The Nov 4 MPS attempt (38 decisions) is retained unchanged. A complete
+fine-tuned Qwen MLX Layout B result still needs a new replacement study.
+The product UI centres on impulse buys (Python `off_list_units`). React may filter
+recorded grabs whose product is absent from the shopper's list for display, but
+totals and evidence measures come from Python (`evaluation/dashboard.py`).

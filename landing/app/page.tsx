@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Landing from "../site/Landing";
 
 export const metadata: Metadata = {
-  title: "Simply · A new perspective on retail",
+  title: "Simply · Spot the impulse buy",
   description:
-    "Explore recorded AI shopper journeys. Follow decisions, inspect baskets, and investigate store layouts with evidence behind every result.",
+    "Replay AI shoppers through a store and see which purchases were planned and which were impulse buys — where, what it cost, and why.",
 };
 
 export default function Page() {

@@ -14,8 +14,8 @@ const fixture=JSON.parse(JSON.parse(text).payload_json);
 const entry={...fixture.source,url:'/fixture.json',bundle_sha256:crypto.createHash('sha256').update(text).digest('hex')};
 let catalogCalls=0,recordingCalls=0,corrupt=false;
 const catalog={schema_version:1,runs:[entry],reports:[]};
-const demoIds=JSON.parse(fs.readFileSync(path.join(root,'data/demo-recordings.json'),'utf8'));
-const recordingDependencies={'./replay':replay,'../data/demo-recordings.json':{default:demoIds}};
+const showcase=JSON.parse(fs.readFileSync(path.join(root,'data/impulse-showcase.json'),'utf8'));
+const recordingDependencies={'./replay':replay,'../data/impulse-showcase.json':{default:showcase}};
 const cache=compile('recordings.ts',recordingDependencies,{fetch:async url=>{
   if(url==='/replays/index.json'){catalogCalls++;return {ok:true,json:async()=>catalog};}
   recordingCalls++;return {ok:true,text:async()=>corrupt?text+' ':text};
@@ -50,7 +50,7 @@ const normal=value=>JSON.parse(JSON.stringify(value));
   const luminance=hex=>{const values=hex.slice(1).match(/../g).map(value=>{const channel=parseInt(value,16)/255;return channel<=.04045?channel/12.92:((channel+.055)/1.055)**2.4;});return values[0]*.2126+values[1]*.7152+values[2]*.0722;};
   for(const [theme,tokens] of [['light',light],['dark',dark]])for(const [foreground,background] of [
     ['color-text','color-surface'],['color-text-secondary','color-canvas'],['color-text-muted','color-canvas'],
-    ['color-on-accent','color-accent'],['color-warning','color-warning-soft'],['color-success','color-success-soft'],['map-label','map-floor'],
+    ['color-on-accent','color-accent'],['color-warning','color-warning-soft'],['color-success','color-success-soft'],['color-impulse','color-impulse-soft'],['color-on-impulse','color-impulse'],['color-planned','color-planned-soft'],['map-label','map-floor'],
   ]){
     const values=[luminance(tokens[foreground]),luminance(tokens[background])].sort((a,b)=>b-a);
     assert((values[0]+.05)/(values[1]+.05)>=4.5,`${theme}: insufficient contrast for ${foreground} on ${background}`);
@@ -62,17 +62,17 @@ const normal=value=>JSON.parse(JSON.stringify(value));
     assert(url.startsWith('/replays/'),'Demo requested a non-recording endpoint');
     return {ok:true,json:async()=>published,text:async()=>fs.readFileSync(path.join(root,'public',url),'utf8')};
   }});
-  for(const [layoutId,runId] of Object.entries(demoIds)){
-    const demo=await demoCache.loadDemoRecording(layoutId);
-    assert.equal(demo.source.run_id,runId,'Demo silently selected another recording');
-    assert.equal(demo.layout.id,layoutId);
-    assert.equal(demo.summary.finished_count,10);
-    assert.equal(demo.summary.mean_list_completion,1);
-    assert(demo.events.every(event=>event.outcome==='applied'));
-    assert(Object.values(replay.frameAt(demo,demo.events.length).states).every(state=>state.phase==='FinishedState'));
-  }
-  await assert.rejects(demoCache.loadDemoRecording('missing-layout'),'Missing demo silently fell back to another run');
-  console.log('Published demos passed: pinned identities, bundle integrity, ten checkouts, complete lists, and no failed actions.');
+  const {run:demo}=await demoCache.loadShowcaseRecording();
+  assert.equal(demo.source.run_id,showcase.run_id,'Showcase silently selected another recording');
+  assert.equal(demo.source.status,'completed');
+  const impulse=compile('impulse.ts');
+  const shopper=demo.summary.shoppers.find(s=>s.agent_id===showcase.shopper_id);
+  const flagged=impulse.impulseBuys(demo,demo.events.length,showcase.shopper_id);
+  assert(shopper.off_list_units>0,'Showcase shopper has no recorded impulse buys');
+  assert.equal(flagged.length,shopper.off_list_units,'Impulse lens disagrees with Python off_list_units');
+  for(const s of demo.summary.shoppers)assert.equal(impulse.impulseBuys(demo,demo.events.length,s.agent_id).length,s.off_list_units,`Impulse lens disagrees for ${s.agent_id}`);
+  assert.equal(impulse.totalOffListUnits(demo.summary),demo.summary.shoppers.reduce((n,s)=>n+s.off_list_units,0));
+  console.log('Impulse showcase passed: pinned identity, bundle integrity, and the impulse lens matches Python off_list_units for every shopper.');
   const featured=cache.preferredRecording(published);
   if(!featured)return;
   const data=JSON.parse(JSON.parse(fs.readFileSync(path.join(root,'public',featured.url.replace(/^\//,'')),'utf8')).payload_json);

@@ -1,5 +1,12 @@
 # Simply
 
+**Spot the impulse buy.** Simply replays AI shoppers through a store and flags every
+item that was not on their list — where it was picked up, what it cost, and the reason
+the shopper gave. An impulse buy is Python's `off_list_units`: a paid unit of a product
+absent from the shopper's list. The lab marks those shelves on the map, ticks them on
+the timeline and tags them in each basket; Evidence compares impulse buys per trip
+across models and layouts. These are simulated shoppers, not measured human behavior.
+
 A React/Next.js retail-layout lab backed by one Python simulation. The default
 shopper model is **GPT-6 Luna** through OpenRouter, pinned to OpenAI’s standard endpoint. Direct OpenAI Responses remains available with `--provider openai`. The live lab also offers **GPT-6.1 Terra**
 for model testing; Gemini is an explicit

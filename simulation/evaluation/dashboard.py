@@ -10,6 +10,7 @@ from statistics import mean
 SIMULATION_DIR=Path(__file__).resolve().parents[1]
 if str(SIMULATION_DIR) not in sys.path:sys.path.insert(0,str(SIMULATION_DIR))
 
+from core.accounting import cents
 from core.evidence import run_row
 from core.export_replay import export_run
 from core.integrity import fingerprint
@@ -25,6 +26,10 @@ MODELS=[{'id':'gpt-6-luna','label':'GPT-6 Luna','status':'recorded'},
         {'id':'qwen3-4b-instruct-2507','label':'Qwen3-4B-Instruct-2507','status':'not_evaluated'},
         {'id':'qwen3-4b-instruct-2507-finetuned','label':'Qwen 4B · fine-tuned','status':'not_evaluated'}]
 MEASURES=[
+    {'id':'impulse_units_per_trip','label':'Impulse buys / trip','unit':'number','primary':True},
+    {'id':'impulse_trip_share','label':'Trips with an impulse buy','unit':'rate','primary':True},
+    {'id':'impulse_spend_per_trip_usd','label':'Impulse spend / trip','unit':'usd','primary':False},
+    {'id':'over_budget_checkout_share','label':'Checkouts over budget','unit':'rate','primary':True},
     {'id':'checkout_completion','label':'Checkout completion','unit':'rate','primary':True},
     {'id':'purchased_unit_fulfillment','label':'Shopping list purchased','unit':'rate','primary':True},
     {'id':'moves_per_trip','label':'Movement steps / trip','unit':'number','primary':True},
@@ -47,7 +52,8 @@ MEASURES=[
 DISTRIBUTIONS=[{'id':'moves','label':'Movement steps / trip','unit':'number'},
     {'id':'fulfillment','label':'Paid-list fulfillment','unit':'rate'},
     {'id':'requests','label':'Submitted API requests / trip','unit':'number'},
-    {'id':'estimated_cost_usd','label':'Estimated API cost / attempted trip','unit':'usd'}]
+    {'id':'estimated_cost_usd','label':'Estimated API cost / attempted trip','unit':'usd'},
+    {'id':'impulse','label':'Impulse buys / trip','unit':'integer'}]
 GROUPS={'main':'Main controlled OpenAI study','pilot':'Separate OpenAI pilots',
         'historical':'Historical OpenAI demonstrations','openrouter':'OpenRouter · separate transport',
         'qwen_baseline':'Qwen2.5 7B · controlled OpenRouter baseline',
@@ -80,9 +86,19 @@ def record(path, main_protocols):
     elif header['provider']=='local_mps':group='local_mps'
     elif experiment.get('stage')=='main':group='pilot'
     else:group='historical'
-    points=[]
+    points=[];prices={p['id']:cents(p['price']) for p in header['catalogue']}
+    lists={s['agent_id']:{i['product_id'] for i in s['customer']['shopping_list']} for s in header['shoppers']}
     for shopper in summary['shoppers']:
         own=[e for e in run['events'] if e['agent_id']==shopper['agent_id']]
+        # Impulse buy = a paid unit of a product absent from the shopper's list (Python off_list_units).
+        off_list=shopper.get('off_list_units')
+        impulse=(off_list if shopper['finished'] else 0) if type(off_list) is int else None
+        cart=own[-1]['after']['cart'] if own else []
+        extra=[(i['product_id'],i['quantity']) for i in cart if i['product_id'] not in lists[shopper['agent_id']]]
+        if shopper['finished'] and impulse is not None and sum(q for _,q in extra)!=impulse:
+            raise ValueError('Impulse items do not reconcile to the recorded off-list count')
+        spend=(sum(prices[pid]*q for pid,q in extra) if shopper['finished'] else 0) if impulse is not None and all(pid in prices for pid,_ in extra) else None
+        overshoot=shopper.get('checkout_overshoot_cents')
         submitted=[e.get('telemetry',{}).get('request_submitted') for e in own]
         costs=[e.get('telemetry',{}).get('estimated_cost_micros') for e in own]
         requested=shopper['requested_units'];paid=shopper['purchased_fulfilled_units']
@@ -90,10 +106,16 @@ def record(path, main_protocols):
             'requested':requested,'purchased':paid,
             'values':{'moves':shopper['successful_moves'],'fulfillment':paid/requested if requested else 1,
                 'requests':sum(submitted) if all(type(n) is bool for n in submitted) else None,
-                'estimated_cost_usd':sum(costs)/1e6 if all(type(n) is int for n in costs) else None}})
+                'estimated_cost_usd':sum(costs)/1e6 if all(type(n) is int for n in costs) else None,
+                'impulse':impulse},
+            'impulse_spend_cents':spend,
+            'over_budget':(overshoot>0 if type(overshoot) is int else None) if shopper['finished'] else False})
     requested=sum(p['requested'] for p in points);paid=sum(p['purchased'] for p in points)
     if abs((paid/requested if requested else 1)-row['metrics']['purchased_unit_fulfillment'])>1e-12:
         raise ValueError('Trip paid fulfillment does not reconcile to run metric')
+    impulses=[p['values']['impulse'] for p in points]
+    if row['metrics'].get('purchased_off_list_units') is not None and None not in impulses and sum(impulses)!=row['metrics']['purchased_off_list_units']:
+        raise ValueError('Trip impulse buys do not reconcile to run metric')
     latencies=[e['telemetry'].get('api_latency_ms',e['telemetry']['provider_latency_ms']) for e in run['events']
         if e.get('telemetry',{}).get('request_submitted') is True]
     unknown_usage=summary['resources']['unknown_usage_requests']
@@ -151,6 +173,12 @@ def cell(rows, status='recorded'):
         values=[r['run_metrics'][key] for r in rows]
         return sum(values) if values and all(n is not None for n in values) else None
     metrics={m['id']:None for m in MEASURES}
+    impulse=[p['values'].get('impulse') for p in points];spend=[p.get('impulse_spend_cents') for p in points]
+    over=[p.get('over_budget') for p in points if p['finished']]
+    if points and None not in impulse:
+        metrics.update(impulse_units_per_trip=sum(impulse)/trips,impulse_trip_share=sum(n>0 for n in impulse)/trips)
+    if points and None not in spend:metrics['impulse_spend_per_trip_usd']=sum(spend)/100/trips
+    if over and None not in over:metrics['over_budget_checkout_share']=sum(over)/len(over)
     if rows:
         metrics.update(checkout_completion=finished/trips,purchased_unit_fulfillment=purchased/requested if requested else 1,
             moves_per_trip=sum(p['values']['moves'] for p in points)/trips,
@@ -217,6 +245,7 @@ def assemble(records, main_study_id, mlx_selected=False):
             'groups':[{'id':g,'label':GROUPS[g],'runs':counts[g],'trips':sum(len(r['points']) for r in records if r['group']==g)} for g in GROUPS if g not in ('local_mps','qwen_pilot','qwen_mlx') or counts[g]]},
         'limitations':[
             'These are simulated shopping trips, not independent people or predictions validated against human behavior.',
+            'An impulse buy is a paid unit of a product that was not on the shopper’s list (Python off_list_units, checked-out trips only). It records an unplanned purchase and the model’s stated reason, not a verified psychological impulse.',
             'The historical table uses four matched OpenAI runs. The Qwen comparison adds its two separate OpenRouter runs. One repetition provides descriptive results, not a confidence interval or statistical significance.',
             'The same ten profiles repeat in the main study. Distribution points are observed trips; they are not independent experimental repetitions.',
             'A continued recording includes its linked interrupted prefix. It is shown separately and must not be counted as another independent set of shoppers.',
@@ -285,13 +314,31 @@ def load_main(public):
     return protocol,children
 
 
+def selected_stopped_slots(runs_root, public):
+    """Retained stopped slots of the selected local studies (their files have no run_end)."""
+    index=json.loads((Path(public)/'index.json').read_text());found=[]
+    for key in ('qwen_pilot','qwen_mlx'):
+        entry=index.get(key)
+        if not entry:continue
+        study_id=json.loads((Path(public)/Path(entry['protocol_url']).name).read_text())['study_id']
+        for path in Path(runs_root).rglob('protocol.json'):
+            if json.loads(path.read_text()).get('study_id')!=study_id or not (path.parent/'interrupted-slots.json').exists():continue
+            found+=[path.parent/name for name in json.loads((path.parent/'interrupted-slots.json').read_text())]
+    return found
+
+
 def publish(runs_root, public, *, closed_only=False, closed_paths=()):
     public=Path(public);plan,protocols=load_main(public);records=[];paths={}
-    closed_paths={Path(path).resolve() for path in closed_paths}
+    closed_paths={Path(path).resolve() for path in [*closed_paths,*(selected_stopped_slots(runs_root,public) if closed_only else [])]}
+    # A retained continuation needs its immutable interrupted source, even after another study is selected.
+    sources=set()
+    for path in Path(runs_root).rglob('*.jsonl'):
+        with path.open('rb') as handle:experiment=json.loads(handle.readline()).get('experiment') or {}
+        if experiment.get('stage')=='continuation':sources.add(experiment.get('source_run_id'))
     for path in sorted(Path(runs_root).rglob('*.jsonl')):
         with path.open('rb') as handle:header=json.loads(handle.readline())
         if header.get('type')!='run_start' or header.get('provider') not in ('openai','openrouter','gemini','local_mps') or header.get('config',{}).get('mode')!='actions':continue
-        if closed_only and read_run(path)['end'] is None and path.resolve() not in closed_paths:continue
+        if closed_only and read_run(path)['end'] is None and path.resolve() not in closed_paths and header.get('run_id') not in sources:continue
         row=record(path,protocols);records.append(row);paths[row['run_id']]=path
     validate_continuations(records,paths)
     result=assemble(records,plan['study_id'],any(a['model']=='qwen2.5-7b-pilot-mlx' for p in protocols for a in p['arms']))

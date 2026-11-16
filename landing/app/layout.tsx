@@ -16,8 +16,8 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Simply Layout Lab",
-  description: "Grocery layout simulation",
+  title: "Simply",
+  description: "Spot impulse buys in simulated shopping trips.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

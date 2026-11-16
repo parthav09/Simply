@@ -75,7 +75,7 @@ export function DashboardContent({data}:{data:Dashboard}){
 }
 
 function RunDistributions({data}:{data:Dashboard}){
-  const [group,setGroup]=useState('all');const [metricId,setMetricId]=useState('moves');
+  const [group,setGroup]=useState('all');const [metricId,setMetricId]=useState(data.distribution_measures.some(m=>m.id==='impulse')?'impulse':'moves');
   const [pointId,setPointId]=useState('');
   const runs=data.runs.filter(r=>group==='all'||r.group===group);
   const metric=data.distribution_measures.find(m=>m.id===metricId)??data.distribution_measures[0];
@@ -88,7 +88,7 @@ function RunDistributions({data}:{data:Dashboard}){
   const height=runs.length*62+75;
   const select=(run:DashboardRun,point:TripPoint)=>setPointId(`${run.run_id}:${point.profile_id}`);
   return <section className="run-distributions" aria-label="Distributions of all retained recordings">
-    <h2>See the spread, not just the average</h2>
+    <h2>Every trip, not just the average</h2>
     <p className="evidence-footnote">{data.coverage.retained_runs} retained runs · {data.coverage.retained_trips} attempted trips · {data.coverage.completed_runs} completed runs · {data.coverage.stopped_runs} interrupted runs. Each row below is one recording; pilots, historical settings and OpenRouter are never averaged into the main comparison.</p>
     <div className="evidence-selectors">
       <label>Recordings<select value={group} onChange={e=>setGroup(e.target.value)}><option value="all">All retained recordings · {data.coverage.retained_runs} runs</option>{data.coverage.groups.map(g=><option key={g.id} value={g.id}>{g.label} · {g.runs} runs</option>)}</select></label>
