@@ -30,7 +30,7 @@ export default function EvidenceDashboard(){
 }
 
 export function DashboardContent({data}:{data:Dashboard}){
-  const [viewId,setViewId]=useState(data.default_view);const [expanded,setExpanded]=useState(false);
+  const [viewId,setViewId]=useState(data.default_view);const [expanded]=useState(true);
   const [pilot,setPilot]=useState<PilotStatus|null>(null);
   const [mlx,setMlx]=useState<PilotStatus|null>(null);
   const view=data.views.find(v=>v.id===viewId)??data.views[0];
@@ -40,14 +40,15 @@ export function DashboardContent({data}:{data:Dashboard}){
   const models=view.models.filter(m=>!(m.id==='qwen2.5-7b-pilot-mps'&&m.status==='not_evaluated'&&!mpsActive));
   const measures=data.measures.filter(m=>(expanded||m.primary)&&(qwen||!m.id.startsWith('provider_reported_')));
   return <section className="model-evidence" aria-label="Model by layout comparison">
-    <div className="evidence-results-heading"><div><p className="eyebrow">Recorded outcomes · {qwen?'OpenAI · OpenRouter · local Apple GPU':'direct OpenAI'}</p><h2>Models × layouts</h2></div><span className="evidence-status is-complete">Recorded evidence · replay makes no API calls</span></div>
+    {data.views.length>1&&<div className="evidence-selectors dashboard-selectors">
+      <label>Results shown<select value={view.id} onChange={e=>setViewId(e.target.value)}>{data.views.map(v=><option key={v.id} value={v.id}>{v.label}</option>)}</select></label>
+    </div>}
+    <EvidenceCharts data={data} models={models}/>
+    <p className="evidence-footnote evidence-scope"><strong>{view.runs} recorded runs · {view.trips} simulated trips.</strong> Simulations, not measured human behavior.</p>
+    <details className="evidence-more"><summary>Full table, every trip and definitions</summary>
     {qwen&&<PilotProgress onProgress={setPilot}/>}
     {qwen&&view.models.some(m=>m.id==='qwen2.5-7b-pilot-mlx')&&<PilotProgress backend="mlx" onProgress={setMlx}/>}
-    <div className="evidence-selectors dashboard-selectors">
-      <label>Results shown<select value={view.id} onChange={e=>setViewId(e.target.value)}>{data.views.map(v=><option key={v.id} value={v.id}>{v.label}</option>)}</select></label>
-      <label className="evidence-toggle"><input type="checkbox" checked={expanded} onChange={e=>setExpanded(e.target.checked)}/>Show detailed metrics</label>
-    </div>
-    <EvidenceCharts data={data} models={models}/>
+
     <p className="evidence-footnote"><strong>{view.runs} recorded runs · {view.trips} simulated trips.</strong> {view.note}</p>
     <p className="evidence-footnote">The same products, prices, profiles, lists and navigation assistance are frozen across the main study. Only shelf placement changes for a layout comparison. These results describe simulations, not measured human behavior.</p>
     <div className="report-table model-layout-table"><table aria-label="Model metrics for Layout A and Layout B"><thead><tr><th scope="col">Model / measure</th>{data.layouts.map(layout=><th scope="col" key={layout.id}>{layout.label}<small>{layout.description}</small></th>)}</tr></thead>
@@ -71,6 +72,7 @@ export function DashboardContent({data}:{data:Dashboard}){
     </section>)}
     <RunDistributions data={data}/>
     <details className="evidence-details"><summary>Definitions, scope & verification</summary><ul>{data.limitations.map(text=><li key={text}>{text}</li>)}</ul><p><a href="/replays/evidence-dashboard.json" download>Download all table values, trip observations and source hashes</a></p><p>Python computes these results from canonical records. The browser only filters observations and displays the exported metrics.</p></details>
+    </details>
   </section>;
 }
 

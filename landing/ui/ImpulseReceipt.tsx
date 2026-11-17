@@ -59,7 +59,7 @@ export default function ImpulseReceipt() {
       <div><span>Budget</span><strong>{cents(shopper.budget_cents)}</strong></div>
       <div className="is-impulse"><span>Impulse items</span><strong>{offList ?? '—'}</strong></div>
     </footer>
-    <Link className="receipt-link" href={`/lab?run=${run.source.run_id}&shopper=${shopper.id}`}>Replay this trip <Icon name="arrow" size={14}/></Link>
+    <Link className="receipt-link" href={`/replays?run=${run.source.run_id}&shopper=${shopper.id}`}>Replay this trip <Icon name="arrow" size={14}/></Link>
     <figcaption className="sr-only">{metric.fulfilled_units} of {metric.requested_units} list items bought. Run {run.source.run_id.slice(0, 8)}.</figcaption>
   </figure>;
 }

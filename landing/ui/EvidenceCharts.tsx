@@ -39,7 +39,7 @@ export default function EvidenceCharts({data,models}:{data:Dashboard;models:Dash
   if(!shown.length)return null;
   return <section className="evidence-charts" aria-label="Results at a glance">
     <div className="evidence-charts-head">
-      <div><h3>Results at a glance</h3><p>Each pair of bars compares one model in the two store layouts. Impulse buys are paid items that weren’t on the shopper’s list. Exact counts are in the table below.</p></div>
+      <div><h3>Results at a glance</h3><p>Each pair of bars compares one model across the two store layouts.</p></div>
       <ul className="chart-legend" aria-label="Layout colors">{data.layouts.map((l,i)=><li key={l.id}><i className={`is-${i===0?'a':'b'}`}/><strong>{`Layout ${i===0?'A':'B'}`}</strong> {l.description}</li>)}</ul>
     </div>
     <div className="chart-grid">{panels.map(panel=>{const measure=data.measures.find(m=>m.id===panel.id);return measure?<Panel key={panel.id} panel={panel} measure={measure} models={shown} layouts={data.layouts}/>:null;})}</div>
