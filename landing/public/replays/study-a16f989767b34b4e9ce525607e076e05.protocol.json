@@ -1938,14 +1938,14 @@
       "arm_id": "arm-0",
       "layout_id": "costco_back_anchor",
       "model": "qwen2.5-7b-instruct",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "label": "costco_back_anchor"
     },
     {
       "arm_id": "arm-1",
       "layout_id": "neighborhood_express",
       "model": "qwen2.5-7b-instruct",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "label": "neighborhood_express"
     }
   ],
@@ -1964,7 +1964,7 @@
       "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
       "config": {
         "mode": "actions",
-        "navigation_policy": "gary2_v2",
+        "navigation_policy": "guided_nav_v2",
         "turn_budget": 120,
         "max_rounds": 1200,
         "concurrency": 2,
@@ -13607,7 +13607,7 @@
       "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
       "config": {
         "mode": "actions",
-        "navigation_policy": "gary2_v2",
+        "navigation_policy": "guided_nav_v2",
         "turn_budget": 120,
         "max_rounds": 1200,
         "concurrency": 2,
@@ -25255,5 +25255,5 @@
       "repetition": 1
     }
   ],
-  "sha256": "3890bc6a429a8c764c0788bc8c77a2f63f8b573831959e37ca63823ae4d31672"
+  "sha256": "8adb163798e2f57917ef584d5fce8ac3bd996b4e71b8f393164ccc44f81b55de"
 }

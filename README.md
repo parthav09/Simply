@@ -10,7 +10,7 @@ across models and layouts. These are simulated shoppers, not measured human beha
 A React/Next.js retail-layout lab backed by one Python simulation. The default
 shopper model is **GPT-6 Luna** through OpenRouter, pinned to OpenAI’s standard endpoint. Direct OpenAI Responses remains available with `--provider openai`. The live lab also offers **GPT-6.1 Terra**
 for model testing; Gemini is an explicit
-optional provider. New live/model runs use Gary-2 style navigation assistance in Python: avoid repeated routes, collect reachable list items and steer toward checkout. Each model request proposes one action; recordings retain the original proposal and identify every adjustment. Python records the actions and results. React displays those
+optional provider. New live/model runs use versioned navigation assistance in Python: avoid repeated routes, collect reachable list items and steer toward checkout. Each model request proposes one action; recordings retain the original proposal and identify every adjustment. Python records the actions and results. React displays those
 same records as shopper positions, baskets, routes, and analytics.
 
 ```text
@@ -38,7 +38,7 @@ Duplicate pickups are rejected. Shopper budgets are soft targets; overspending
 is permitted and measured. The retained earlier recordings keep their original rules.
 
 There is no separate browser shopping policy and no desktop app to launch.
-This follows Gary-2's run → record → web replay pattern, with Simply's own UI,
+This follows a run → record → web replay pattern, with Simply's own UI,
 record validation, and evaluation.
 
 ## Start the live web lab
@@ -99,7 +99,7 @@ The original successful Layout A/B recordings remain unchanged. Newly authorized
 study attempts and the separate complete-trip pilots are retained for verification;
 older deleted archives were not restored. The API accounting ledger remains intact.
 Scripted fixtures never stand in for model evidence.
-See [the live implementation and Gary-2 reference](simulation/docs/gary2-live-reference.md).
+See [the live implementation reference](simulation/docs/live-replay-flow.md).
 
 The [implementation audit](simulation/docs/implementation-status.md) tracks the
 current scope and the evidence still needed before the full plan is complete.
@@ -244,5 +244,5 @@ New layout, model and navigation-assistance comparisons use the frozen
 [`evaluation.study` workflow](simulation/docs/controlled-studies.md). Preparation
 makes no model calls; execution records every attempt; the Evidence tab displays
 published reports, uncertainty, failures and costs. See the
-[Gary-2 behavior audit](simulation/docs/gary2-behavior-audit.md) for spending,
+[behavior rules](simulation/docs/behavior-rules.md) for spending,
 policy parity and deliberate simulation differences.

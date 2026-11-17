@@ -1938,14 +1938,14 @@
       "arm_id": "arm-0",
       "layout_id": "costco_back_anchor",
       "model": "gpt-6-luna",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "label": "costco_back_anchor"
     },
     {
       "arm_id": "arm-1",
       "layout_id": "neighborhood_express",
       "model": "gpt-6-luna",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "label": "neighborhood_express"
     }
   ],
@@ -1964,7 +1964,7 @@
       "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
       "config": {
         "mode": "actions",
-        "navigation_policy": "gary2_v2",
+        "navigation_policy": "guided_nav_v2",
         "turn_budget": 120,
         "max_rounds": 1200,
         "concurrency": 5,
@@ -13598,7 +13598,7 @@
       "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
       "config": {
         "mode": "actions",
-        "navigation_policy": "gary2_v2",
+        "navigation_policy": "guided_nav_v2",
         "turn_budget": 120,
         "max_rounds": 1200,
         "concurrency": 5,
@@ -25269,5 +25269,5 @@
       "repetition": 5
     }
   ],
-  "sha256": "5702f49f13f93c75d09eb6da41b8f3602c7888c01328ebd43c0277d66761e0ab"
+  "sha256": "2699d1199190e7979a83eeaa483f60e2c54bac78d2b0f2b6a011e307748f1935"
 }

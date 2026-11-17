@@ -307,7 +307,7 @@ def load_main(public):
             or mlx['kind']!='layout' or mlx['cohort_size']!=10 or mlx['repetitions']!=1
             or mlx['concurrency']!=1 or mlx['turn_budget']!=120 or len(mlx['arms'])!=2
             or mlx['shopping_rules']!='unique_single_checkout_v1'
-            or any(a['model']!='qwen2.5-7b-pilot-mlx' or a['policy']!='gary2_v2' for a in mlx['arms'])
+            or any(a['model']!='qwen2.5-7b-pilot-mlx' or a['policy']!='guided_nav_v2' for a in mlx['arms'])
             or {a['layout_id'] for a in mlx['arms']}!={l['id'] for l in LAYOUTS}):
             raise ValueError('Invalid frozen local MLX pilot protocol')
         children.append(mlx)

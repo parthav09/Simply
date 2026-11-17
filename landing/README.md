@@ -42,8 +42,7 @@ The live UI requests a Python session and lifecycle controls through its local
 proxy; it never applies actions, invents a result or substitutes a scripted policy.
 Live states and metrics come from Python. Recorded playback, seeking and filters
 only select saved states. Reconnecting restores the existing run without calls
-to the model. See `../simulation/docs/gary2-live-reference.md` for the exact Gary-2
-comparison: its live view is a Python desktop window; its website is saved replay.
+to the model. See `../simulation/docs/live-replay-flow.md` for the live execution flow.
 
 Build/dev explicitly use Next's webpack pipeline. Fonts are downloaded by
 `next/font` during the first build; subsequent builds use its cache. The app's
@@ -70,7 +69,7 @@ prices. Live runs retain ledger accounting without a local spending cap. Provide
 rate and quota limits still apply. Previewing a layout makes no model
 calls. The lab shows pending decisions, pause state, actual purchase/failure
 feeds and static sprites placed directly at confirmed grid positions. New live
-runs use one model proposal per action and Python-owned Gary-2 navigation assistance;
+runs use one model proposal per action and Python-owned navigation assistance;
 adjustments are identified in the feed and original proposals remain in evidence.
 Ended runs keep their final state on screen and restore the same recording after
 a page reload. New setup explicitly returns to configuration without model calls.

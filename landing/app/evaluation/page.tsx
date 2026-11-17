@@ -18,6 +18,6 @@ export default function Page(){
       <RunHistory/>
       <ExperimentReport/>
     </details>
-    <footer className="evidence-method"><p>A fair layout comparison keeps the shoppers, products, prices, model and navigation policy fixed and changes only shelf placement. Repeated runs are needed to measure variation; most cells here are a single run.</p><p>Inspired by <a href="https://github.com/ved-2004/Gary-2">Gary-2</a>. Python owns the simulation and its metrics; this page displays the saved results.</p><Link className="text-link" href="/lab">Open shopper lab <Icon name="arrow" size={14}/></Link></footer>
+    <footer className="evidence-method"><p>A fair layout comparison keeps the shoppers, products, prices, model and navigation policy fixed and changes only shelf placement. Repeated runs are needed to measure variation; most cells here are a single run.</p><p>Python owns the simulation and its metrics; this page displays the saved results.</p><Link className="text-link" href="/lab">Open shopper lab <Icon name="arrow" size={14}/></Link></footer>
   </div></main>;
 }

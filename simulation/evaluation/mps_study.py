@@ -20,7 +20,7 @@ def validate(protocol):
         or protocol['concurrency']!=1 or protocol['turn_budget']!=120
         or len(protocol['schedule'])!=2 or len(protocol['arms'])!=2
         or {a['layout_id'] for a in protocol['arms']}!=set(ACTIVE_LAYOUT_IDS)
-        or any(a['model']!='qwen2.5-7b-pilot-mps' or a['policy']!='gary2_v2' for a in protocol['arms'])
+        or any(a['model']!='qwen2.5-7b-pilot-mps' or a['policy']!='guided_nav_v2' for a in protocol['arms'])
         or protocol['shopping_rules']!='unique_single_checkout_v1'):
         raise ValueError('Expected exactly two frozen MPS pilot layout runs with baseline-equivalent settings')
 

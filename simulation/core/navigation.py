@@ -1,4 +1,4 @@
-"""Versioned Gary-2 action assistance, using only frozen run facts.
+"""Versioned navigation assistance, using only frozen run facts.
 
 This selects an action; core.actions remains the only state mutation boundary.
 The same pure function validates recorded adjustments without loading a store.
@@ -9,13 +9,13 @@ from agents.base import Decision
 from agents.steps import MOVES
 
 MODEL_ONLY = 'model_only'
-GARY2 = 'gary2_v1'
-GARY2_CURRENT = 'gary2_v2'
-ASSISTED = (GARY2, GARY2_CURRENT)
+GUIDED_V1 = 'guided_nav_v1'
+GUIDED_CURRENT = 'guided_nav_v2'
+ASSISTED = (GUIDED_V1, GUIDED_CURRENT)
 POLICIES = (MODEL_ONLY, *ASSISTED)
 
 
-def adjusted_action(proposal, before, layout, visits, policy=GARY2, action_limit=None):
+def adjusted_action(proposal, before, layout, visits, policy=GUIDED_V1, action_limit=None):
     allowed = set(before['allowed_steps'])
     x, y = before['x'], before['y']
     counts = {step: visits.get((x + dx, y + dy), 0)
@@ -28,14 +28,14 @@ def adjusted_action(proposal, before, layout, visits, policy=GARY2, action_limit
     for item in before['requirements']:
         needed[item['product_id']] += item['quantity']
     remaining = needed - owned
-    limit = min(before['turn_budget'], action_limit or before['turn_budget']) if policy == GARY2_CURRENT else before['turn_budget']
+    limit = min(before['turn_budget'], action_limit or before['turn_budget']) if policy == GUIDED_CURRENT else before['turn_budget']
     turns_left = limit - before['turns_used']
     reachable = [product for shelf in layout['shelves']
                  if shelf['offsets'] and min(abs(x - shelf['x'] - dx) + abs(y - shelf['y'] - dy)
                                             for dx, dy in shelf['offsets']) == 1
                  for product in shelf['products']]
-    if policy == GARY2_CURRENT:
-        # Gary-2 inspects adjacent shelves left, right, up, then down. Preserve
+    if policy == GUIDED_CURRENT:
+        # Inspect adjacent shelves left, right, up, then down. Preserve
         # that priority when multiple Simply shelf groups are within reach.
         reachable = []
         seen = set()
@@ -54,15 +54,15 @@ def adjusted_action(proposal, before, layout, visits, policy=GARY2, action_limit
             return proposal, None
         return Decision(step, product_id, f'Navigation assist: {reason}. Model proposed {proposal.step}: {proposal.reason}'), reason
 
-    # Gary-2 prioritizes checkout near its iteration limit, then reachable targets.
+    # Prioritize checkout near the action limit, then reachable targets.
     if owned and 'checkout' in allowed and turns_left <= 15:
         return choose('checkout', 'checkout with few turns remaining')
     if 'grab' in allowed:
         for product in reachable:
             if remaining[product['id']] > 0:
                 return choose('grab', 'pick up a reachable list item', product['id'])
-    # Gary-2 keeps an unowned off-list grab while targets remain and checkout is not urgent.
-    if (policy == GARY2 and proposal.step == 'grab' and proposal.product_id and remaining
+    # Keep an unowned off-list grab while targets remain and checkout is not urgent.
+    if (policy == GUIDED_V1 and proposal.step == 'grab' and proposal.product_id and remaining
             and not owned[proposal.product_id] and not remaining[proposal.product_id]
             and turns_left / before['turn_budget'] > .10):
         return proposal, None

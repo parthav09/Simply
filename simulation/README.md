@@ -4,8 +4,8 @@ For new layout, model and navigation-assistance results, use the
 [frozen study workflow](docs/controlled-studies.md) in `evaluation/study.py`.
 Preparation makes no requests. New study runs use cost tracking without an
 app-enforced cap; the older `evaluation.run campaign` retains its explicitly
-bounded historical protocol. The [Gary-2 review](docs/gary2-behavior-audit.md)
-documents `gary2_v2`, soft shopper budgets and remaining behavior differences.
+bounded historical protocol. The [behavior rules](docs/behavior-rules.md)
+document `guided_nav_v2`, soft shopper budgets and remaining behavior differences.
 
 `core/session.py` is the shared execution path. `main.py` runs the simulation
 from a command, exports recordings, or inspects saved evidence in the terminal. GPT-6 Luna through OpenRouter is the default CLI/web model; direct OpenAI remains available with `--provider openai`;
@@ -17,7 +17,7 @@ For live React viewing, start `npm run simulation:serve --prefix landing` and
 `npm run dev --prefix landing` in separate terminals, then open `/lab`. The live
 tab starts or follows a Python run and streams committed actions while model
 requests are pending. Recorded replay remains available in its own tab. See
-`docs/gary2-live-reference.md` for the inspected Gary-2 code and browser adaptation.
+`docs/live-replay-flow.md` for the live execution flow and browser bridge.
 
 ```bash
 .venv/bin/python simulation/main.py --provider openrouter --shoppers 10 --export-web
@@ -34,7 +34,7 @@ failed action. For the low-quota Gemini key, use `--requests-per-minute 8`.
 The seed controls experimental grouping/order. OpenAI Responses has no request
 seed option; this limitation is explicitly recorded rather than faked.
 
-New live/model sessions use `gary2_v2` navigation assistance and one model
+New live/model sessions use `guided_nav_v2` navigation assistance and one model
 proposal per action. Python favors less-visited cells, collects reachable list
 items, avoids fulfilled duplicate pickups and steers stocked carts toward
 checkout when lists are complete or turns run low. Each requested product is limited to one unit.

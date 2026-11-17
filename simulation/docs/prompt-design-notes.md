@@ -2,21 +2,16 @@
 
 This describes the preceding `focused-v2` prompt. The current
 `observe-plan-v3` revision and execution review are documented in
-[gary2-agent-optimization.md](gary2-agent-optimization.md).
+[agent-execution-optimization.md](agent-execution-optimization.md).
 
-Reviewed Gary-2's current `simulation/agents/llm.py` on October 27, 2026:
-https://github.com/ved-2004/Gary-2/blob/main/simulation/agents/llm.py
+Useful prompt structures include persona context, a previous public plan,
+recent actions/positions, destination visit counts, remaining targets, visible
+target markers and explicit checkout reminders. They help the model keep a
+destination across individual moves.
 
-`LLMAgent.build_system_prompt` and `build_state_snapshot` provide persona context,
-a previous public plan, recent actions/positions, destination visit counts,
-remaining targets, visible target markers, and explicit checkout reminders.
-Those structures help the model keep a destination across individual moves.
-
-Gary-2 also uses `adjust_llm_action` to replace some proposals with programmed
-pickups, less-visited movement, checkout navigation or checkout itself. Simply
-does not adopt those overrides: its applied actions remain the validated model
-proposals, including poor choices. A prompt can ask the shopper to focus; it
-cannot guarantee that the model will comply.
+In model-only runs the applied actions remain the validated model proposals,
+including poor choices. A prompt can ask the shopper to focus; it cannot
+guarantee that the model will comply.
 
 Simply's informed `focused-v2` prompt adds:
 

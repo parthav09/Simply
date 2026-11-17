@@ -59,7 +59,7 @@ class ControlledStudyTests(unittest.TestCase):
                 self.assertNotEqual(a['model'], b['model']); self.assertNotEqual(a['pricing'], b['pricing'])
             if kind == 'assistance':
                 self.assertEqual(a['layout'], b['layout']); self.assertEqual(a['model'], b['model'])
-                self.assertEqual({c['config']['navigation_policy'] for c in contracts}, {'gary2_v2', 'model_only'})
+                self.assertEqual({c['config']['navigation_policy'] for c in contracts}, {'guided_nav_v2', 'model_only'})
             with self.assertRaises(FileExistsError):
                 prepare(directory)
 

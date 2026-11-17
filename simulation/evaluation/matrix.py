@@ -238,7 +238,7 @@ def report(directory):
         'limitations': [plan['scope'], f"The same {plan['cohort_size']} derived shopper profiles are repeated; the {len(plan['schedule'])*plan['cohort_size']} planned trips are not independent people.",
             '95% intervals resample complete repetition blocks and are conditional on this cohort; four planned contrasts are not multiplicity-adjusted.',
             'All shoppers and stopped attempts remain in arm totals. Paired contrasts use intact completed pairs only.',
-            'Both models use gary2_v2 assistance and one model proposal per action; assistance counts must accompany model comparisons.',
+            'Both models use guided_nav_v2 assistance and one model proposal per action; assistance counts must accompany model comparisons.',
             'Known costs use frozen price snapshots; missing charges remain unknown. Simulated checkout sales are not real revenue.']}
     if 'provider' in plan:
         result['provider']=plan['provider']
@@ -342,7 +342,7 @@ def write_summary(directory, result):
             f"- Built a Python/React LLM-agent simulation and evaluation harness with live SSE, validated action records, deterministic replay, and frozen layout/model comparisons; collected {result['collection']['attempted_trips']} attempted simulated trips and retained provider-interrupted outcomes."]
     lines += ['', '## Next MLE evidence', '',
         'Use a separate held-out shopper/mission/layout split for the future base-versus-fine-tuned open-weight model comparison. Keep original proposals separate from assisted actions. This experiment adds evaluation evidence; training ownership, production adoption, and real shopper validity remain separate work.', '',
-        'Gary-2 inspired the navigation and recording workflow. Simply contributes its own browser SSE/replay bridge, validation contracts, and controlled evaluation implementation.', '']
+        'The navigation assistance, recording workflow, browser SSE/replay bridge, validation contracts, and controlled evaluation are Simply\'s own implementation.', '']
     (directory / 'case-study.md').write_text('\n'.join(lines))
 
 

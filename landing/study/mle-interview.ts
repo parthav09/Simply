@@ -698,7 +698,7 @@ const drills = [
     "area": "Interview defense",
     "title": "Your contribution and a hard tradeoff",
     "prompt": "What did you personally contribute, what came from references/tools, and what would you redesign?",
-    "answer": "I would describe only work I can substantiate, using a concrete artifact or commit for each contribution. Gary-2 inspired run/record/replay and navigation; Simply has its own Python execution/evidence boundaries, React bridge and evaluation. I would distinguish assisted coding, design decisions, debugging and validation without claiming I invented reference concepts.\n\nFor a redesign answer, I would choose a real constraint, such as separating a public replay service from authorized paid execution, and explain migration and verification. I would prepare a specific incident and measured result from my own experience rather than inventing a behavioral story.",
+    "answer": "I would describe only work I can substantiate, using a concrete artifact or commit for each contribution. Simply has its own Python execution/evidence boundaries, React bridge and evaluation. I would distinguish assisted coding, design decisions, debugging and validation without claiming more than I can substantiate.\n\nFor a redesign answer, I would choose a real constraint, such as separating a public replay service from authorized paid execution, and explain migration and verification. I would prepare a specific incident and measured result from my own experience rather than inventing a behavioral story.",
     "rubric": [
       "Attribute reference patterns and tool assistance accurately.",
       "Tie personal claims to artifacts you can explain.",
@@ -706,7 +706,7 @@ const drills = [
       "Use an authentic incident instead of an invented story."
     ],
     "followup": "Walk me through a bug you diagnosed: evidence, hypothesis, fix and verification.",
-    "source": "simulation/docs/architecture.md · simulation/docs/gary2-live-reference.md · .github/workflows/offline-evaluation.yml",
+    "source": "simulation/docs/architecture.md · simulation/docs/live-replay-flow.md · .github/workflows/offline-evaluation.yml",
     "check": "What makes an ownership answer credible?",
     "options": [
       "Specific explainable artifacts, accurate attribution and a real decision or debugging example.",

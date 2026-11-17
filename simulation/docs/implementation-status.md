@@ -34,4 +34,4 @@ does not support a five-repetition or statistical-significance claim. See
 The open-weight provider and fine-tuning pipeline remain future work. Preserve
 a held-out cohort and compare the base checkpoint with the tuned checkpoint.
 See [resume-evidence.md](resume-evidence.md) for supported claims and
-[gary2-behavior-audit.md](gary2-behavior-audit.md) for behavior scope.
+[behavior-rules.md](behavior-rules.md) for behavior scope.

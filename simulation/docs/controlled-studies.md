@@ -6,7 +6,7 @@
 It runs five repetitions of ten fixed profiles in each of four conditions
 (200 simulated trips). Models are interleaved within repetition blocks. Each
 child remains an ordinary canonical layout study; model contrasts match the
-same layout and repetition across children. Both models use `gary2_v2`, so these
+same layout and repetition across children. Both models use `guided_nav_v2`, so these
 results measure assisted system performance. They do not isolate unassisted
 model intelligence or the benefit of assistance itself.
 
@@ -108,7 +108,7 @@ confounded by different amounts of Python routing or action batching.
 ```
 
 Use the same `run --directory ...` command to collect it. For assisted system
-performance instead, prepare both models with `--policy gary2_v2`; label that
+performance instead, prepare both models with `--policy guided_nav_v2`; label that
 result as assisted and report the number of adjusted proposals. Compare policies
 separately using `--kind assistance --models gpt-6-luna --layout costco_back_anchor`.
 An assistance comparison holds the single-action request interface fixed too.

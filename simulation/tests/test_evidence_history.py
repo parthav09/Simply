@@ -80,7 +80,7 @@ class EvidenceHistoryTests(unittest.TestCase):
         row=run_row(self.make_run().path);baseline=copy.deepcopy(row);baseline['kind']='model'
         candidate=copy.deepcopy(baseline);candidate['run_id']='another-test-run'
         self.assertTrue(compare_rows(baseline,candidate)['matched_controls'])
-        candidate['controls']['policy']='gary2_v1';candidate['controls']['cohort']='other';candidate['controls']['settings']='other'
+        candidate['controls']['policy']='guided_nav_v1';candidate['controls']['cohort']='other';candidate['controls']['settings']='other'
         result=compare_rows(baseline,candidate)
         self.assertFalse(result['matched_controls']);self.assertEqual(len(result['reasons']),3)
         candidate['status']='cancelled';self.assertIn('An incomplete or stopped recording is included',compare_rows(baseline,candidate)['reasons'])
@@ -142,7 +142,7 @@ class EvidenceHistoryTests(unittest.TestCase):
         shopper=shoppers[0];shopper.state.x,shopper.state.y=grid.checkout[0]
         shopper.state.cart=[CartItem(item.product_id,item.name,item.quantity) for item in shopper.state.requirements]
         session=SimulationSession(shopper_count=1,max_rounds=3,grid=grid,shoppers=shoppers,
-            decide=UnknownCostProvider(),navigation_policy='gary2_v1',output_path=self.root/'unknown.jsonl')
+            decide=UnknownCostProvider(),navigation_policy='guided_nav_v1',output_path=self.root/'unknown.jsonl')
         session.run();row=run_row(session.path)
         self.assertEqual(row['finished_count'],1)
         self.assertFalse(row['cost_complete'])

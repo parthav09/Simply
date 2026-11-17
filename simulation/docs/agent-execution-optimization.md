@@ -1,10 +1,5 @@
 # Shopper execution review — October 27, 2026
 
-Reviewed Gary-2 main at `93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3`,
-confirmed through its GitHub branch reference, and inspected its current
-[agent](https://github.com/ved-2004/Gary-2/blob/93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3/simulation/agents/llm.py)
-and [runner](https://github.com/ved-2004/Gary-2/blob/93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3/simulation/core/runner.py).
-
 ## Findings and changes
 
 Simply previously requested a model decision for every one-cell movement and
@@ -14,13 +9,12 @@ assortments visible ahead: product details appeared only next to a shelf.
 This combination made navigation expensive and gave the model little local
 evidence for approaching particular products.
 
-Gary-2 exposes shelves within six tiles, marks target products, preserves a
-public plan and recent history, and submits asynchronous requests. It still
-requests individual actions. Its apparent shopping competence also depends on
-`adjust_llm_action`, which replaces proposals with target grabs, movement and
-checkout. Simply's architecture rules explicitly forbid these replacements.
-Gary-2's speed and completion therefore cannot be attributed solely to model
-reasoning or copied as an unmodified shopper benchmark.
+A useful execution model exposes shelves within six tiles, marks target products, preserves a
+public plan and recent history, and submits asynchronous requests, one individual action at
+a time. Apparent shopping competence can also depend on programmed adjustments that replace
+model proposals with target grabs, movement and checkout. Simply's architecture rules keep
+such adjustments in versioned, recorded Python policy, so speed and completion are not
+attributed solely to model reasoning; assisted and model-only runs are reported separately.
 
 The new informed revision, `observe-plan-v3`, supplies nearby assortments within
 six cells, identifies remaining targets, and retains exact one-cell grabbing
@@ -41,7 +35,7 @@ Valid poor choices, duplicate purchases and overspending remain observable.
 Cached plans apply without a network wait, and idle peers may request at the
 same time. The default concurrency is ten in the main CLI, session and live
 service. Live ticks apply a shopper as soon as its own request is ready, the
-same independent pump Gary-2 uses. A slow peer no longer holds back another
+same independent pump pattern. A slow peer no longer holds back another
 shopper's commit or next request. `run()` still waits for a full wave and
 commits in roster order for offline compatibility checks.
 

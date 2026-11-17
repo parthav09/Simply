@@ -71,7 +71,7 @@ Full shopper runs can take a long time with this tensor-only int4 implementation
 ```
 
 Use `neighborhood_express` for Layout B. This starts a real local run; the same
-Python rules, `gary2_v2` assistance and unique single-checkout semantics apply.
+Python rules, `guided_nav_v2` assistance and unique single-checkout semantics apply.
 Local runs are marked `local_mps`, exported as real model runs, and appear in
 history. They are not silently inserted into the controlled baseline estimates.
 Fresh controlled base-versus-adapter studies remain a separate evaluation task.
@@ -80,7 +80,7 @@ Fresh controlled base-versus-adapter studies remain a separate evaluation task.
 
 The requested local pilot study is
 `simulation/runs/studies/qwen25-7b-pilot-mps-ab-20261104`. It freezes the same ten
-profiles, seed, 120-action allowance, unique targets and `gary2_v2` assistance as
+profiles, seed, 120-action allowance, unique targets and `guided_nav_v2` assistance as
 the hosted baseline, with one run on each layout and GPU concurrency 1.
 
 ```bash

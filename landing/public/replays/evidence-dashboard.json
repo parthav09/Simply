@@ -1538,7 +1538,7 @@
   "runs": [
     {
       "run_id": "995c65c0e4b04b5ebfecf7b67c7379cd",
-      "source_sha256": "c1129f504900c5689c0cf9faeb1bcf89182a261866c15563fee590fc6f822c41",
+      "source_sha256": "819365d8b37b1949a6528173148413e2b6f45caae4c19651b8e82135b547667d",
       "provider": "openai",
       "model": "gpt-6-luna",
       "layout_id": "costco_back_anchor",
@@ -1550,7 +1550,7 @@
       "continuation": null,
       "cohort_sha256": "d7e00fdff0825b6333ca7efa0f23797a6d1a5a67baae701466c08a4221964d22",
       "shopping_rules": "quantity_two_phase_v1",
-      "policy": "gary2_v1",
+      "policy": "guided_nav_v1",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 0.90625,
@@ -2381,7 +2381,7 @@
     },
     {
       "run_id": "7aae885ed4004235ac4c3a237440d72a",
-      "source_sha256": "129e8f84f771ea5e84ee1045d4ab223e101553d3ed9def04f49a4823e9c172d7",
+      "source_sha256": "822fbfd8d6fbd4da2cee877e8643020230c9183a53032b68c5791981361d2191",
       "provider": "openai",
       "model": "gpt-6-luna",
       "layout_id": "neighborhood_express",
@@ -2393,7 +2393,7 @@
       "continuation": null,
       "cohort_sha256": "d7e00fdff0825b6333ca7efa0f23797a6d1a5a67baae701466c08a4221964d22",
       "shopping_rules": "quantity_two_phase_v1",
-      "policy": "gary2_v1",
+      "policy": "guided_nav_v1",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 0.9375,
@@ -3283,7 +3283,7 @@
     },
     {
       "run_id": "fde2de5cf2824b30adc47c9174bd764d",
-      "source_sha256": "42c62d2502b2742b89b2a3dbbf8ff960f03d5d40c96fa3cb37e34e7517febf62",
+      "source_sha256": "90a90525cad3d8b6f44b8d6c45912d29988a3f8cfb9b10f6bbbf2afaa7808b13",
       "provider": "openai",
       "model": "gpt-6-luna",
       "layout_id": "neighborhood_express",
@@ -3295,7 +3295,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 0.9245283018867925,
@@ -4097,7 +4097,7 @@
     },
     {
       "run_id": "2d81adccb9d64be98e196d046aac7e82",
-      "source_sha256": "1717d45863da33579ec464c72adc898fddb5f67d46077c87e763f981a7b460af",
+      "source_sha256": "9e1ecc9d0f0abd3def4b4f4fd97ca7182cf4ae3abb34e2d95d417a1bfc7e2279",
       "provider": "openai",
       "model": "gpt-6-luna",
       "layout_id": "costco_back_anchor",
@@ -4109,7 +4109,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 0.9811320754716981,
@@ -4947,7 +4947,7 @@
     },
     {
       "run_id": "45c58a6162f4450091c3caa16e0e701c",
-      "source_sha256": "d47fe9d3ae0e97158c04b7639c6818f86d6f389369b52d72fcfc77ef10fc2473",
+      "source_sha256": "a398c886992f830d8d33dcecd248b37ee3df2dd97ab0007dfff0c198773710f6",
       "provider": "openai",
       "model": "gpt-6-luna",
       "layout_id": "neighborhood_express",
@@ -4959,7 +4959,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 0.9056603773584906,
@@ -5796,7 +5796,7 @@
     },
     {
       "run_id": "1e5be585cfcd4d09bb198967c3281d79",
-      "source_sha256": "392d0c58798b6ff76e0d74eb455e461f7fcb7b6f0d46ea7d73277b0e68d6535b",
+      "source_sha256": "16aef9e962d0ca5dbafd76470fe7140c011ac0cff437adc2a54be8d00450672e",
       "provider": "openai",
       "model": "gpt-6.1-terra",
       "layout_id": "neighborhood_express",
@@ -5808,7 +5808,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 1.0,
@@ -6435,7 +6435,7 @@
     },
     {
       "run_id": "1512b82600664e66ae4db51c29841a6a",
-      "source_sha256": "8aae71d28d10806000bc054a8b5e96304f0922cde445c66648e9b4294389d824",
+      "source_sha256": "e4c45c638dcfdca546711967de58c9c5db2334b4bb4a09b513fdf6f3638c0c8d",
       "provider": "openai",
       "model": "gpt-6.1-terra",
       "layout_id": "costco_back_anchor",
@@ -6447,7 +6447,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 1.0,
@@ -7168,7 +7168,7 @@
     },
     {
       "run_id": "e3109929c9ce49ecbf80f170a51b4f6a",
-      "source_sha256": "8f6b24d4a8a4ad2b28866f8e09c6d9e73810f72f62d7f3a66e85c24f6c4b2f23",
+      "source_sha256": "dfaccb346ef458f6c1f6d78cc7ce008c242b6c1f6863a56339658f5808095491",
       "provider": "openai",
       "model": "gpt-6-luna",
       "layout_id": "costco_back_anchor",
@@ -7180,7 +7180,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 0.9622641509433962,
@@ -7999,7 +7999,7 @@
     },
     {
       "run_id": "43604b0a77ca4643b6bd07be96b5a89b",
-      "source_sha256": "19a215c096b150d6ca4a38ceaf10a7b91f33291d05e66f4388e20e3f80bf37c0",
+      "source_sha256": "7823c58be26acebffe931f18311770d1bc61484ad138dd9b27b5483830482be7",
       "provider": "openai",
       "model": "gpt-6.1-terra",
       "layout_id": "costco_back_anchor",
@@ -8011,7 +8011,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 0.9811320754716981,
@@ -8731,7 +8731,7 @@
     },
     {
       "run_id": "9488c19617e1432d85be3e1ec2ba4e2c",
-      "source_sha256": "b06703a48a1d97b6835ceb28065fa03b41eb5808e23b37049356bbd7bd3ae102",
+      "source_sha256": "d06d507276c3282e74b0dc34896458f5f533fe1a84243d8ce80ecfd27700bb5f",
       "provider": "openai",
       "model": "gpt-6-luna",
       "layout_id": "costco_back_anchor",
@@ -8743,7 +8743,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 0.9622641509433962,
@@ -9612,7 +9612,7 @@
     },
     {
       "run_id": "6be24fc157fc4ff699114695bb002184",
-      "source_sha256": "535cf4ec4bbd124e67084f3043f623ac64f0e992987c1db1f49f27c6b3ddf46c",
+      "source_sha256": "7b6e9335d78bfc5d6063d6f14b992759b040f52652375d49889e73d8c133896a",
       "provider": "openai",
       "model": "gpt-6.1-terra",
       "layout_id": "neighborhood_express",
@@ -9624,7 +9624,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 1.0,
         "purchased_unit_fulfillment": 1.0,
@@ -10248,7 +10248,7 @@
     },
     {
       "run_id": "2e4b328864cf47ab9edb49b9b44f8956",
-      "source_sha256": "8dbc09a1996adb511481ff2b433eab505be6fdd6074b1d73b1bc9c687f8e426f",
+      "source_sha256": "a595ab421333e4cffb94ed382014f3f69a4741f5914e4f1e75c37d61b44bbde7",
       "provider": "openai",
       "model": "gpt-6-luna",
       "layout_id": "neighborhood_express",
@@ -10260,7 +10260,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 0.0,
         "purchased_unit_fulfillment": 0.0,
@@ -10580,7 +10580,7 @@
     },
     {
       "run_id": "96caa4c88a3044e6bd2c21065fe05642",
-      "source_sha256": "87b1165b3a16a920e63a66718cfb0b0b96cddbcfbcb5c86e28e66f87437c192d",
+      "source_sha256": "b43b8440f9aaed9213fb37fb2ff80954394aeb82355197ca4f1fe84442e3b780",
       "provider": "openrouter",
       "model": "gpt-6-luna",
       "layout_id": "neighborhood_express",
@@ -10592,7 +10592,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 0.0,
         "purchased_unit_fulfillment": 0.0,
@@ -10848,7 +10848,7 @@
     },
     {
       "run_id": "10fd15cb8f634223b56652b0ea284251",
-      "source_sha256": "170a1285219ebafe285036a49a005feb70de8943e01b678220eb89c16676289f",
+      "source_sha256": "a4e741f4b76646dcde9f65ddceb57c5873a66540d7aefc907b5c37a1865f3a41",
       "provider": "openrouter",
       "model": "qwen2.5-7b-instruct",
       "layout_id": "neighborhood_express",
@@ -10860,7 +10860,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 0.9,
         "purchased_unit_fulfillment": 0.32075471698113206,
@@ -12034,7 +12034,7 @@
     },
     {
       "run_id": "c5c26fb5137a40bc9d8ebfdd12dfcaa9",
-      "source_sha256": "6302ea3a842f787c1bbe4cb9920fc450a2b1a2bf6a1e5db3baa4e01135486964",
+      "source_sha256": "a78180e8c12220cba818211e7bdd377f724b3f5f8b960618652044f94f3a6f12",
       "provider": "openrouter",
       "model": "qwen2.5-7b-instruct",
       "layout_id": "costco_back_anchor",
@@ -12046,7 +12046,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 0.6,
         "purchased_unit_fulfillment": 0.2830188679245283,
@@ -13284,7 +13284,7 @@
     },
     {
       "run_id": "28e77581b0d9433da4baf719b6d33e62",
-      "source_sha256": "eedee5fb11908a7480fd1f3b767cd4e7d5dd1288d12f8b1d89a181c58a0e9fee",
+      "source_sha256": "3c71d5ff6fd45c991c29dd93894897452766251e683d8e40e57a0eec1ba8ea6a",
       "provider": "local_mps",
       "model": "qwen2.5-7b-pilot-mlx",
       "layout_id": "neighborhood_express",
@@ -13298,7 +13298,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 0.0,
         "purchased_unit_fulfillment": 0.0,
@@ -13885,7 +13885,7 @@
     },
     {
       "run_id": "2e5afc29dc9540ababeecd0ed7e0f48d",
-      "source_sha256": "7a7016920971054e68d678624a6f6860cf7491388d61dd7e45e10850eb9bef3f",
+      "source_sha256": "e132f5b46fc08025bc21cf9603570fc87b9fadde8c61490dcdd5989797a49949",
       "provider": "local_mps",
       "model": "qwen2.5-7b-pilot-mlx",
       "layout_id": "costco_back_anchor",
@@ -13897,7 +13897,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 0.8,
         "purchased_unit_fulfillment": 0.33962264150943394,
@@ -15201,7 +15201,7 @@
     },
     {
       "run_id": "c8e6de0c076e449f97824472dfe59688",
-      "source_sha256": "d48ccd452dab968237bc39e6fe1899189b0b1ce6c77e0ec1d51090a42d35c1cb",
+      "source_sha256": "b0f68e5ced7304c62d06398b3664fbfca322a38a298c5663c66bc2e9d4b5c5a4",
       "provider": "local_mps",
       "model": "qwen2.5-7b-pilot-mlx",
       "layout_id": "neighborhood_express",
@@ -15212,12 +15212,12 @@
       "repetition": null,
       "continuation": {
         "source_run_id": "28e77581b0d9433da4baf719b6d33e62",
-        "source_sha256": "eedee5fb11908a7480fd1f3b767cd4e7d5dd1288d12f8b1d89a181c58a0e9fee",
+        "source_sha256": "3c71d5ff6fd45c991c29dd93894897452766251e683d8e40e57a0eec1ba8ea6a",
         "source_event_count": 354
       },
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 0.0,
         "purchased_unit_fulfillment": 0.0,
@@ -16030,7 +16030,7 @@
     },
     {
       "run_id": "311d63f0df3a4d2d9d94c05b3619b388",
-      "source_sha256": "d1a624a076a6627b5889cebc33fed1ede671257bdd6dd5e4418cb0780b4bdde9",
+      "source_sha256": "7d3dbf69d47e1c30f407afd1ff777a4869845b3824f03bb6caf59d1ecd5f3b16",
       "provider": "openrouter",
       "model": "gpt-6-luna",
       "layout_id": "costco_back_anchor",
@@ -16042,7 +16042,7 @@
       "continuation": null,
       "cohort_sha256": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
       "shopping_rules": "unique_single_checkout_v1",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "run_metrics": {
         "checkout_completion": 0.0,
         "purchased_unit_fulfillment": 0.0,

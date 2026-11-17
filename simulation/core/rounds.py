@@ -110,7 +110,7 @@ class RoundCoordinator:
         return self.tick(grid, shoppers, apply_decisions, event_callback, wait_all=True)
 
     def tick(self, grid, shoppers, apply_decisions=True, event_callback=None, wait_all=False):
-        """Gary-2 style pump: apply ready work, submit idle shoppers, do not block on peers."""
+        """Independent pump: apply ready work, submit idle shoppers, do not block on peers."""
         if self._closed:
             return ()
         started = perf_counter()

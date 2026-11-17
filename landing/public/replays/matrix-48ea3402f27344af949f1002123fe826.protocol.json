@@ -5,12 +5,12 @@
     {
       "directory": "model-0",
       "model": "gpt-6-luna",
-      "sha256": "5702f49f13f93c75d09eb6da41b8f3602c7888c01328ebd43c0277d66761e0ab"
+      "sha256": "2699d1199190e7979a83eeaa483f60e2c54bac78d2b0f2b6a011e307748f1935"
     },
     {
       "directory": "model-1",
       "model": "gpt-6.1-terra",
-      "sha256": "946793c6fdc3187b2a64c0a385a1e15035a48e15b4aaa2720fe634f8a9b8fe9b"
+      "sha256": "7def3378f2364c3ef08547bcc8e8c848a6264a8fd352dc12a16108c5467452a4"
     }
   ],
   "schedule": [
@@ -124,5 +124,5 @@
   ],
   "scope": "Development benchmark: assisted system performance, not unassisted model intelligence or real retail impact.",
   "comparisons": "Layout B minus A within each model; Terra minus Luna within each layout. All four comparisons declared before execution.",
-  "sha256": "190f8e0250c4076f27cec0086088d532e459c649a49afe6afd628bf549eaafdd"
+  "sha256": "ffcd7b4c7d54af39fac068df6e8b4107ae27e2848fa4c8e4aa3a5ca7af54dbc3"
 }

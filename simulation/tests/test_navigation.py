@@ -11,7 +11,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from agents.base import Decision, ProposalResult
 from core.export_replay import build_bundle
-from core.navigation import GARY2, GARY2_CURRENT, MODEL_ONLY, adjusted_action
+from core.navigation import GUIDED_V1, GUIDED_CURRENT, MODEL_ONLY, adjusted_action
 from core.run_log import RunLogError, read_run
 from core.session import SimulationSession
 from core.grid import build_store
@@ -69,7 +69,7 @@ class NavigationTests(unittest.TestCase):
                               for item in shopper.state.requirements]
         provider = SingleActionProvider()
         session = SimulationSession(shopper_count=1, max_rounds=2, decide=provider,
-            navigation_policy=GARY2, grid=grid, shoppers=shoppers, output_path=self.root / 'checkout.jsonl')
+            navigation_policy=GUIDED_V1, grid=grid, shoppers=shoppers, output_path=self.root / 'checkout.jsonl')
         session.run()
         run = read_run(session.path)
         self.assertEqual([e['action']['step'] for e in run['events']], ['checkout', 'checkout'])
@@ -82,7 +82,7 @@ class NavigationTests(unittest.TestCase):
             move = Decision(next(step for step in allowed if step.startswith('move_')))
             return ProposalResult(None, move, continuation=(move,))
         session = SimulationSession(shopper_count=1, max_rounds=1, decide=provider,
-            navigation_policy=GARY2, output_path=self.root / 'unexpected-plan.jsonl')
+            navigation_policy=GUIDED_V1, output_path=self.root / 'unexpected-plan.jsonl')
         session.run()
         event = read_run(session.path)['events'][0]
         self.assertEqual(event['outcome'], 'invalid_decision')
@@ -127,7 +127,7 @@ class NavigationTests(unittest.TestCase):
 
     def session(self, provider=None, **kwargs):
         return SimulationSession(shopper_count=1, max_rounds=3, decide=provider or SingleActionProvider(),
-                                 navigation_policy=GARY2, output_path=self.root / 'run.jsonl', **kwargs)
+                                 navigation_policy=GUIDED_V1, output_path=self.root / 'run.jsonl', **kwargs)
 
     def test_one_request_per_action_and_adjusted_events_survive_live_export_and_tamper_checks(self):
         provider = SingleActionProvider()
@@ -138,7 +138,7 @@ class NavigationTests(unittest.TestCase):
         # Recreate the session so the frozen initial position includes this setup.
         session.finish('cancelled', 'test setup')
         session = SimulationSession(shopper_count=1, max_rounds=3, decide=provider,
-            navigation_policy=GARY2, grid=session.grid, shoppers=[shopper], output_path=self.root / 'assisted.jsonl')
+            navigation_policy=GUIDED_V1, grid=session.grid, shoppers=[shopper], output_path=self.root / 'assisted.jsonl')
         with patch('urllib.request.urlopen', side_effect=AssertionError('test must not call a model')):
             session.run()
         run = read_run(session.path)
@@ -169,7 +169,7 @@ class NavigationTests(unittest.TestCase):
         for name, provider in [('invalid', lambda *args: None),
                                ('error', lambda *args: (_ for _ in ()).throw(RuntimeError('test failure')))]:
             session = SimulationSession(shopper_count=1, max_rounds=1, decide=provider,
-                navigation_policy=GARY2, output_path=self.root / f'{name}.jsonl')
+                navigation_policy=GUIDED_V1, output_path=self.root / f'{name}.jsonl')
             session.run()
             event = read_run(session.path)['events'][0]
             self.assertIsNone(event['action'])
@@ -179,7 +179,7 @@ class NavigationTests(unittest.TestCase):
         with patch('agents.providers.build_provider', return_value=SingleActionProvider()):
             session = SimulationSession(shopper_count=1, output_path=self.root / 'default.jsonl',
                                         ledger_path=self.root / 'ledger.sqlite3')
-        self.assertEqual(session.header['config']['navigation_policy'], GARY2_CURRENT)
+        self.assertEqual(session.header['config']['navigation_policy'], GUIDED_CURRENT)
         self.assertFalse(session.coordinator.uses_plans(session.shoppers[0]))
         session.finish('cancelled', 'test complete')
         session = SimulationSession(shopper_count=1, decide=SingleActionProvider(), output_path=self.root / 'injected.jsonl')

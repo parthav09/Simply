@@ -1,7 +1,7 @@
 {
   "matrix_report_version": 2,
   "study_id": "48ea3402f27344af949f1002123fe826",
-  "protocol_sha256": "190f8e0250c4076f27cec0086088d532e459c649a49afe6afd628bf549eaafdd",
+  "protocol_sha256": "ffcd7b4c7d54af39fac068df6e8b4107ae27e2848fa4c8e4aa3a5ca7af54dbc3",
   "repetitions": 5,
   "cohort_size": 10,
   "collection": {
@@ -22,7 +22,7 @@
     {
       "model": "gpt-6-luna",
       "layout_id": "costco_back_anchor",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "recorded_runs": 2,
       "metrics": {
         "checkout_completion": 1.0,
@@ -54,7 +54,7 @@
     {
       "model": "gpt-6-luna",
       "layout_id": "neighborhood_express",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "recorded_runs": 2,
       "metrics": {
         "checkout_completion": 0.5,
@@ -86,7 +86,7 @@
     {
       "model": "gpt-6.1-terra",
       "layout_id": "costco_back_anchor",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "recorded_runs": 2,
       "metrics": {
         "checkout_completion": 1.0,
@@ -118,7 +118,7 @@
     {
       "model": "gpt-6.1-terra",
       "layout_id": "neighborhood_express",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "recorded_runs": 2,
       "metrics": {
         "checkout_completion": 1.0,
@@ -2334,7 +2334,7 @@
       "shopper_count": 10,
       "status": "completed",
       "warnings": [],
-      "navigation_policy": "gary2_v2",
+      "navigation_policy": "guided_nav_v2",
       "shopping_rules": "unique_single_checkout_v1",
       "action_limit": 120,
       "finished_count": 10,
@@ -2361,7 +2361,7 @@
         "unknown_usage_requests": 0
       },
       "cost_complete": true,
-      "source_sha256": "d47fe9d3ae0e97158c04b7639c6818f86d6f389369b52d72fcfc77ef10fc2473",
+      "source_sha256": "a398c886992f830d8d33dcecd248b37ee3df2dd97ab0007dfff0c198773710f6",
       "source_file": "repeat-01-arm-1.jsonl",
       "controls": {
         "provider": "openai",
@@ -2370,8 +2370,8 @@
         "cohort": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
         "catalogue": "450ff158e0540f9af9e9d821cc6d1b4891abfd1134ad6312385eed58def9e84a",
         "starting_cells": "79e60adbc3cb3e953b0260972eefa2a0f7a7ccb9d9fb8ba27fb502b5ed7efebe",
-        "policy": "gary2_v2",
-        "settings": "6fb66440186e3186438eb42b326e1f91a8385f42b00e896b19879e216cc2588f",
+        "policy": "guided_nav_v2",
+        "settings": "551de0e2f7498d194edc7ef8d0c90607077a07cb5adcc3df5ee5e885ac19a0c0",
         "prompt": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
         "engine": "a9cafcdc1440143379ef035520a24a5fb835e681f9802b91669e1f552c44fab1",
         "provider_code": "574301e03b7ad54f5cba1bab1ea6dc08f89b13f6c2bfe91f4b401ea53030d8a2",
@@ -3768,7 +3768,7 @@
       "shopper_count": 10,
       "status": "completed",
       "warnings": [],
-      "navigation_policy": "gary2_v2",
+      "navigation_policy": "guided_nav_v2",
       "shopping_rules": "unique_single_checkout_v1",
       "action_limit": 120,
       "finished_count": 10,
@@ -3795,7 +3795,7 @@
         "unknown_usage_requests": 0
       },
       "cost_complete": true,
-      "source_sha256": "8f6b24d4a8a4ad2b28866f8e09c6d9e73810f72f62d7f3a66e85c24f6c4b2f23",
+      "source_sha256": "dfaccb346ef458f6c1f6d78cc7ce008c242b6c1f6863a56339658f5808095491",
       "source_file": "repeat-01-arm-0.jsonl",
       "controls": {
         "provider": "openai",
@@ -3804,8 +3804,8 @@
         "cohort": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
         "catalogue": "450ff158e0540f9af9e9d821cc6d1b4891abfd1134ad6312385eed58def9e84a",
         "starting_cells": "79e60adbc3cb3e953b0260972eefa2a0f7a7ccb9d9fb8ba27fb502b5ed7efebe",
-        "policy": "gary2_v2",
-        "settings": "6fb66440186e3186438eb42b326e1f91a8385f42b00e896b19879e216cc2588f",
+        "policy": "guided_nav_v2",
+        "settings": "551de0e2f7498d194edc7ef8d0c90607077a07cb5adcc3df5ee5e885ac19a0c0",
         "prompt": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
         "engine": "a9cafcdc1440143379ef035520a24a5fb835e681f9802b91669e1f552c44fab1",
         "provider_code": "574301e03b7ad54f5cba1bab1ea6dc08f89b13f6c2bfe91f4b401ea53030d8a2",
@@ -5193,7 +5193,7 @@
       "shopper_count": 10,
       "status": "completed",
       "warnings": [],
-      "navigation_policy": "gary2_v2",
+      "navigation_policy": "guided_nav_v2",
       "shopping_rules": "unique_single_checkout_v1",
       "action_limit": 120,
       "finished_count": 10,
@@ -5220,7 +5220,7 @@
         "unknown_usage_requests": 0
       },
       "cost_complete": true,
-      "source_sha256": "b06703a48a1d97b6835ceb28065fa03b41eb5808e23b37049356bbd7bd3ae102",
+      "source_sha256": "d06d507276c3282e74b0dc34896458f5f533fe1a84243d8ce80ecfd27700bb5f",
       "source_file": "repeat-02-arm-0.jsonl",
       "controls": {
         "provider": "openai",
@@ -5229,8 +5229,8 @@
         "cohort": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
         "catalogue": "450ff158e0540f9af9e9d821cc6d1b4891abfd1134ad6312385eed58def9e84a",
         "starting_cells": "79e60adbc3cb3e953b0260972eefa2a0f7a7ccb9d9fb8ba27fb502b5ed7efebe",
-        "policy": "gary2_v2",
-        "settings": "fca05d3297edb794237dfa9ff3f6470682ec535e5c6925792a4a6860efea25b1",
+        "policy": "guided_nav_v2",
+        "settings": "8f2562298009787a12af5a812b535ab29b553d25d917100df7ddb5d9aaa9e825",
         "prompt": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
         "engine": "a9cafcdc1440143379ef035520a24a5fb835e681f9802b91669e1f552c44fab1",
         "provider_code": "574301e03b7ad54f5cba1bab1ea6dc08f89b13f6c2bfe91f4b401ea53030d8a2",
@@ -6673,7 +6673,7 @@
       "shopper_count": 10,
       "status": "aborted",
       "warnings": [],
-      "navigation_policy": "gary2_v2",
+      "navigation_policy": "guided_nav_v2",
       "shopping_rules": "unique_single_checkout_v1",
       "action_limit": 120,
       "finished_count": 0,
@@ -6700,7 +6700,7 @@
         "unknown_usage_requests": 9
       },
       "cost_complete": false,
-      "source_sha256": "8dbc09a1996adb511481ff2b433eab505be6fdd6074b1d73b1bc9c687f8e426f",
+      "source_sha256": "a595ab421333e4cffb94ed382014f3f69a4741f5914e4f1e75c37d61b44bbde7",
       "source_file": "repeat-02-arm-1.jsonl",
       "controls": {
         "provider": "openai",
@@ -6709,8 +6709,8 @@
         "cohort": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
         "catalogue": "450ff158e0540f9af9e9d821cc6d1b4891abfd1134ad6312385eed58def9e84a",
         "starting_cells": "79e60adbc3cb3e953b0260972eefa2a0f7a7ccb9d9fb8ba27fb502b5ed7efebe",
-        "policy": "gary2_v2",
-        "settings": "fca05d3297edb794237dfa9ff3f6470682ec535e5c6925792a4a6860efea25b1",
+        "policy": "guided_nav_v2",
+        "settings": "8f2562298009787a12af5a812b535ab29b553d25d917100df7ddb5d9aaa9e825",
         "prompt": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
         "engine": "a9cafcdc1440143379ef035520a24a5fb835e681f9802b91669e1f552c44fab1",
         "provider_code": "574301e03b7ad54f5cba1bab1ea6dc08f89b13f6c2bfe91f4b401ea53030d8a2",
@@ -7706,7 +7706,7 @@
       "shopper_count": 10,
       "status": "completed",
       "warnings": [],
-      "navigation_policy": "gary2_v2",
+      "navigation_policy": "guided_nav_v2",
       "shopping_rules": "unique_single_checkout_v1",
       "action_limit": 120,
       "finished_count": 10,
@@ -7733,7 +7733,7 @@
         "unknown_usage_requests": 0
       },
       "cost_complete": true,
-      "source_sha256": "392d0c58798b6ff76e0d74eb455e461f7fcb7b6f0d46ea7d73277b0e68d6535b",
+      "source_sha256": "16aef9e962d0ca5dbafd76470fe7140c011ac0cff437adc2a54be8d00450672e",
       "source_file": "repeat-01-arm-1.jsonl",
       "controls": {
         "provider": "openai",
@@ -7742,8 +7742,8 @@
         "cohort": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
         "catalogue": "450ff158e0540f9af9e9d821cc6d1b4891abfd1134ad6312385eed58def9e84a",
         "starting_cells": "79e60adbc3cb3e953b0260972eefa2a0f7a7ccb9d9fb8ba27fb502b5ed7efebe",
-        "policy": "gary2_v2",
-        "settings": "6fb66440186e3186438eb42b326e1f91a8385f42b00e896b19879e216cc2588f",
+        "policy": "guided_nav_v2",
+        "settings": "551de0e2f7498d194edc7ef8d0c90607077a07cb5adcc3df5ee5e885ac19a0c0",
         "prompt": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
         "engine": "a9cafcdc1440143379ef035520a24a5fb835e681f9802b91669e1f552c44fab1",
         "provider_code": "574301e03b7ad54f5cba1bab1ea6dc08f89b13f6c2bfe91f4b401ea53030d8a2",
@@ -8871,7 +8871,7 @@
       "shopper_count": 10,
       "status": "completed",
       "warnings": [],
-      "navigation_policy": "gary2_v2",
+      "navigation_policy": "guided_nav_v2",
       "shopping_rules": "unique_single_checkout_v1",
       "action_limit": 120,
       "finished_count": 10,
@@ -8898,7 +8898,7 @@
         "unknown_usage_requests": 0
       },
       "cost_complete": true,
-      "source_sha256": "8aae71d28d10806000bc054a8b5e96304f0922cde445c66648e9b4294389d824",
+      "source_sha256": "e4c45c638dcfdca546711967de58c9c5db2334b4bb4a09b513fdf6f3638c0c8d",
       "source_file": "repeat-01-arm-0.jsonl",
       "controls": {
         "provider": "openai",
@@ -8907,8 +8907,8 @@
         "cohort": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
         "catalogue": "450ff158e0540f9af9e9d821cc6d1b4891abfd1134ad6312385eed58def9e84a",
         "starting_cells": "79e60adbc3cb3e953b0260972eefa2a0f7a7ccb9d9fb8ba27fb502b5ed7efebe",
-        "policy": "gary2_v2",
-        "settings": "6fb66440186e3186438eb42b326e1f91a8385f42b00e896b19879e216cc2588f",
+        "policy": "guided_nav_v2",
+        "settings": "551de0e2f7498d194edc7ef8d0c90607077a07cb5adcc3df5ee5e885ac19a0c0",
         "prompt": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
         "engine": "a9cafcdc1440143379ef035520a24a5fb835e681f9802b91669e1f552c44fab1",
         "provider_code": "574301e03b7ad54f5cba1bab1ea6dc08f89b13f6c2bfe91f4b401ea53030d8a2",
@@ -10150,7 +10150,7 @@
       "shopper_count": 10,
       "status": "completed",
       "warnings": [],
-      "navigation_policy": "gary2_v2",
+      "navigation_policy": "guided_nav_v2",
       "shopping_rules": "unique_single_checkout_v1",
       "action_limit": 120,
       "finished_count": 10,
@@ -10177,7 +10177,7 @@
         "unknown_usage_requests": 0
       },
       "cost_complete": true,
-      "source_sha256": "19a215c096b150d6ca4a38ceaf10a7b91f33291d05e66f4388e20e3f80bf37c0",
+      "source_sha256": "7823c58be26acebffe931f18311770d1bc61484ad138dd9b27b5483830482be7",
       "source_file": "repeat-02-arm-0.jsonl",
       "controls": {
         "provider": "openai",
@@ -10186,8 +10186,8 @@
         "cohort": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
         "catalogue": "450ff158e0540f9af9e9d821cc6d1b4891abfd1134ad6312385eed58def9e84a",
         "starting_cells": "79e60adbc3cb3e953b0260972eefa2a0f7a7ccb9d9fb8ba27fb502b5ed7efebe",
-        "policy": "gary2_v2",
-        "settings": "fca05d3297edb794237dfa9ff3f6470682ec535e5c6925792a4a6860efea25b1",
+        "policy": "guided_nav_v2",
+        "settings": "8f2562298009787a12af5a812b535ab29b553d25d917100df7ddb5d9aaa9e825",
         "prompt": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
         "engine": "a9cafcdc1440143379ef035520a24a5fb835e681f9802b91669e1f552c44fab1",
         "provider_code": "574301e03b7ad54f5cba1bab1ea6dc08f89b13f6c2bfe91f4b401ea53030d8a2",
@@ -11431,7 +11431,7 @@
       "shopper_count": 10,
       "status": "completed",
       "warnings": [],
-      "navigation_policy": "gary2_v2",
+      "navigation_policy": "guided_nav_v2",
       "shopping_rules": "unique_single_checkout_v1",
       "action_limit": 120,
       "finished_count": 10,
@@ -11458,7 +11458,7 @@
         "unknown_usage_requests": 0
       },
       "cost_complete": true,
-      "source_sha256": "535cf4ec4bbd124e67084f3043f623ac64f0e992987c1db1f49f27c6b3ddf46c",
+      "source_sha256": "7b6e9335d78bfc5d6063d6f14b992759b040f52652375d49889e73d8c133896a",
       "source_file": "repeat-02-arm-1.jsonl",
       "controls": {
         "provider": "openai",
@@ -11467,8 +11467,8 @@
         "cohort": "3290e1947b3895c30186a46cbb6de7db8fdfd1500f6becb03576427530a8ca35",
         "catalogue": "450ff158e0540f9af9e9d821cc6d1b4891abfd1134ad6312385eed58def9e84a",
         "starting_cells": "79e60adbc3cb3e953b0260972eefa2a0f7a7ccb9d9fb8ba27fb502b5ed7efebe",
-        "policy": "gary2_v2",
-        "settings": "fca05d3297edb794237dfa9ff3f6470682ec535e5c6925792a4a6860efea25b1",
+        "policy": "guided_nav_v2",
+        "settings": "8f2562298009787a12af5a812b535ab29b553d25d917100df7ddb5d9aaa9e825",
         "prompt": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
         "engine": "a9cafcdc1440143379ef035520a24a5fb835e681f9802b91669e1f552c44fab1",
         "provider_code": "574301e03b7ad54f5cba1bab1ea6dc08f89b13f6c2bfe91f4b401ea53030d8a2",
@@ -12572,7 +12572,7 @@
     "The same 10 derived shopper profiles are repeated; the 200 planned trips are not independent people.",
     "95% intervals resample complete repetition blocks and are conditional on this cohort; four planned contrasts are not multiplicity-adjusted.",
     "All shoppers and stopped attempts remain in arm totals. Paired contrasts use intact completed pairs only.",
-    "Both models use gary2_v2 assistance and one model proposal per action; assistance counts must accompany model comparisons.",
+    "Both models use guided_nav_v2 assistance and one model proposal per action; assistance counts must accompany model comparisons.",
     "Known costs use frozen price snapshots; missing charges remain unknown. Simulated checkout sales are not real revenue."
   ],
   "source_urls": {

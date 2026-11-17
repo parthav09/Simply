@@ -20,7 +20,7 @@ business state. No recording means an honest empty state, never a scripted fallb
 - `simulation/ui/`: deprecated compatibility helpers only. Do not add a desktop UI.
 
 ## Product workflow
-Use Gary-2's run → record → React replay pattern, with Simply's own design and
+Use a run → record → React replay pattern, with Simply's own design and
 validation. Run the model simulation from a Python command, save canonical
 records, explicitly export selected recordings, and display them in the web app.
 The product is a React web app, not a Pygame/Tkinter desktop application.
@@ -28,11 +28,10 @@ The local Python service may stream flushed canonical records into the lab.
 React may request a Python session or lifecycle control through the local API;
 it must not apply shopper actions or invent outcomes. Live and replay views use
 the same Python state and metrics. Reconnecting never starts a new model run.
-Gary-2's live view is Python/Raylib and its website is recorded replay; Simply's
-SSE bridge adapts that Python-owned live flow to React, rather than copying an
-existing Gary-2 browser streaming protocol.
-New live/model sessions use the versioned Python-owned Gary-2 navigation assist
-(`gary2_v2`; preserve `gary2_v1` for historical validation):
+Simply's SSE bridge adapts the Python-owned live flow to React; React never
+owns simulation state.
+New live/model sessions use the versioned Python-owned navigation assist
+(`guided_nav_v2`; `guided_nav_v1` stays valid for older recordings):
 avoid repeated routes, collect reachable list items and steer toward checkout.
 Use one model proposal per action; do not burst through multi-action plans in
 live runs. Record original proposals and every applied adjustment. No browser
@@ -132,7 +131,7 @@ from the controlled OpenRouter baseline and the historical OpenAI studies.
 ## November 4 MPS pilot layout study
 The user subsequently authorized exactly one recorded simulation per active
 layout using the served fine-tuned MPS pilot: ten fixed profiles, one repetition,
-120 actions per shopper, `gary2_v2` assistance and `unique_single_checkout_v1`.
+120 actions per shopper, `guided_nav_v2` assistance and `unique_single_checkout_v1`.
 Use `evaluation.study` with `local_mps`, freeze the serving identity, and record
 every attempt. Publish finished recordings into Evidence automatically; never
 export a changing live snapshot under a final run ID. Retain stopped attempts
@@ -141,7 +140,7 @@ This local study makes no paid API calls. Compare it descriptively with existing
 results, explicitly preserving hardware and quantization differences.
 
 ## November 16 local Qwen attempts and impulse-focused UI
-Prompts and assistance stay at their benchmarked values (`informed`, `gary2_v2`).
+Prompts and assistance stay at their benchmarked values (`informed`, `guided_nav_v2`).
 An impulse-aware prompt/assist rework was tried and fully reverted at the user's
 request; do not reintroduce it without asking. Two replacement local studies were
 started and stopped at the user's request, retaining their partial records:
@@ -153,3 +152,14 @@ fine-tuned Qwen MLX Layout B result still needs a new replacement study.
 The product UI centres on impulse buys (Python `off_list_units`). React may filter
 recorded grabs whose product is absent from the shopper's list for display, but
 totals and evidence measures come from Python (`evaluation/dashboard.py`).
+
+## November 16 navigation policy renaming
+At the user's request every reference to the earlier reference-project naming was
+removed. The assist policy ids are `guided_nav_v1` and `guided_nav_v2`
+(constants `GUIDED_V1`, `GUIDED_CURRENT` in `core/navigation.py`); behavior is
+unchanged. Saved recordings, protocols, reports and published evidence were
+rewritten to the new ids, and their content hashes, protocol fingerprints and
+the evidence index were regenerated. This supersedes the earlier "never relabel
+historical recordings" rule for this identifier rename only: counts, layouts,
+models, prompts, decisions and outcomes are untouched. Do not reintroduce the
+old names.

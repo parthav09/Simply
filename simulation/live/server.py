@@ -20,7 +20,7 @@ from agents.openrouter_provider import OpenRouterProvider,MODEL_PRICING as ROUTE
 from agents.mps_runtime import MODEL as MPS_MODEL,PRICING as MPS_PRICING,SETTINGS as MPS_SETTINGS
 from agents.mlx_runtime import MODEL as MLX_MODEL,PRICING as MLX_PRICING,SETTINGS as MLX_SETTINGS
 from core.integrity import fingerprint
-from core.navigation import GARY2_CURRENT, MODEL_ONLY
+from core.navigation import GUIDED_CURRENT, MODEL_ONLY
 from core.shopping import SIMPLE_SHOPPING
 from core.evidence import EvidenceStore,history_payload
 
@@ -98,7 +98,7 @@ class RunManager:
             from agents.providers import FakeDecisionProvider
             session=SimulationSession(layout,count,rounds,120,1 if provider=='local_mps' else DEFAULT_CONCURRENCY,grid=grid,shoppers=shoppers,
                 provider_name=provider,model_name=model,decide=FakeDecisionProvider() if provider=='fake' else None,
-                navigation_policy=GARY2_CURRENT if provider!='fake' else MODEL_ONLY,
+                navigation_policy=GUIDED_CURRENT if provider!='fake' else MODEL_ONLY,
                 shopping_rules=SIMPLE_SHOPPING,
                 requests_per_minute=18 if provider=='openrouter' else 0,
                 output_path=self.root/f'live_{time.time_ns()}.jsonl',ledger_path=self.root/'gemini_campaign.sqlite3',
@@ -113,7 +113,7 @@ class RunManager:
         header=build_run_start(grid,shoppers,run_id='preview',provider='not-started',model=model,
             max_rounds=120,concurrency=DEFAULT_CONCURRENCY,propose_only=False,prompt_variant='informed',
             generation_settings=MLX_SETTINGS if model==MLX_MODEL else MPS_SETTINGS if model==MPS_MODEL else OpenRouterProvider.generation_settings,
-            pricing=MLX_PRICING if model==MLX_MODEL else MPS_PRICING if model==MPS_MODEL else ROUTER_PRICING[model],navigation_policy=GARY2_CURRENT,
+            pricing=MLX_PRICING if model==MLX_MODEL else MPS_PRICING if model==MPS_MODEL else ROUTER_PRICING[model],navigation_policy=GUIDED_CURRENT,
             shopping_rules=SIMPLE_SHOPPING)
         projection=LiveProjection();projection.append((json.dumps(header)+'\n').encode())
         return projection.snapshot()

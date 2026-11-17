@@ -14,6 +14,6 @@ positions, cart quantities, outcomes and metrics come from exported Python runs.
 Missing recordings produce an empty state. Test fixtures remain visibly labeled.
 
 See `../README.md` for the full commands and `architecture.md` for the permanent
-folder/authority rules, Gary-2 reference, record integrity and acceptance checks.
+folder/authority rules, record integrity and acceptance checks.
 Historical week-3 documents describe the earlier offline milestone; they are not
 the current runtime architecture or evidence of a completed live-model study.

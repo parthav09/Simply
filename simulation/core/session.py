@@ -19,7 +19,7 @@ from core.grid import LAYOUTS, build_store
 from core.config import DEFAULT_CONCURRENCY, DEFAULT_SHOPPER_COUNT, MAX_SHOPPER_COUNT
 from core.rounds import RoundCoordinator, state_snapshot
 from core.run_log import SCHEMA_VERSION, RunWriter
-from core.navigation import MODEL_ONLY, GARY2_CURRENT, POLICIES
+from core.navigation import MODEL_ONLY, GUIDED_CURRENT, POLICIES
 
 
 from core.integrity import fingerprint
@@ -91,7 +91,7 @@ class SimulationSession:
         if layout_name not in LAYOUTS or prompt_variant not in ('baseline','informed'):
             raise ValueError('Unknown layout or prompt variant')
         if navigation_policy is None:
-            navigation_policy = GARY2_CURRENT if decide is None and not propose_only else MODEL_ONLY
+            navigation_policy = GUIDED_CURRENT if decide is None and not propose_only else MODEL_ONLY
         if navigation_policy not in POLICIES:
             raise ValueError('Unknown navigation policy')
         if shopping_rules is None:

@@ -29,8 +29,8 @@ provider or independent action executor. The local service calls the core sessio
 interface; the Next.js proxy only transports requests and events.
 
 Providers return `ProposalResult(raw_response, decision, telemetry, continuation)`.
-New live/model sessions freeze `navigation_policy=gary2_v1` and request one
-model action per response. `core/navigation.py` selects Gary-2 style adjustments
+New live/model sessions freeze `navigation_policy=guided_nav_v2` and request one
+model action per response. `core/navigation.py` selects adjustments
 using frozen state: less-visited moves, reachable list pickups, duplicate
 avoidance and checkout steering. List quantities remain respected; no shopper
 budget is enforced. `core/actions.py` is still the only mutation boundary.
@@ -63,52 +63,25 @@ The golden fixture compares all 25 TypeScript frames with independent Python
 view snapshots, including backwards seeking and final outcomes. Dependency checks
 prevent a UI import into core or restoration of a browser shopper policy.
 
-## Gary-2 reference and deliberate distinction
+## Run → record → replay structure
 
-Gary-2 uses a React/Next.js website for playback and a separate Python/Raylib
-local simulation tool (`pyray` in its entry point). It records Python trajectories,
-including raw model decisions and adjusted
-applied actions, then its React site imports trajectories and matching result
-files through a replay catalogue. Its website plays stored snapshots rather than
-inventing a fresh trip. Simply follows that run → record → React replay structure;
-its own Python launcher runs from a command without a desktop window.
+Simply runs a Python simulation from a command, records canonical trajectories
+(raw model proposals and adjusted applied actions), and replays them in a
+React/Next.js website. The website plays stored snapshots rather than inventing
+a fresh trip. Its Python launcher runs without a desktop window.
 
-References:
-- https://github.com/ved-2004/Gary-2/blob/main/simulation/replay/io.py
-- https://github.com/ved-2004/Gary-2/blob/main/landing/lib/replay-catalog.ts
-- https://github.com/ved-2004/Gary-2/blob/main/landing/lib/replay.ts
+Versioned Python assistance policies may override model actions to purchase list
+items or pursue checkout; model-only experiments remain separate. The current
+default provider is GPT-6 Luna; earlier Gemini evidence is retained separately and
+is never relabeled as OpenAI output.
 
-Gary-2 can override model actions to purchase list items or pursue checkout.
-Simply now adapts those overrides in its versioned Python assistance policy;
-model-only experiments remain separate. Current default provider is GPT-6 Luna; earlier Gemini evidence
-is retained separately and is never relabeled as OpenAI output.
-
-## When the UI runs: code-level Gary-2 comparison
-
-Gary-2 has two separate display paths:
-
-1. **Live local display.** `simulation/main.py` opens a Raylib window with
-   `pyray`, then repeatedly resolves completed model requests, submits new
-   requests, applies actions, and draws the current Python engine state. The
-   local window and simulation run together. Its asynchronous model worker lets
-   the drawing loop continue while a request is pending.
-2. **Website replay.** The Python run saves results and a trajectory. The
-   website's `landing/lib/replay-catalog.ts` imports saved trajectory JSON and
-   matching result JSON. `SimulationReplay.tsx` advances a `currentStep` cursor
-   over those saved snapshots. The browser's play button controls replay; it
-   does not launch Python or make a new model decision.
+## When the UI runs
 
 The UI code already exists before a simulation starts. The run produces the data
 that the UI displays; it does not generate the UI's code or layout afterward.
-States are captured as actions happen, and the website animates them later.
-
-Gary-2 is model-driven with programmed decision overrides. Its
-`AsyncOpenAIActionRunner` requests structured actions from OpenAI;
-`LLMAgent.apply_llm_action` calls `adjust_llm_action` before applying them. The
-adjuster can auto-grab targets, replace moves, and choose checkout. The runner
-also has checkout branches that can execute before another model request.
-Its exporter saves both the raw proposal and the adjusted action. It is therefore
-a hybrid model-and-rules policy, rather than an unmodified model-only policy.
+States are captured as actions happen, and the website displays them later. The
+policy is a hybrid of model proposals and recorded rules-based assistance, or
+model-only when selected.
 
 Simply implements recorded replay and the subsequently requested live React path:
 
@@ -136,18 +109,10 @@ Its reconnect snapshot and contiguous transitions share the export's display
 state and metrics. The replay tab retains event seeking and playback independently.
 The coordinator applies each ready shopper independently and immediately
 submits that shopper's next request; it does not wait for slower peers.
-See `gary2-live-reference.md` for the inspected Gary-2
-commit and the distinction between its desktop renderer and Simply's SSE bridge.
+See `live-replay-flow.md` for the live SSE bridge.
 The configured model proposes actions; Python applies the frozen navigation
 policy and enforces physical and accounting rules. Explicit fake fixtures are reserved for tests,
 and a missing API key never switches a model run to a scripted provider.
-
-Additional source references:
-- https://github.com/ved-2004/Gary-2/blob/main/simulation/main.py#L516-L559
-- https://github.com/ved-2004/Gary-2/blob/main/simulation/main.py#L734-L750
-- https://github.com/ved-2004/Gary-2/blob/main/simulation/core/runner.py
-- https://github.com/ved-2004/Gary-2/blob/main/simulation/agents/llm.py#L154-L204
-- https://github.com/ved-2004/Gary-2/blob/main/landing/components/SimulationReplay.tsx#L596-L686
 
 ## Evidence boundaries
 

@@ -1,31 +1,7 @@
-# Gary-2 execution and Simply's live React lab
+# Live execution and Simply's React lab
 
-Inspected Gary-2 `main` at commit
-`93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3` on October 27, 2026.
-
-Gary-2's live simulation is a Python desktop app using Raylib (`pyray`), not a
-live React stream. Its asynchronous OpenAI runner submits decision requests on
-an asyncio event loop. The main rendering loop repeatedly resolves completed
-requests, applies decisions to the Python engine, submits subsequent requests
-and draws the engine's current shopper states. It saves results and trajectories
-after a simulation finishes.
-
-The React website imports saved trajectory/result JSON in its replay catalogue.
-`SimulationReplay.tsx` advances a playback cursor with `setInterval` and displays
-the saved shopper snapshots. The repository's complete tree has website API
-routes for its waitlist; it has no Python-to-React simulation streaming endpoint.
-
-Primary code references:
-
-- [Async OpenAI requests](https://github.com/ved-2004/Gary-2/blob/93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3/simulation/agents/llm.py#L600)
-- [Resolve completed decisions and submit subsequent requests](https://github.com/ved-2004/Gary-2/blob/93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3/simulation/core/runner.py)
-- [Live rendering loop and trajectory saving](https://github.com/ved-2004/Gary-2/blob/93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3/simulation/main.py#L516)
-- [Trajectory format](https://github.com/ved-2004/Gary-2/blob/93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3/simulation/replay/io.py)
-- [Static website catalogue](https://github.com/ved-2004/Gary-2/blob/93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3/landing/lib/replay-catalog.ts)
-- [Browser playback cursor](https://github.com/ved-2004/Gary-2/blob/93a4d0dac630461cbbb1d3e6e07b156f0b1bb7a3/landing/components/SimulationReplay.tsx#L594)
-
-Simply keeps the requested React interface and adopts the Python-owned live
-action flow. Provider work runs outside rendering. The coordinator commits each ready proposal without waiting for slower peers
+Simply runs the simulation in a Python process and displays it in React. Provider
+work runs outside rendering. The coordinator commits each ready proposal without waiting for slower peers
 and flushes each action to JSONL before publication. Each shopper can request
 its next action independently.
 
@@ -43,9 +19,8 @@ the live cursor following Python's latest committed event. Inspection and
 reconnection never call the model. Missing Python service produces an explicit
 offline state. Closing a browser does not cancel its Python session.
 
-The SSE browser transport is Simply's addition; Gary-2 does not provide this
-browser streaming protocol. New live/model runs use Python-owned `gary2_v1`
-action assistance, adapted from Gary-2's `adjust_llm_action`: less-visited moves,
+The SSE browser transport streams flushed canonical records. New live/model runs
+use Python-owned `guided_nav_v2` action assistance: less-visited moves,
 reachable target pickups, duplicate avoidance and checkout steering. Simply
 honors requested quantities and its existing two-stage checkout. Each event
 retains the original model proposal, raw response, adjustment reason and applied

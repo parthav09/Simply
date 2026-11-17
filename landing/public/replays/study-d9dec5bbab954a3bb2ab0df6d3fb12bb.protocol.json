@@ -1938,14 +1938,14 @@
       "arm_id": "arm-0",
       "layout_id": "costco_back_anchor",
       "model": "qwen2.5-7b-pilot-mps",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "label": "costco_back_anchor"
     },
     {
       "arm_id": "arm-1",
       "layout_id": "neighborhood_express",
       "model": "qwen2.5-7b-pilot-mps",
-      "policy": "gary2_v2",
+      "policy": "guided_nav_v2",
       "label": "neighborhood_express"
     }
   ],
@@ -1964,7 +1964,7 @@
       "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
       "config": {
         "mode": "actions",
-        "navigation_policy": "gary2_v2",
+        "navigation_policy": "guided_nav_v2",
         "turn_budget": 120,
         "max_rounds": 1200,
         "concurrency": 1,
@@ -13640,7 +13640,7 @@
       "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
       "config": {
         "mode": "actions",
-        "navigation_policy": "gary2_v2",
+        "navigation_policy": "guided_nav_v2",
         "turn_budget": 120,
         "max_rounds": 1200,
         "concurrency": 1,
@@ -25321,5 +25321,5 @@
       "repetition": 1
     }
   ],
-  "sha256": "a4a0df6076c5a1df9a664014d53d054332994627daa112f7261636d30ee0f565"
+  "sha256": "fac24530f8f4debc667123606e72d84190fac5279013a991387679f0fc999115"
 }

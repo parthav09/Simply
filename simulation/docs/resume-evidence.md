@@ -8,7 +8,7 @@ training, held-out generalization, production adoption, or real retail impact.
 
 The frozen October 29 matrix covered two layouts and two models with the same
 ten derived profiles, lists, catalogue, prices, starting cells, prompts, 120-action
-limit, single-action interface, unique-product rules, and `gary2_v2` assistance.
+limit, single-action interface, unique-product rules, and `guided_nav_v2` assistance.
 Models were interleaved within repetition blocks. Source records preserve model
 proposals separately from applied adjustments.
 
@@ -116,6 +116,6 @@ and Python-computed differences live in `comparisons[].profile_pairs`. Each pair
 retains both source run IDs and its repetition. An unfinished shopper in a completed
 run remains eligible; a provider-interrupted run is visible but not paired.
 
-Gary-2 inspired the navigation/recording pattern. Simply's own contributions
+Simply's own contributions
 include its React SSE/replay bridge, execution/evidence contracts, Python-owned
 accounting and metrics, and controlled evaluation workflow.

@@ -20,7 +20,7 @@ from core.evidence import METRICS, run_row
 from core.export_replay import export_run
 from core.grid import build_store
 from core.integrity import fingerprint
-from core.navigation import GARY2_CURRENT, MODEL_ONLY
+from core.navigation import GUIDED_CURRENT, MODEL_ONLY
 from core.run_log import read_run
 from core.session import SimulationSession, build_run_start
 from core.shopping import SIMPLE_SHOPPING
@@ -73,7 +73,7 @@ def template(protocol, arm, repetition):
     return controls(header)
 
 
-def prepare(directory, *, kind='layout', models=None, layout=ACTIVE_LAYOUT_IDS[0], policy=GARY2_CURRENT,
+def prepare(directory, *, kind='layout', models=None, layout=ACTIVE_LAYOUT_IDS[0], policy=GUIDED_CURRENT,
             shoppers=10, repetitions=5, turn_budget=120, concurrency=2, seed=42, provider='openai', requests_per_minute=0):
     if kind not in KINDS or provider not in ('openai', 'openrouter', 'fake','local_mps'):
         raise ValueError('Unsupported study kind or provider')
@@ -81,7 +81,7 @@ def prepare(directory, *, kind='layout', models=None, layout=ACTIVE_LAYOUT_IDS[0
         raise ValueError('Study settings must be integers')
     if not 10 <= shoppers <= 15 or not 1 <= repetitions <= 50 or not 1 <= turn_budget <= 120 or not 1 <= concurrency <= 15 or requests_per_minute < 0:
         raise ValueError('Invalid study settings')
-    if layout not in ACTIVE_LAYOUT_IDS or policy not in (GARY2_CURRENT, MODEL_ONLY):
+    if layout not in ACTIVE_LAYOUT_IDS or policy not in (GUIDED_CURRENT, MODEL_ONLY):
         raise ValueError('Unsupported layout or policy')
     if provider=='local_mps':
         if concurrency!=1:raise ValueError('Local MPS studies require concurrency 1')
@@ -99,7 +99,7 @@ def prepare(directory, *, kind='layout', models=None, layout=ACTIVE_LAYOUT_IDS[0
         raise ValueError('Unsupported model')
     variants = ([(name, models[0], policy) for name in ACTIVE_LAYOUT_IDS] if kind == 'layout' else
                 [(layout, model, policy) for model in models] if kind == 'model' else
-                [(layout, models[0], name) for name in (MODEL_ONLY, GARY2_CURRENT)])
+                [(layout, models[0], name) for name in (MODEL_ONLY, GUIDED_CURRENT)])
     arms = [{'arm_id': f'arm-{n}', 'layout_id': name, 'model': model, 'policy': nav,
              'label': name if kind == 'layout' else model if kind == 'model' else nav}
             for n, (name, model, nav) in enumerate(variants)]
@@ -307,7 +307,7 @@ def main(argv=None):
     parser.add_argument('--kind', choices=KINDS, default='layout')
     parser.add_argument('--models', nargs='+')
     parser.add_argument('--layout', choices=ACTIVE_LAYOUT_IDS, default=ACTIVE_LAYOUT_IDS[0])
-    parser.add_argument('--policy', choices=(GARY2_CURRENT, MODEL_ONLY), default=GARY2_CURRENT)
+    parser.add_argument('--policy', choices=(GUIDED_CURRENT, MODEL_ONLY), default=GUIDED_CURRENT)
     parser.add_argument('--provider', choices=('openai', 'openrouter', 'fake','local_mps'), default='openai')
     parser.add_argument('--shoppers', type=int, default=10)
     parser.add_argument('--repetitions', type=int, default=5)
