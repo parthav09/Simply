@@ -2,22 +2,25 @@
 
     python3 notebooks/build_colab_notebooks.py
 
-01_finetune_qwen25_7b_impulse_v2.ipynb  QLoRA fine-tune on impulse_teacher_v2 -> downloads adapter ZIP
+01_finetune_qwen25_7b_impulse_v3.ipynb  QLoRA fine-tune on impulse_teacher_v3 -> downloads adapter ZIP
 02_run_layout_A.ipynb                   upload that ZIP -> 10 shoppers on Layout A -> downloads results ZIP
 03_run_layout_B.ipynb                   same on Layout B
 
 Every notebook embeds the same frozen Simply core (notebooks/frozen_source.py), so the prompt
-and guided_nav_v2 are identical in training data, fine-tuning and both layout runs.
+and guided_nav_v3 are identical in training data, fine-tuning and both layout runs.
 """
 import base64
 import hashlib
+import io
+import sys
+import zipfile
 import json
 from pathlib import Path
 
 import frozen_source
 
 ROOT = Path(__file__).resolve().parents[1]
-DATASET_DIR = ROOT / 'data/finetuning/impulse_v2'
+DATASET_DIR = ROOT / 'data/finetuning/impulse_v3'
 DATASET_FILES = ('train.jsonl', 'validation.jsonl', 'test.jsonl', 'provenance.jsonl', 'manifest.json')
 
 
@@ -47,16 +50,15 @@ STAMP = time.strftime("%Y%m%d_%H%M%S")
 '''
 
 INSTALL = r'''
+# Same install the original working notebook used: plain pip, output shown live.
 import subprocess, sys
-PINNED = ["unsloth==2026.11.1", "unsloth_zoo==2026.11.1", "transformers==5.17.0", "peft==0.21.2",
-          "accelerate==1.15.0", "bitsandbytes==0.50.2", "datasets==4.8.5", "sentencepiece", "protobuf"]
-try:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", *PINNED])
-    print("Installed the pinned stack (same versions as the Nov 4 pilot).")
-except subprocess.CalledProcessError:
-    print("WARNING: pinned install failed; using current releases. Versions are recorded in the output ZIP.")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "--upgrade", "unsloth", "datasets",
-                           "peft", "accelerate", "bitsandbytes", "sentencepiece", "protobuf"])
+
+subprocess.check_call([
+    sys.executable, "-m", "pip", "install", "--upgrade",
+    "unsloth", "datasets", "peft", "accelerate", "bitsandbytes",
+    "sentencepiece", "protobuf",
+])
+print("Install finished. If Colab shows a 'Restart session' popup, click Restart, then Runtime -> Run all.")
 '''
 
 UNPACK = r'''
@@ -64,7 +66,7 @@ UNPACK = r'''
 import base64, hashlib, io, shutil, sys, zipfile
 from pathlib import Path
 BUNDLE_SHA256 = "__BUNDLE_SHA__"
-SOURCE_SHA256 = "__SOURCE_SHA__"   # frozen prompt + guided_nav_v2 code; must match across all three notebooks
+SOURCE_SHA256 = "__SOURCE_SHA__"   # frozen prompt + guided_nav_v3 code; must match across all three notebooks
 BUNDLE_B64 = "__B64__"
 _blob = base64.b64decode(BUNDLE_B64)
 assert hashlib.sha256(_blob).hexdigest() == BUNDLE_SHA256, "Embedded bundle is corrupted"
@@ -81,305 +83,282 @@ import evaluation.impulse_eval as ie
 print("Simply core unpacked to", PROJECT)
 '''
 
-# ---------------------------------------------------------------- notebook 01: fine-tune
-FT_INTRO = r'''
-# 01 · Fine-tune Qwen2.5-7B-Instruct (QLoRA) to make impulse buys
+# ---------------------------------------------------------------- notebook 01: fine-tune (kept short on purpose)
+FT_INTRO = r"""
+# 01 · Fine-tune Qwen2.5-7B-Instruct to make impulse buys (QLoRA, Unsloth)
 
-**Run:** `Runtime → Change runtime type → A100 GPU`, then `Runtime → Run all`. Nothing to upload.
-**Output:** your browser downloads `simply_qwen25_7b_impulse_v2_adapter_<time>.zip`. Keep it, you upload it into notebooks 02 and 03.
+**Run:** `Runtime → Change runtime type → A100 GPU`, then `Runtime → Run all`. You upload one file: `impulse_v3_dataset.csv` (a file picker opens at step 2; or drag it into the Files panel first).
+**Output:** a ZIP downloads at the end (`simply_qwen25_7b_impulse_v3_adapter_*.zip`). You upload it into notebooks 02 and 03.
+**Time:** about 60 minutes (install ≈ 4, load ≈ 3, untuned check ≈ 4, train ≈ 38, tuned check ≈ 4, save ≈ 2).
 
-**What it does**
-1. Installs the pinned stack (Unsloth 2026.11.1, Transformers 5.17.0, PEFT 0.21.2).
-2. Unpacks the frozen Simply core and the **impulse_teacher_v2** dataset (1,724 train / 251 validation / 360 test decisions),
-   then re-checks hashes, split leakage and that every impulse label follows the visible-fact rules.
-3. Scores the **untuned** model on a fixed validation subset (offline, per decision).
-4. QLoRA SFT on `unsloth/Qwen2.5-7B-Instruct-bnb-4bit` (rank 16, alpha 32, lr 1e-4, 1 epoch, effective batch 8, loss on the answer only).
-5. Re-scores the tuned model on the same subset, then once on the untouched test split (every impulse moment, thinned list/checkout/move rows).
-6. Packs adapter + reports into one ZIP and downloads it.
+What it does: verifies the uploaded impulse_v3 CSV (hashes, JSON, split leakage) → measures token lengths (no truncation) →
+scores the **untuned** model on a fixed validation subset → memory check on the longest example → QLoRA fine-tune
+(4-bit NF4, LoRA r=16 on all attention + MLP layers, answer-only loss, validation loss every 50 steps, best checkpoint kept)
+→ scores the **tuned** model on the same rows → saves the adapter, checks it against memory → downloads one ZIP.
+No paid API calls. Whole-trip results come from notebooks 02/03.
 
-**Time:** about 1 h 40 min on an A100 (≈80 min training, ≈15 min of evaluation). Set `FAST_TRAINING_SUBSET = True` in step 5 for ≈55 min of training (see the note beside it). No paid API calls.
+Switches (step 3): `MODE = "smoke"` trains 3 steps only, to test the pipeline (its adapter is rejected by 02/03);
+`FULL_DATA = True` uses all 1,753 rows (~80 min of training); `RUN_FINAL_TEST = True` also scores the held-out test split.
+"""
 
-**About the data:** a deterministic rule teacher, run through the real Python core with the frozen `informed` prompt and
-`guided_nav_v2`. Impulse grabs depend only on things the prompt shows: shopping style (planner / mixed / impulsive),
-diet, allergy, alcohol, health, product department and price, budget slack, checkout urgency and extras already taken.
-Each base shopper appears in all three styles, so the model sees the same trip with different styles. The 15 benchmark
-shoppers used in notebooks 02/03 are **excluded** from training. It teaches these rules, not real human psychology.
-'''
-
-FT_IMPORTS = r'''
-from unsloth import FastLanguageModel   # must be imported before transformers
-import torch, gc, importlib.metadata, inspect, json, math, statistics, threading, time
+FT_DATA = r"""
+import csv, hashlib, json, sys, shutil
 from collections import Counter
+from pathlib import Path
+import evaluation.impulse_eval as ie
 
-gpu = torch.cuda.get_device_properties(0)
-print(f"GPU: {gpu.name}; memory: {gpu.total_memory / 2**30:.1f} GiB")
-TRAINING_MODE = "impulse_v2"
-MODEL_ID = "unsloth/Qwen2.5-7B-Instruct-bnb-4bit"
-MAX_SEQ_LENGTH = 16384
-LORA_RANK, LORA_ALPHA, LEARNING_RATE, SEED, EPOCHS = 16, 32, 1e-4, 3407, 1
-MAX_NEW_TOKENS = 256          # same as the served decision limit
-RUN_TEST_SPLIT = True         # settings are fixed before looking at test; it is scored exactly once
-RUN_DIRECTORY = Path(f"/content/simply_qwen25_7b_impulse_v2_{STAMP}")
-RUN_DIRECTORY.mkdir(parents=True)
+MODE = "pilot"          # "smoke" = 3 optimizer steps to test the pipeline; its adapter is rejected by notebooks 02/03
+FULL_DATA = False       # True = all 1,753 rows (~80 min of training)
+RUN_FINAL_TEST = False  # True = also score the held-out test split once (~12 min)
+assert MODE in ("pilot", "smoke")
+
 DATA = PROJECT / "training_data"
-'''
+manifest = json.loads((DATA / "dataset_meta.json").read_text())
+assert manifest["dataset"] == "simply_impulse_teacher_v3" and manifest["model_requests"] == 0
+SOURCE_SHA256 = manifest["frozen_source_sha256"]       # ties this adapter to the exact prompt/code used in notebooks 02/03
+assert hashlib.sha256(CSV_PATH.read_bytes()).hexdigest() == manifest["csv_sha256"], "dataset CSV changed or is the wrong file"
+csv.field_size_limit(sys.maxsize)
+data, provenance = {"train": [], "validation": [], "test": []}, {}
+with open(CSV_PATH, newline="", encoding="utf-8") as handle:
+    for row in csv.DictReader(handle):
+        split = row["split"]
+        data[split].append({"messages": [{"role": "user", "content": row["prompt"]}, {"role": "assistant", "content": row["response"]}]})
+        provenance[split, len(data[split])] = row               # label, base_id, prompt_sha256, target_sha256 per row
+assert {k: len(v) for k, v in data.items()} == manifest["examples"], "row counts differ from the expected dataset"
 
-FT_VERIFY = r'''
-def read_jsonl(path):
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
-
-manifest = json.loads((DATA / "manifest.json").read_text())
-assert manifest["dataset"] == "simply_impulse_teacher_v2" and manifest["model_requests"] == 0
-assert manifest["frozen_source_sha256"] == SOURCE_SHA256, "dataset was generated with different Simply code"
-for name, digest in manifest["files"].items():
-    assert hashlib.sha256((DATA / name).read_bytes()).hexdigest() == digest, f"Changed file: {name}"
-raw_data = {s: read_jsonl(DATA / f"{s}.jsonl") for s in ("train", "validation", "test")}
-provenance = {(p["split"], p["line"]): p for p in read_jsonl(DATA / "provenance.jsonl")}
-assert len(provenance) == sum(map(len, raw_data.values()))
 bases, prompts = {}, {}
-for split, rows in raw_data.items():
+for split, rows in data.items():                          # schema, allowed steps, hashes, split leakage
     bases[split], prompts[split] = set(), set()
     for line, row in enumerate(rows, 1):
         meta = provenance[split, line]
         assert [m["role"] for m in row["messages"]] == ["user", "assistant"]
-        prompt, target_raw = [m["content"] for m in row["messages"]]
-        target = json.loads(target_raw)
-        assert set(target) == {"step", "product_id", "reason"}
-        facts, profile = ie.observation(prompt), ie.parse_profile(prompt)
-        assert target["step"] in facts["allowed_steps"]
+        prompt, answer = (m["content"] for m in row["messages"])
+        action = json.loads(answer)
+        assert set(action) == {"step", "product_id", "reason"} and all(isinstance(v, str) for v in action.values())
+        assert action["step"] in ie.observation(prompt)["allowed_steps"]
         assert hashlib.sha256(prompt.encode()).hexdigest() == meta["prompt_sha256"]
-        assert hashlib.sha256(target_raw.encode()).hexdigest() == meta["target_sha256"]
-        if meta["label"] in ("impulse_grab", "impulse_pass"):     # labels must follow the visible-fact rule
-            state, candidates = ie.impulse_context(facts, profile)
-            assert (meta["label"] == "impulse_grab") == (state == "eligible")
-            if state == "eligible":
-                assert target["product_id"] == candidates[0]["product_id"]
+        assert hashlib.sha256(answer.encode()).hexdigest() == meta["target_sha256"]
         bases[split].add(meta["base_id"]); prompts[split].add(meta["prompt_sha256"])
-    print(split, len(rows), "rows |", dict(Counter(provenance[split, i + 1]["label"] for i in range(len(rows)))))
 for a, b in (("train", "validation"), ("train", "test"), ("validation", "test")):
-    assert not bases[a] & bases[b] and not prompts[a] & prompts[b], "Split leakage"
-print("Data checks passed. Benchmark shoppers excluded:", manifest["excluded_benchmark_shoppers"])
-'''
+    assert not bases[a] & bases[b] and not prompts[a] & prompts[b], "split leakage"
+label_of = lambda split, i: provenance[split, i + 1]["label"]
+print("Data checks passed:", {s: len(r) for s, r in data.items()}, "| benchmark shoppers excluded:", len(manifest["excluded_benchmark_shoppers"]))
 
-FT_TOKENIZE = r'''
-from huggingface_hub import HfApi
-from transformers import AutoTokenizer
+CAPS = {"impulse_pass": 400, "list_grab": 140, "checkout": 60, "move": 60}   # training subset; impulse_grab: keep all
+seen, keep = Counter(), []
+for i in range(len(data["train"])):
+    label = label_of("train", i)
+    if FULL_DATA or seen[label] < CAPS.get(label, 10**9):
+        seen[label] += 1; keep.append(i)
+print(f"Training on {len(keep)} of {len(data['train'])} rows:", dict(seen))
+
+EVAL_QUOTA = {"impulse_grab": 999, "impulse_pass": 24, "list_grab": 10, "checkout": 8, "move": 4}   # fixed validation subset
+taken, eval_idx = Counter(), []
+for i in range(len(data["validation"])):
+    label = label_of("validation", i)
+    if taken[label] < EVAL_QUOTA[label]:
+        taken[label] += 1; eval_idx.append(i)
+eval_rows = [data["validation"][i] for i in eval_idx]
+print("Validation scoring subset:", dict(taken))
+
+OUT = Path("/content/impulse_v3_adapter"); shutil.rmtree(OUT, ignore_errors=True); (OUT / "adapter").mkdir(parents=True)
+"""
+
+FT_MODEL = r"""
+from unsloth import FastLanguageModel        # import before transformers
+import gc, importlib.metadata, inspect, math, statistics, time
+import torch
 from datasets import Dataset
+from huggingface_hub import HfApi
 
-MODEL_REVISION = HfApi().model_info(MODEL_ID).sha
-tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, revision=MODEL_REVISION)
+MODEL_ID, MAX_SEQ_LENGTH = "unsloth/Qwen2.5-7B-Instruct-bnb-4bit", 16384
+REVISION = HfApi().model_info(MODEL_ID).sha
+model, tokenizer = FastLanguageModel.from_pretrained(model_name=MODEL_ID, revision=REVISION,
+    max_seq_length=MAX_SEQ_LENGTH, dtype=None, load_in_4bit=True)      # 4-bit NF4 base, frozen
 if tokenizer.pad_token_id is None:
     tokenizer.pad_token = tokenizer.eos_token
-reference_template = tokenizer.chat_template
 
-def render_ids(tok, messages, generation_prompt):
-    text = tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=generation_prompt)
-    return tok(text, add_special_tokens=False)["input_ids"]
+def ids(messages, generation_prompt):
+    text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=generation_prompt)
+    return tokenizer(text, add_special_tokens=False)["input_ids"]
 
-def tokenize_example(row):
-    full_ids = render_ids(tokenizer, row["messages"], False)
-    prefix_ids = render_ids(tokenizer, row["messages"][:-1], True)
-    assert full_ids[:len(prefix_ids)] == prefix_ids, "chat-template prefix mismatch"
-    labels = [-100] * len(prefix_ids) + full_ids[len(prefix_ids):]   # loss on the answer only
-    return {"input_ids": full_ids, "attention_mask": [1] * len(full_ids), "labels": labels}
+def tokenize(row):                                # loss only on the assistant's JSON answer
+    full, prefix = ids(row["messages"], False), ids(row["messages"][:-1], True)
+    assert full[:len(prefix)] == prefix, "chat template prefix mismatch"
+    labels = [-100] * len(prefix) + full[len(prefix):]
+    assert any(l != -100 for l in labels), "no answer tokens to learn from"
+    return {"input_ids": full, "attention_mask": [1] * len(full), "labels": labels}
 
-tokenized_rows = {s: [tokenize_example(r) for r in rows] for s, rows in raw_data.items()}
-length_summary = {}
-for split, rows in tokenized_rows.items():
-    lengths = [len(r["input_ids"]) for r in rows]
-    length_summary[split] = {"count": len(rows), "median": statistics.median(lengths), "max": max(lengths)}
-    print(split, length_summary[split])
-    assert max(lengths) + MAX_NEW_TOKENS <= MAX_SEQ_LENGTH, "never truncate observations"
+rows = [tokenize(data["train"][i]) for i in keep]
+eval_tokenized = [tokenize(data["validation"][i]) for i in eval_idx[:48]]
+lengths = [len(r["input_ids"]) for r in rows]
+length_summary = {"rows": len(rows), "median": statistics.median(lengths), "max": max(lengths)}
+print("Token lengths:", length_summary, "(never truncated)")
+assert max(lengths) + 256 <= MAX_SEQ_LENGTH, "example too long for the context window"
+print("Learned text of the first example:", tokenizer.decode([t for t in rows[0]["labels"] if t != -100]))
+train_dataset, eval_dataset = Dataset.from_list(rows), Dataset.from_list(eval_tokenized)
 
-# Fixed, label-stratified subset of validation for quick before/after scoring and trainer eval loss.
-def label_of(split, index): return provenance[split, index + 1]["label"]
-QUOTA = {"impulse_grab": 999, "impulse_pass": 24, "list_grab": 10, "checkout": 8, "move": 4}   # ~84 rows
-taken, eval_indices = Counter(), []
-for i in range(len(raw_data["validation"])):
-    label = label_of("validation", i)
-    if taken[label] < QUOTA[label]:
-        taken[label] += 1; eval_indices.append(i)
-eval_rows = [raw_data["validation"][i] for i in eval_indices]
-print("Validation scoring subset:", dict(taken))
-# SPEED KNOB: True trains on ~1,150 of 1,724 rows (~30% faster) by thinning the most common label types.
-# It keeps every impulse grab and checkout, but changes the grab:pass balance from 1:5.7 to 1:3.5, so the
-# tuned model may grab slightly more often. Leave False for the full, as-designed dataset.
-FAST_TRAINING_SUBSET = False
-if FAST_TRAINING_SUBSET:
-    caps, seen, keep_idx = {"impulse_pass": 450, "list_grab": 300, "move": 150}, Counter(), []
-    for i in range(len(raw_data["train"])):
-        label = label_of("train", i)
-        if seen[label] < caps.get(label, 10**9):
-            seen[label] += 1; keep_idx.append(i)
-    print("Fast subset:", dict(seen), "->", len(keep_idx), "rows")
-else:
-    keep_idx = list(range(len(raw_data["train"])))
-train_dataset = Dataset.from_list([tokenized_rows["train"][i] for i in keep_idx])
-eval_dataset = Dataset.from_list([tokenized_rows["validation"][i] for i in eval_indices[:48]])   # in-training eval loss
-print("Base revision:", MODEL_REVISION)
-'''
-
-FT_LOAD = r'''
-model, model_tokenizer = FastLanguageModel.from_pretrained(
-    model_name=MODEL_ID, revision=MODEL_REVISION, max_seq_length=MAX_SEQ_LENGTH,
-    dtype=None, load_in_4bit=True, full_finetuning=False)
-model_tokenizer.chat_template = reference_template
-model_tokenizer.pad_token = tokenizer.pad_token
-assert render_ids(model_tokenizer, raw_data["train"][0]["messages"], False) == tokenized_rows["train"][0]["input_ids"]
-tokenizer = model_tokenizer
-
-def generate_responses(rows, label):
-    """Greedy, no repetition penalty: exactly how notebooks 02/03 serve the model."""
+def generate_responses(rows_to_score, label):
+    # Greedy, no repetition penalty: exactly how notebooks 02/03 serve the model.
     FastLanguageModel.for_inference(model); model.eval()
-    responses, started = [], time.time()
-    for n, row in enumerate(rows, 1):
+    out, started = [], time.time()
+    for n, row in enumerate(rows_to_score, 1):
         text = tokenizer.apply_chat_template(row["messages"][:-1], tokenize=False, add_generation_prompt=True)
         inputs = tokenizer(text, return_tensors="pt", add_special_tokens=False).to(model.device)
         with torch.inference_mode():
-            out = model.generate(**inputs, max_new_tokens=MAX_NEW_TOKENS, do_sample=False, temperature=None,
-                                 top_p=None, top_k=None, repetition_penalty=1.0,
-                                 pad_token_id=tokenizer.pad_token_id, eos_token_id=tokenizer.eos_token_id)
-        responses.append(tokenizer.decode(out[0, inputs["input_ids"].shape[1]:], skip_special_tokens=True).strip())
+            gen = model.generate(**inputs, max_new_tokens=256, do_sample=False, temperature=None, top_p=None, top_k=None,
+                                 repetition_penalty=1.0, pad_token_id=tokenizer.pad_token_id, eos_token_id=tokenizer.eos_token_id)
+        out.append(tokenizer.decode(gen[0, inputs["input_ids"].shape[1]:], skip_special_tokens=True).strip())
         if n % 25 == 0:
-            print(f"  {label}: {n}/{len(rows)} ({time.time() - started:.0f}s)", flush=True)
-        del inputs, out
-    return responses
+            print(f"  {label}: {n}/{len(rows_to_score)} ({time.time() - started:.0f}s)", flush=True)
+        del inputs, gen
+    return out
 
-def offline_eval(rows, label):
-    metrics, records = ie.score_offline(rows, generate_responses(rows, label))
-    (RUN_DIRECTORY / f"offline_eval_{label}.json").write_text(json.dumps({"metrics": metrics, "records": records}, indent=2))
-    keys = ["strict_schema_rate", "observation_valid_rate", "exact_action_agreement", "list_grab_recall",
-            "checkout_recall", "off_list_proposals", "rule_violation_rate"]
-    print(label, json.dumps({k: metrics[k] for k in keys}, indent=1))
-    print("impulse:", json.dumps(metrics["impulse"], indent=1))
-    print("impulse by style:", json.dumps(metrics["impulse_by_style"], indent=1))
+def offline_eval(rows_to_score, label):
+    metrics, records = ie.score_offline(rows_to_score, generate_responses(rows_to_score, label))
+    (OUT / f"offline_eval_{label}.json").write_text(json.dumps({"metrics": metrics, "records": records}, indent=2))
+    keys = ("strict_schema_rate", "observation_valid_rate", "exact_action_agreement", "list_grab_recall", "checkout_recall",
+            "off_list_proposals", "rule_violation_rate")
+    print(label, json.dumps({k: metrics[k] for k in keys}), "\nimpulse:", json.dumps(metrics["impulse"]),
+          "\nby tier:", json.dumps(metrics["impulse_by_tier"]))
     return metrics
-'''
 
-FT_BASELINE = r'''
 baseline = offline_eval(eval_rows, "validation_untuned")
-'''
+"""
 
-FT_TRAIN = r'''
+FT_TRAIN = r"""
+from transformers import DataCollatorForSeq2Seq, Trainer, TrainingArguments, set_seed
+SEED = 3407
 FastLanguageModel.for_training(model)
-model = FastLanguageModel.get_peft_model(
-    model, r=LORA_RANK, target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
-    lora_alpha=LORA_ALPHA, lora_dropout=0, bias="none", use_gradient_checkpointing="unsloth",
-    random_state=SEED, use_rslora=False, loftq_config=None)
+model = FastLanguageModel.get_peft_model(model, r=16, lora_alpha=32, lora_dropout=0, bias="none", random_state=SEED,
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+    use_gradient_checkpointing="unsloth")
 model.print_trainable_parameters()
 assert all("lora_" in n for n, p in model.named_parameters() if p.requires_grad), "base weights must stay frozen"
+collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True, pad_to_multiple_of=8, label_pad_token_id=-100, return_tensors="pt")
 
-from transformers import DataCollatorForSeq2Seq, Trainer, TrainingArguments, set_seed
-collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True, pad_to_multiple_of=8,
-                                  label_pad_token_id=-100, return_tensors="pt")
-# Memory check on the longest example before committing ~80 minutes.
-longest = max(tokenized_rows["train"], key=lambda r: len(r["input_ids"]))
+# Memory check on the longest example (one forward/backward, no update) before committing ~40 minutes.
+longest = max(rows, key=lambda r: len(r["input_ids"]))
 batch = {k: v.to(model.device) for k, v in collator([longest]).items()}
 model.train(); model.zero_grad(set_to_none=True)
 with torch.autocast(device_type="cuda", dtype=torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16):
     loss = model(**batch).loss
 loss.backward(); model.zero_grad(set_to_none=True); del batch, loss; gc.collect(); torch.cuda.empty_cache()
-print("Longest example fits:", len(longest["input_ids"]), "tokens")
+print("Longest example fits:", len(longest["input_ids"]), "tokens | peak", round(torch.cuda.max_memory_allocated() / 2**30, 1), "GiB")
 
 set_seed(SEED)
-arguments = TrainingArguments(
-    output_dir=str(RUN_DIRECTORY / "checkpoints"), per_device_train_batch_size=1, per_device_eval_batch_size=1,
-    gradient_accumulation_steps=8, num_train_epochs=EPOCHS, learning_rate=LEARNING_RATE, warmup_ratio=0.05,
-    weight_decay=0.01, lr_scheduler_type="linear", optim="adamw_8bit",
-    fp16=not torch.cuda.is_bf16_supported(), bf16=torch.cuda.is_bf16_supported(), logging_steps=5,
-    eval_strategy="steps", eval_steps=72, prediction_loss_only=True, save_strategy="steps", save_steps=72,
-    save_total_limit=2, load_best_model_at_end=True, metric_for_best_model="eval_loss", greater_is_better=False,
+smoke, bf16 = MODE == "smoke", torch.cuda.is_bf16_supported()
+args = TrainingArguments(output_dir="/content/ckpt", per_device_train_batch_size=1, per_device_eval_batch_size=1,
+    gradient_accumulation_steps=4, num_train_epochs=1, max_steps=3 if smoke else -1, learning_rate=1e-4, warmup_steps=0.05,   # transformers 5: a float below 1 is a ratio of total steps
+    weight_decay=0.01, lr_scheduler_type="linear", optim="adamw_8bit", bf16=bf16, fp16=not bf16, logging_steps=10,
+    eval_strategy="no" if smoke else "steps", eval_steps=50, prediction_loss_only=True,
+    save_strategy="no" if smoke else "steps", save_steps=50, save_total_limit=2,
+    load_best_model_at_end=not smoke, metric_for_best_model="eval_loss", greater_is_better=False,
     report_to="none", seed=SEED, data_seed=SEED, dataloader_num_workers=0, remove_unused_columns=False)
-options = dict(model=model, args=arguments, train_dataset=train_dataset, eval_dataset=eval_dataset, data_collator=collator)
+options = dict(model=model, args=args, train_dataset=train_dataset, eval_dataset=eval_dataset, data_collator=collator)
 options["processing_class" if "processing_class" in inspect.signature(Trainer.__init__).parameters else "tokenizer"] = tokenizer
 trainer = Trainer(**options)
-assert not globals().get("TRAINING_FINISHED", False), "Already trained; restart the runtime to train again."
-training_result = trainer.train()
-TRAINING_FINISHED = True
-assert math.isfinite(training_result.metrics["train_loss"]), "Training loss is not finite"
-print(training_result.metrics)
-(RUN_DIRECTORY / "training_metrics.json").write_text(json.dumps(training_result.metrics, indent=2))
-(RUN_DIRECTORY / "training_log.json").write_text(json.dumps(trainer.state.log_history, indent=2))
-'''
+result = trainer.train()
+assert math.isfinite(result.metrics["train_loss"]), "loss is not finite"
+print(result.metrics)
+"""
 
-FT_AFTER = r'''
-tuned = offline_eval(eval_rows, "validation_tuned")
-print("\nBefore → after on the same validation subset")
-for key in ("exact_action_agreement", "list_grab_recall", "checkout_recall", "rule_violation_rate"):
-    print(f"  {key}: {baseline[key]} → {tuned[key]}")
-for key in ("model_grab_rate", "teacher_grab_rate", "precision", "recall", "f1"):
-    print(f"  impulse {key}: {baseline['impulse'][key]} → {tuned['impulse'][key]}")
-TEST_QUOTA = {"list_grab": 20, "checkout": 8, "move": 8}      # all impulse moments are kept so precision/recall stay unbiased
-seen, test_rows = Counter(), []
-for i, row in enumerate(raw_data["test"]):
-    label = provenance["test", i + 1]["label"]
-    if label in TEST_QUOTA:
-        if seen[label] >= TEST_QUOTA[label]:
-            continue
-        seen[label] += 1
-    test_rows.append(row)
-print("Test rows scored:", len(test_rows), "of", len(raw_data["test"]))
-test_metrics = offline_eval(test_rows, "test_tuned") if RUN_TEST_SPLIT else None
-'''
-
-FT_SAVE = r'''
+FT_SAVE = r"""
+import zipfile
 from safetensors.torch import load_file
-ADAPTER_DIRECTORY = RUN_DIRECTORY / "adapter"
-model.save_pretrained(str(ADAPTER_DIRECTORY)); tokenizer.save_pretrained(str(ADAPTER_DIRECTORY))
-ADAPTER_SHA256 = hashlib.sha256((ADAPTER_DIRECTORY / "adapter_model.safetensors").read_bytes()).hexdigest()
-saved, live = load_file(str(ADAPTER_DIRECTORY / "adapter_model.safetensors")), dict(model.named_parameters())
+from google.colab import files
+
+tuned = offline_eval(eval_rows, "validation_tuned")
+print("\nBefore (untuned) -> after (tuned), same validation rows")
+for key in ("strict_schema_rate", "observation_valid_rate", "exact_action_agreement", "list_grab_recall", "checkout_recall", "rule_violation_rate"):
+    print(f"  {key}: {baseline[key]} -> {tuned[key]}")
+for key in ("model_grab_rate", "teacher_grab_rate", "precision", "recall", "f1"):
+    print(f"  impulse {key}: {baseline['impulse'][key]} -> {tuned['impulse'][key]}")
+test_metrics = offline_eval(data["test"], "test_tuned") if RUN_FINAL_TEST else None
+
+model.save_pretrained(str(OUT / "adapter")); tokenizer.save_pretrained(str(OUT / "adapter"))
+adapter_sha = hashlib.sha256((OUT / "adapter" / "adapter_model.safetensors").read_bytes()).hexdigest()
+saved, live = load_file(str(OUT / "adapter" / "adapter_model.safetensors")), dict(model.named_parameters())
 mismatch = sum(1 for name, tensor in saved.items()
-               if (p := live.get(name.replace(".lora_A.", ".lora_A.default.").replace(".lora_B.", ".lora_B.default."))) is None
-               or not torch.equal(p.detach().cpu().to(tensor.dtype), tensor))
-print(f"Saved {len(saved)} LoRA tensors, sha256 {ADAPTER_SHA256[:16]}…, mismatches vs memory: {mismatch}")
+               if (q := live.get(name.replace(".lora_A.", ".lora_A.default.").replace(".lora_B.", ".lora_B.default."))) is None
+               or not torch.equal(q.detach().cpu().to(tensor.dtype), tensor))
+print(f"Saved {len(saved)} LoRA tensors, sha256 {adapter_sha[:16]}..., mismatches vs trained model: {mismatch}")
 assert saved and mismatch == 0, "saved adapter differs from the trained model"
 
-versions = {}
-for package in ["unsloth", "unsloth_zoo", "transformers", "datasets", "peft", "accelerate", "bitsandbytes", "torch"]:
-    try: versions[package] = importlib.metadata.version(package)
-    except importlib.metadata.PackageNotFoundError: versions[package] = "unavailable"
-experiment = {
-    "project": "Simply", "training_mode": TRAINING_MODE, "method": "QLoRA_SFT", "base_model": MODEL_ID,
-    "base_revision": MODEL_REVISION, "max_seq_length": MAX_SEQ_LENGTH, "lora_rank": LORA_RANK, "lora_alpha": LORA_ALPHA,
-    "learning_rate": LEARNING_RATE, "epochs": EPOCHS, "seed": SEED, "assistant_output_only_loss": True,
-    "load_in_4bit": True, "training_arguments": arguments.to_dict(), "packages": versions,
-    "chat_template_sha256": hashlib.sha256(tokenizer.chat_template.encode()).hexdigest(),
-    "dataset": manifest["dataset"], "dataset_counts": manifest["examples"], "dataset_hashes": manifest["files"],
-    "frozen_source_sha256": SOURCE_SHA256, "frozen_commit": manifest["frozen_commit"],
-    "token_lengths": length_summary, "gpu": gpu.name, "adapter_sha256": ADAPTER_SHA256, "lora_tensors": len(saved),
-    "offline_eval": {"validation_untuned": baseline, "validation_tuned": tuned, "test_tuned": test_metrics},
-    "limitation": "Rule-teacher labels; offline scores are per decision. Whole-trip behaviour is measured in notebooks 02/03."}
-(RUN_DIRECTORY / "experiment.json").write_text(json.dumps(experiment, indent=2, default=str))
+packages = {}
+for name in ("unsloth", "unsloth_zoo", "transformers", "peft", "bitsandbytes", "torch", "datasets", "accelerate"):
+    try: packages[name] = importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError: packages[name] = "unavailable"
+experiment = {"project": "Simply", "training_mode": "impulse_v3" if MODE == "pilot" else "impulse_v3_smoke",
+    "method": "QLoRA_SFT", "base_model": MODEL_ID, "base_revision": REVISION, "dataset": manifest["dataset"],
+    "dataset_csv_sha256": manifest["csv_sha256"], "frozen_source_sha256": SOURCE_SHA256, "frozen_commit": manifest["frozen_commit"],
+    "rows_trained": len(keep), "full_data": FULL_DATA, "lora_rank": 16, "lora_alpha": 32, "learning_rate": 1e-4, "epochs": 1,
+    "gradient_accumulation_steps": 4, "seed": SEED, "max_seq_length": MAX_SEQ_LENGTH, "token_lengths": length_summary,
+    "training_arguments": args.to_dict(), "train_metrics": result.metrics, "assistant_output_only_loss": True, "load_in_4bit": True,
+    "chat_template_sha256": hashlib.sha256(tokenizer.chat_template.encode()).hexdigest(), "adapter_sha256": adapter_sha,
+    "lora_tensors": len(saved), "packages": packages, "gpu": torch.cuda.get_device_name(0),
+    "offline_eval": {"validation_untuned": baseline, "validation_tuned": tuned, "test_tuned": test_metrics}}
+(OUT / "experiment.json").write_text(json.dumps(experiment, indent=2, default=str))
+(OUT / "training_log.json").write_text(json.dumps(trainer.state.log_history, indent=2))
+ZIP = Path(f"/content/simply_qwen25_7b_impulse_v3_adapter_{STAMP}.zip")
+with zipfile.ZipFile(ZIP, "w", zipfile.ZIP_DEFLATED) as archive:
+    for path in sorted(OUT.rglob("*")):
+        if path.is_file(): archive.write(path, str(path.relative_to(OUT)))
+print("Created", ZIP, f"({ZIP.stat().st_size / 2**20:.0f} MiB)")
+print("\n=== PASTE THIS INTO THE SIMPLY CHAT ===\n" + json.dumps({"mode": MODE, "adapter_sha256": adapter_sha[:16],
+    "rows_trained": len(keep), "train_loss": result.metrics["train_loss"],
+    "validation_untuned_impulse": baseline["impulse"], "validation_tuned_impulse": tuned["impulse"],
+    "validation_tuned_by_tier": tuned["impulse_by_tier"], "tuned_rule_violation_rate": tuned["rule_violation_rate"],
+    "tuned_exact_action_agreement": tuned["exact_action_agreement"],
+    "test_tuned_impulse": test_metrics["impulse"] if test_metrics else None, "packages": packages}, indent=1, default=str))
+files.download(str(ZIP))
+"""
 
-import zipfile
-from google.colab import files
-ZIP_PATH = Path(f"/content/simply_qwen25_7b_impulse_v2_adapter_{STAMP}.zip")
-members = [p for p in sorted(RUN_DIRECTORY.rglob("*")) if p.is_file() and "checkpoints" not in p.parts]
-manifest_out = {str(p.relative_to(RUN_DIRECTORY)): hashlib.sha256(p.read_bytes()).hexdigest() for p in members}
-(RUN_DIRECTORY / "MANIFEST.json").write_text(json.dumps(manifest_out, indent=2))
-with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED) as archive:
-    for p in members + [RUN_DIRECTORY / "MANIFEST.json"]:
-        archive.write(p, str(p.relative_to(RUN_DIRECTORY)))
-print("Created", ZIP_PATH, f"({ZIP_PATH.stat().st_size / 2**20:.0f} MiB)")
-summary = {"adapter_sha256": ADAPTER_SHA256, "train_loss": training_result.metrics["train_loss"],
-           "validation_untuned_impulse": baseline["impulse"], "validation_tuned_impulse": tuned["impulse"],
-           "test_tuned_impulse": test_metrics["impulse"] if test_metrics else None,
-           "test_tuned_exact_action_agreement": test_metrics["exact_action_agreement"] if test_metrics else None}
-print("\n=== PASTE THIS INTO THE SIMPLY CHAT ===\n" + json.dumps(summary, indent=1, default=str))
-files.download(str(ZIP_PATH))
-'''
+UPLOAD_CSV = r"""
+#@title Provide the dataset CSV (impulse_v3_dataset.csv)
+# If you already dragged the CSV into the Colab Files panel (/content), it is used; otherwise a file picker opens.
+import glob, os, shutil
+from pathlib import Path
+found = sorted(glob.glob("/content/**/impulse_v3_dataset*.csv", recursive=True))
+if not found:
+    from google.colab import files
+    uploaded = files.upload()
+    found = [name for name in uploaded if name.endswith(".csv")]
+    assert found, "No CSV uploaded. Re-run this cell and choose impulse_v3_dataset.csv."
+    found = [str(Path("/content") / found[0])]
+CSV_PATH = Path(found[0])
+print("Using", CSV_PATH, f"({CSV_PATH.stat().st_size / 2**20:.0f} MB)")
+"""
+
+SMALL_UNPACK = r"""
+#@title Unpack the bundled scoring code and dataset fingerprint (hash-verified; do not edit)
+import base64, hashlib, io, shutil, sys, zipfile
+from pathlib import Path
+BUNDLE_SHA256 = "__BUNDLE_SHA__"
+BUNDLE_B64 = "__B64__"
+_blob = base64.b64decode(BUNDLE_B64)
+assert hashlib.sha256(_blob).hexdigest() == BUNDLE_SHA256, "Embedded bundle is corrupted"
+PROJECT = Path("/content/simply")
+shutil.rmtree(PROJECT, ignore_errors=True); PROJECT.mkdir(parents=True)
+with zipfile.ZipFile(io.BytesIO(_blob)) as _z:
+    _z.extractall(PROJECT)
+del _blob, BUNDLE_B64
+sys.path.insert(0, str(PROJECT / "simulation"))
+print("Scoring code ready in", PROJECT)
+"""
+
 
 # ---------------------------------------------------------------- notebooks 02/03: layout runs
 RUN_INTRO = r'''
 # __NUMBER__ · Run the fine-tuned Qwen on Layout __LETTER__ (`__LAYOUT__`)
 
 **Run:** `Runtime → Change runtime type → A100 GPU` (an L4 also works), then `Runtime → Run all`.
-When asked, upload the `simply_qwen25_7b_impulse_v2_adapter_*.zip` that notebook 01 downloaded.
-**Output:** your browser downloads `simply_impulse_v2_layout___LETTER___<time>.zip`, and the last cell prints a summary
+When asked, upload the `simply_qwen25_7b_impulse_v3_adapter_*.zip` that notebook 01 downloaded.
+**Output:** your browser downloads `simply_impulse_v3_layout___LETTER___<time>.zip`, and the last cell prints a summary
 to paste into the Simply chat.
 
-**What it runs:** the same 10 frozen benchmark shoppers used by every earlier Layout A/B study (seed `20261030`),
-120 actions each, one model decision per action, `guided_nav_v2` assistance, `unique_single_checkout_v1`.
+**What it runs:** the same 10 frozen benchmark shoppers used by every earlier Layout A/B study (seed `20261118`, the same as the Nov 17 Luna/Terra impulse studies),
+120 actions each, one model decision per action, `guided_nav_v3` assistance, `unique_single_checkout_v1`.
 The model only **proposes**. The Python core applies every action and writes the canonical run record.
 Impulse buys are counted by Python (`off_list_units`). None of these shoppers were in the training data.
 
@@ -389,14 +368,14 @@ Impulse buys are counted by Python (`off_list_units`). None of these shoppers we
 RUN_CONFIG = r'''
 LAYOUT = "__LAYOUT__"
 LAYOUT_LETTER = "__LETTER__"
-SHOPPERS, TURN_BUDGET, RUN_SEED = 10, 120, 20261030   # study seed 20261029 + repetition 1, as in earlier studies
-NAV_POLICY = "guided_nav_v2"
+SHOPPERS, TURN_BUDGET, RUN_SEED = 10, 120, 20261118   # study seed 20261117 + repetition 1: same as the Nov 17 Luna/Terra impulse studies
+NAV_POLICY = "guided_nav_v3"
 '''
 
 RUN_ADAPTER = r'''
 import json, zipfile
 from google.colab import files
-print("Upload the adapter ZIP from notebook 01 (simply_qwen25_7b_impulse_v2_adapter_*.zip)")
+print("Upload the adapter ZIP from notebook 01 (simply_qwen25_7b_impulse_v3_adapter_*.zip)")
 uploaded = files.upload()
 archives = [(n, b) for n, b in uploaded.items() if n.endswith(".zip")]
 assert len(archives) == 1, "Upload exactly one adapter ZIP"
@@ -408,7 +387,7 @@ with zipfile.ZipFile(io.BytesIO(archives[0][1])) as archive:
 del uploaded, archives
 ADAPTER_DIR = ADAPTER_ROOT / "adapter"
 experiment = json.loads((ADAPTER_ROOT / "experiment.json").read_text())
-assert experiment["training_mode"] == "impulse_v2" and experiment["dataset"] == "simply_impulse_teacher_v2", "not an impulse-v2 adapter"
+assert experiment["training_mode"] == "impulse_v3" and experiment["dataset"] == "simply_impulse_teacher_v3", "not an impulse-v3 adapter"
 assert experiment["frozen_source_sha256"] == SOURCE_SHA256, "adapter was trained against different Simply code"
 ADAPTER_SHA256 = hashlib.sha256((ADAPTER_DIR / "adapter_model.safetensors").read_bytes()).hexdigest()
 assert ADAPTER_SHA256 == experiment["adapter_sha256"], "adapter file differs from the one notebook 01 recorded"
@@ -439,21 +418,21 @@ print(f"Loaded base + {len(saved)} LoRA tensors exactly on {gpu.name}")
 
 RUN_SERVE = r'''
 from http.server import ThreadingHTTPServer
-from agents.cuda_runtime import CUDARuntime, IMPULSE_MODEL, SETTINGS, BASE_MODEL
+from agents.cuda_runtime import CUDARuntime, IMPULSE_V3_MODEL, SETTINGS, BASE_MODEL
 from mps_server import handler_for
 versions = {p: importlib.metadata.version(p) for p in ("unsloth", "transformers", "peft", "bitsandbytes", "torch")}
-identity = {"model": IMPULSE_MODEL, "device": "cuda", "base_model": BASE_MODEL, "base_revision": experiment["base_revision"],
-    "training_base_model": experiment["base_model"], "training_mode": "impulse_v2", "dataset": experiment["dataset"],
+identity = {"model": IMPULSE_V3_MODEL, "device": "cuda", "base_model": BASE_MODEL, "base_revision": experiment["base_revision"],
+    "training_base_model": experiment["base_model"], "training_mode": "impulse_v3", "dataset": experiment["dataset"],
     "adapter_sha256": ADAPTER_SHA256, "chat_template_sha256": experiment["chat_template_sha256"],
     "frozen_source_sha256": SOURCE_SHA256, "generation": SETTINGS, "gpu": gpu.name, "packages": versions,
-    "deployment_note": "impulse_v2 QLoRA adapter on the NF4 training base, served on Colab CUDA."}
+    "deployment_note": "impulse_v3 QLoRA adapter on the NF4 training base, served on Colab CUDA."}
 runtime = CUDARuntime(model, tokenizer, identity)
-server = ThreadingHTTPServer(("127.0.0.1", 8768), handler_for(runtime, IMPULSE_MODEL, "CUDA"))
+server = ThreadingHTTPServer(("127.0.0.1", 8768), handler_for(runtime, IMPULSE_V3_MODEL, "CUDA"))
 server.daemon_threads = True
 threading.Thread(target=server.serve_forever, daemon=True).start()
 os.environ["SIMPLY_CUDA_URL"] = "http://127.0.0.1:8768"
-from agents.cuda_provider import impulse_health
-print("Serving:", impulse_health()["model"])
+from agents.cuda_provider import impulse_v3_health
+print("Serving:", impulse_v3_health()["model"])
 '''
 
 RUN_SIMULATE = r'''
@@ -464,7 +443,7 @@ from core.session import SimulationSession
 from core.shopping import SIMPLE_SHOPPING
 from evaluation.benchmark import load_benchmark, instantiate_benchmark
 
-OUT = Path(f"/content/simply_impulse_v2_layout_{LAYOUT_LETTER}_{STAMP}")
+OUT = Path(f"/content/simply_impulse_v3_layout_{LAYOUT_LETTER}_{STAMP}")
 OUT.mkdir(parents=True)
 RUN_PATH = OUT / f"run_layout_{LAYOUT_LETTER}.jsonl"
 benchmark = load_benchmark(PROJECT / "simulation/benchmarks/two_layouts_15_v2.json")
@@ -472,10 +451,10 @@ grid = build_store(LAYOUT)
 shoppers = instantiate_benchmark(benchmark, SHOPPERS, grid, TURN_BUDGET, SIMPLE_SHOPPING)
 print("Shoppers:", [(s.customer.customer_id, s.customer.shopping_style) for s in shoppers])
 session = SimulationSession(LAYOUT, SHOPPERS, TURN_BUDGET, TURN_BUDGET, 1, grid=grid, shoppers=shoppers, decide=None,
-    provider_name="local_mps", model_name=IMPULSE_MODEL, seed=RUN_SEED, navigation_policy=NAV_POLICY,
+    provider_name="local_mps", model_name=IMPULSE_V3_MODEL, seed=RUN_SEED, navigation_policy=NAV_POLICY,
     allow_action_plans=False, shopping_rules=SIMPLE_SHOPPING, output_path=RUN_PATH,
     ledger_path=DECISION_RUNS_DIR / "gemini_campaign.sqlite3", requests_per_minute=0,
-    experiment={"kind": "qwen_impulse_v2_layout_run", "layout": LAYOUT, "benchmark_sha256": benchmark["sha256"],
+    experiment={"kind": "qwen_impulse_v3_layout_run", "layout": LAYOUT, "benchmark_sha256": benchmark["sha256"],
                 "cohort_size": SHOPPERS, "seed": RUN_SEED, "adapter_sha256": ADAPTER_SHA256})
 
 def watch():
@@ -512,7 +491,7 @@ with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED) as archive:
         archive.write(p, f"{OUT.name}/{p.name}")
 print("Created", ZIP_PATH, f"({ZIP_PATH.stat().st_size / 2**20:.1f} MiB)")
 summary = {"layout": LAYOUT, "run_id": report["run_id"], "status": report["status"], "model": report["model"],
-           "adapter_sha256": ADAPTER_SHA256[:16], "overall": report["overall"], "by_style": report["by_style"],
+           "adapter_sha256": ADAPTER_SHA256[:16], "overall": report["overall"], "by_style": report["by_style"], "by_tier": report["by_tier"],
            "failures": report["failures"], "run_error": RUN_ERROR}
 print("\n=== PASTE THIS INTO THE SIMPLY CHAT ===\n" + json.dumps(summary, indent=1))
 files.download(str(ZIP_PATH))
@@ -531,21 +510,52 @@ def unpack_cell(extra, label):
                 B64=base64.b64encode(data).decode()), source_sha, len(data)
 
 
+def write_csv(directory):
+    """One CSV with every row (train/validation/test): prompt, response and the per-row metadata the checks need."""
+    import csv
+    path = directory / 'impulse_v3_dataset.csv'
+    csv.field_size_limit(sys.maxsize)
+    fields = ['split', 'line', 'label', 'tier', 'style', 'base_id', 'prompt_sha256', 'target_sha256', 'prompt', 'response']
+    with open(path, 'w', newline='', encoding='utf-8') as out:
+        writer = csv.DictWriter(out, fieldnames=fields, lineterminator='\n')
+        writer.writeheader()
+        meta = {}
+        for line in (directory / 'provenance.jsonl').read_text().splitlines():
+            row = json.loads(line)
+            meta[row['split'], row['line']] = row
+        for split in ('train', 'validation', 'test'):
+            for number, line in enumerate((directory / f'{split}.jsonl').read_text().splitlines(), 1):
+                m = meta[split, number]
+                prompt, answer = (x['content'] for x in json.loads(line)['messages'])
+                writer.writerow({**{k: m[k] for k in fields[:8]}, 'prompt': prompt, 'response': answer})
+    return path
+
+
 def main():
     out = ROOT / 'notebooks'
     manifest = json.loads((DATASET_DIR / 'manifest.json').read_text())
-    data = {f'training_data/{name}': (DATASET_DIR / name).read_bytes() for name in DATASET_FILES}
-    unpack_ft, source_sha, size_ft = unpack_cell(data, ' and the impulse_v2 dataset')
-    assert manifest['frozen_source_sha256'] == source_sha, 'dataset is stale: regenerate data/finetuning/impulse_v2'
+    _, source_sha = frozen_source.bundle({})
+    assert manifest['frozen_source_sha256'] == source_sha, 'dataset is stale: regenerate data/finetuning/impulse_v3'
+    csv_path = write_csv(DATASET_DIR)
+    meta = {k: manifest[k] for k in ('dataset', 'model_requests', 'frozen_commit', 'frozen_source_sha256', 'examples', 'excluded_benchmark_shoppers')}
+    meta['csv_sha256'] = hashlib.sha256(csv_path.read_bytes()).hexdigest()
+    small = {'training_data/dataset_meta.json': json.dumps(meta, indent=1).encode(),
+             'simulation/evaluation/impulse_eval.py': (ROOT / 'simulation/evaluation/impulse_eval.py').read_bytes()}
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+        for name, data in sorted(small.items()):
+            archive.writestr(zipfile.ZipInfo(name, date_time=(2026, 11, 17, 0, 0, 0)), data, compress_type=zipfile.ZIP_DEFLATED)
+    blob = buffer.getvalue()
+    unpack_ft = fill(SMALL_UNPACK, BUNDLE_SHA=hashlib.sha256(blob).hexdigest(), B64=base64.b64encode(blob).decode())
+    size_ft = len(blob)
     gpu_a100 = fill(GPU_CHECK, MIN_MIB=38000, GPU_MESSAGE='Training needs a 40 GB A100 for 16K-token observations.')
     ft = notebook([md(FT_INTRO), code(gpu_a100), md('### 1 · Install'), code(INSTALL),
-        md('### 2 · Unpack Simply core + dataset'), code(unpack_ft, form=True),
-        md('### 3 · Settings'), code(FT_IMPORTS), md('### 4 · Verify the dataset'), code(FT_VERIFY),
-        md('### 5 · Tokenize (no truncation) and pick the fixed validation subset'), code(FT_TOKENIZE),
-        md('### 6 · Load the 4-bit base'), code(FT_LOAD), md('### 7 · Score the untuned model'), code(FT_BASELINE),
-        md('### 8 · Add LoRA and train'), code(FT_TRAIN), md('### 9 · Score the tuned model (validation, then test once)'), code(FT_AFTER),
-        md('### 10 · Save, verify and download the adapter'), code(FT_SAVE)])
-    (out / '01_finetune_qwen25_7b_impulse_v2.ipynb').write_text(json.dumps(ft, indent=1) + '\n')
+        md('### 2 · Unpack the scoring code, then provide the dataset CSV'), code(unpack_ft, form=True), code(UPLOAD_CSV),
+        md('### 3 · Verify the data, choose settings and training rows'), code(FT_DATA),
+        md('### 4 · Load the 4-bit model, tokenize, and score the untuned model'), code(FT_MODEL),
+        md('### 5 · Memory check, then train (QLoRA)'), code(FT_TRAIN),
+        md('### 6 · Score the tuned model, save, verify and download the adapter'), code(FT_SAVE)])
+    (out / '01_finetune_qwen25_7b_impulse_v3.ipynb').write_text(json.dumps(ft, indent=1) + '\n')
     unpack_run, run_sha, size_run = unpack_cell({}, '')
     assert run_sha == source_sha
     gpu_any = fill(GPU_CHECK, MIN_MIB=22000, GPU_MESSAGE='Use an A100 or L4 GPU runtime.')
