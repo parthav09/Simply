@@ -274,6 +274,284 @@
       "url": "/replays/c8e6de0c076e449f97824472dfe59688.json",
       "evidence_url": "/replays/c8e6de0c076e449f97824472dfe59688.source.jsonl",
       "bundle_sha256": "56d1705133283db71995ff1a17597e47f3bc783049006f6013a75e3610140d07"
+    },
+    {
+      "run_id": "2b123694e3464410b74ef5baea461ff4",
+      "sha256": "3013d663e279f6e3a2fb1b35b8dae4115611a9d1216d19ab97ee01f7947512a8",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-11-18T01:40:17.515304+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/2b123694e3464410b74ef5baea461ff4.json",
+      "evidence_url": "/replays/2b123694e3464410b74ef5baea461ff4.source.jsonl",
+      "bundle_sha256": "1271b68f86e7ed4436affe9fd231bd54171a99eaa3582a663f71f7526b674a90"
+    },
+    {
+      "run_id": "15f75ea5e4d9495086aa50d646d1348a",
+      "sha256": "f199d37ba1176713351d9e653698c634e9a85ead5e7fb5e2fb77487fe703b17d",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "aborted",
+      "recorded_at": "2026-11-18T01:59:00.867742+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/15f75ea5e4d9495086aa50d646d1348a.json",
+      "evidence_url": "/replays/15f75ea5e4d9495086aa50d646d1348a.source.jsonl",
+      "bundle_sha256": "891f6662cb54dd4eaff5523586ac143f92190193792f6ac0e57430c79e148589"
+    },
+    {
+      "run_id": "10505e431b78480bafbb541abe9f2710",
+      "sha256": "3a769ced3b9c5f2beedcfbbf776a149f51a772cf4fa69f5f8c84ab50ed12cefa",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-11-18T02:30:51.911095+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/10505e431b78480bafbb541abe9f2710.json",
+      "evidence_url": "/replays/10505e431b78480bafbb541abe9f2710.source.jsonl",
+      "bundle_sha256": "4a9589aeba26a98acdc818a5591cc1c56898723ba444e3316e55a06ef1a1771e"
+    },
+    {
+      "run_id": "b0ba564da4124ed99a569e29dca0d036",
+      "sha256": "222492b7e2e9cb8696f6ee5cc2802cc2dfd378b65497ce29929a4f405fc6c15f",
+      "provider": "openrouter",
+      "model": "gpt-6.1-terra",
+      "status": "completed",
+      "recorded_at": "2026-11-18T01:40:17.516486+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/b0ba564da4124ed99a569e29dca0d036.json",
+      "evidence_url": "/replays/b0ba564da4124ed99a569e29dca0d036.source.jsonl",
+      "bundle_sha256": "c8863bba7cec443170c445d701fd6d34ada46b6598c1d35ce8cb73874de0b5b7"
+    },
+    {
+      "run_id": "56967e288de94649b8a89e30dc08df06",
+      "sha256": "7391b1b4aa39a3143a812f951b5b1f719af4e41677fe3b6bf4d56974f21e6dd9",
+      "provider": "openrouter",
+      "model": "gpt-6.1-terra",
+      "status": "completed",
+      "recorded_at": "2026-11-18T01:58:51.081606+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/56967e288de94649b8a89e30dc08df06.json",
+      "evidence_url": "/replays/56967e288de94649b8a89e30dc08df06.source.jsonl",
+      "bundle_sha256": "50c4b71b444d1360e157d37f43a166ec5205aea7503c4baca7a82f51035f9246"
+    },
+    {
+      "run_id": "995c65c0e4b04b5ebfecf7b67c7379cd",
+      "sha256": "819365d8b37b1949a6528173148413e2b6f45caae4c19651b8e82135b547667d",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-28T23:42:16.371197+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:5f5b2659bfab5c1ad0b4ecdc4b198348b7c247cd7fed3e8b33431882b9a9b913",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/995c65c0e4b04b5ebfecf7b67c7379cd.json",
+      "evidence_url": "/replays/995c65c0e4b04b5ebfecf7b67c7379cd.source.jsonl",
+      "bundle_sha256": "5ceb84fac5cc24ba86677d72b6b4cc19ea7a6cb77135d6153bdcc6e2fce24ccc"
+    },
+    {
+      "run_id": "7aae885ed4004235ac4c3a237440d72a",
+      "sha256": "822fbfd8d6fbd4da2cee877e8643020230c9183a53032b68c5791981361d2191",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-10-29T00:17:57.796161+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:5f5b2659bfab5c1ad0b4ecdc4b198348b7c247cd7fed3e8b33431882b9a9b913",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/7aae885ed4004235ac4c3a237440d72a.json",
+      "evidence_url": "/replays/7aae885ed4004235ac4c3a237440d72a.source.jsonl",
+      "bundle_sha256": "e09f0dfe3e95c9e8dd609ac1dd593d5165cde6a8f641c64ced146d349ff1e09d"
+    },
+    {
+      "run_id": "311d63f0df3a4d2d9d94c05b3619b388",
+      "sha256": "7d3dbf69d47e1c30f407afd1ff777a4869845b3824f03bb6caf59d1ecd5f3b16",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "cancelled",
+      "recorded_at": "2026-11-16T19:17:02.743593+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/311d63f0df3a4d2d9d94c05b3619b388.json",
+      "evidence_url": "/replays/311d63f0df3a4d2d9d94c05b3619b388.source.jsonl",
+      "bundle_sha256": "aaa9cc4aeb13830aa919fb193d9b5a3fd32a881978fa07e9270c4e1c308486f8"
+    },
+    {
+      "run_id": "96caa4c88a3044e6bd2c21065fe05642",
+      "sha256": "b43b8440f9aaed9213fb37fb2ff80954394aeb82355197ca4f1fe84442e3b780",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "aborted",
+      "recorded_at": "2026-10-30T02:58:56.076604+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/96caa4c88a3044e6bd2c21065fe05642.json",
+      "evidence_url": "/replays/96caa4c88a3044e6bd2c21065fe05642.source.jsonl",
+      "bundle_sha256": "83274c73699f09156ebe4acdb9abea03321f6958d3ad2e433b0722e5ca69f6c7"
+    },
+    {
+      "run_id": "87e48065ebc44b24813831d4905faba2",
+      "sha256": "70cbf042c64706ddfc5a0988371a2c8f606d3f228138937a470d51fdb824210f",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-11-17T23:58:10.726536+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/87e48065ebc44b24813831d4905faba2.json",
+      "evidence_url": "/replays/87e48065ebc44b24813831d4905faba2.source.jsonl",
+      "bundle_sha256": "874f98d053e4039e26b54d06761b863d1e969603960356331807a7ccc4d49961"
+    },
+    {
+      "run_id": "6b97456af3f54c17986fad4ac0690e3e",
+      "sha256": "fb693d2fb6d0f76c8696764175c83d8e10a971001f85daa3c28fdbed48a4a604",
+      "provider": "openrouter",
+      "model": "gpt-6-luna",
+      "status": "completed",
+      "recorded_at": "2026-11-17T23:39:12.455239+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/6b97456af3f54c17986fad4ac0690e3e.json",
+      "evidence_url": "/replays/6b97456af3f54c17986fad4ac0690e3e.source.jsonl",
+      "bundle_sha256": "6fae08314a570496416d3048345d4d51ea0908de9433ef653ae5c0f510431bb5"
+    },
+    {
+      "run_id": "adb17a24fb6c420bbcd6812e0011735f",
+      "sha256": "47cfc35e0c428c837077f67cb4a3c4c312f28f853aa27ce2b4b702243383e7f9",
+      "provider": "openrouter",
+      "model": "gpt-6.1-terra",
+      "status": "completed",
+      "recorded_at": "2026-11-17T23:55:09.631750+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/adb17a24fb6c420bbcd6812e0011735f.json",
+      "evidence_url": "/replays/adb17a24fb6c420bbcd6812e0011735f.source.jsonl",
+      "bundle_sha256": "fcc11174b3a663821cee9f26eb041ebecea1f14e76dd20685b01b338af4cd80e"
+    },
+    {
+      "run_id": "a6442b5bf0bc4da7a9eb388c9eaa9a5d",
+      "sha256": "3ef231f286505dc2ded9b632b51ac25fcafe55dce8d16ebbe28958db3641bb65",
+      "provider": "openrouter",
+      "model": "gpt-6.1-terra",
+      "status": "completed",
+      "recorded_at": "2026-11-17T23:39:12.456115+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/a6442b5bf0bc4da7a9eb388c9eaa9a5d.json",
+      "evidence_url": "/replays/a6442b5bf0bc4da7a9eb388c9eaa9a5d.source.jsonl",
+      "bundle_sha256": "ab9be7857a66323259ecb9f65f79d8c6b61eafa7e3960f4aab28ea6c6f7f2fac"
+    },
+    {
+      "run_id": "30312db902d34c6ca6fd2bba2767bad3",
+      "sha256": "d05f6750cd9a15d68408b44d6dd41d2843d98f89bb68f83b6a07ec6939731382",
+      "provider": "openrouter",
+      "model": "qwen2.5-7b-instruct",
+      "status": "aborted",
+      "recorded_at": "2026-11-17T23:39:12.456526+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/30312db902d34c6ca6fd2bba2767bad3.json",
+      "evidence_url": "/replays/30312db902d34c6ca6fd2bba2767bad3.source.jsonl",
+      "bundle_sha256": "1d21abb4ff8e0097402dc49b182c752068505adf15d6ad1d6289334d5a29d19a"
+    },
+    {
+      "run_id": "f3d2bfa69fd64ac1938717ed3807d853",
+      "sha256": "f7b70956670e3c61ce0878880c7c84a390a639c9ff88abcbf7d8200606265789",
+      "provider": "local_mps",
+      "model": "qwen2.5-7b-pilot-mlx",
+      "status": "incomplete",
+      "recorded_at": "2026-11-16T21:06:18.743520+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [
+        "Incomplete run: no run_end record"
+      ],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/f3d2bfa69fd64ac1938717ed3807d853.json",
+      "evidence_url": "/replays/f3d2bfa69fd64ac1938717ed3807d853.source.jsonl",
+      "bundle_sha256": "bd68d82fcdbde168edc60beaca5340c43891c527987dd201ea9e264d953c4a13"
+    },
+    {
+      "run_id": "61ed6b82700346e29819081714beda88",
+      "sha256": "e70109ac7226135d1cc0fe6c09032742efc5770a7340625e62dcef5c8e29971d",
+      "provider": "local_mps",
+      "model": "qwen2.5-7b-pilot-mps",
+      "status": "incomplete",
+      "recorded_at": "2026-11-04T17:37:01.926937+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [
+        "Incomplete run: no run_end record"
+      ],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/61ed6b82700346e29819081714beda88.json",
+      "evidence_url": "/replays/61ed6b82700346e29819081714beda88.source.jsonl",
+      "bundle_sha256": "94694f9505ac1ffb9febf289ebd34911523eadcb45cc2b0fb911b569ba7cba59"
+    },
+    {
+      "run_id": "c5322fd1b46f470385e0f77c77b3b1c3",
+      "sha256": "1fc4b2e8e113b13f3f5fe44728ff3c31c39c11bf621334a0052bb9253c103995",
+      "provider": "local_mps",
+      "model": "qwen2.5-7b-pilot-mps",
+      "status": "incomplete",
+      "recorded_at": "2026-11-16T20:32:20.058477+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
+      "warnings": [
+        "Incomplete run: no run_end record"
+      ],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/c5322fd1b46f470385e0f77c77b3b1c3.json",
+      "evidence_url": "/replays/c5322fd1b46f470385e0f77c77b3b1c3.source.jsonl",
+      "bundle_sha256": "2b28d12d11bdd768542631a79f46e944ce9100bca1f2838bf015fc9a77577538"
     }
   ],
   "reports": [
@@ -301,11 +579,26 @@
       "url": "/replays/study-58b659b556b248b982d56ff3a51f4c93.json",
       "title": "layout \u00b7 local_mps \u00b7 pilot_or_incomplete \u00b7 58b659b5",
       "sha256": "793ec5015c0cfe9a2c6c80fc397f3df81d1a0bc66d09a14cc55b5f519b9cbdce"
+    },
+    {
+      "url": "/replays/study-6d52bd9402e843ec813fcb9ab159773b.json",
+      "title": "layout \u00b7 openrouter \u00b7 pilot_or_incomplete \u00b7 6d52bd94",
+      "sha256": "b1069619cab20e26ea2108ede872a6c4700c8eb195e0240e566e0ef9ecc531f3"
+    },
+    {
+      "url": "/replays/study-8a74ffe80110473b998c77ac32547335.json",
+      "title": "layout \u00b7 openrouter \u00b7 pilot_or_incomplete \u00b7 8a74ffe8",
+      "sha256": "2018c74793bbb4eeca07c3262283a67eb631c0cc49b5cb41d8b81c30630a6daa"
+    },
+    {
+      "url": "/replays/study-b20b2b5ddd07494fbbabe96526593c70.json",
+      "title": "layout \u00b7 openrouter \u00b7 completed \u00b7 b20b2b5d",
+      "sha256": "918c8953b74bb89293955fc97f52b831570bfc16aaae130dad7a29c938225e31"
     }
   ],
   "history": {
     "url": "/replays/history.json",
-    "sha256": "330264acbf58e8a3d675b98fc11795121bf4ee38da007905d8e500c9fc76bbc9"
+    "sha256": "56441580c2f9c51cd5d570a45f4adb12c0bc6e49cfb98df44b559395d4f3c3ba"
   },
   "matrix": {
     "url": "/replays/matrix-48ea3402f27344af949f1002123fe826.json",
@@ -314,7 +607,7 @@
   },
   "dashboard": {
     "url": "/replays/evidence-dashboard.json",
-    "sha256": "941c00470dada5ac937de2f93c1d7c7f4ef78d068baabe92d5f210cbdabf14fd"
+    "sha256": "62b6e70da015eb0bb5ea61d41e7622622c522c981f87c5eb207cdca75483edad"
   },
   "qwen_baseline": {
     "protocol_url": "/replays/study-a16f989767b34b4e9ce525607e076e05.protocol.json",
@@ -327,5 +620,19 @@
   "qwen_mlx": {
     "protocol_url": "/replays/study-58b659b556b248b982d56ff3a51f4c93.protocol.json",
     "sha256": "eee5628a655a34818fdfb2d26e01d5a490b5a63914c65bb27ee88701183ff438"
-  }
+  },
+  "openrouter_v3": [
+    {
+      "protocol_url": "/replays/study-6d52bd9402e843ec813fcb9ab159773b.protocol.json",
+      "sha256": "af674a1736b46edf1d28682cdfdcd80f7eadbe60ac5170804d58e6642febccbf"
+    },
+    {
+      "protocol_url": "/replays/study-8a74ffe80110473b998c77ac32547335.protocol.json",
+      "sha256": "57e7451b388fa49912e12ddbe744ed4991461281852fd661ce5b24d6b48be5a2"
+    },
+    {
+      "protocol_url": "/replays/study-b20b2b5ddd07494fbbabe96526593c70.protocol.json",
+      "sha256": "a8c3ee7e633b2e34477149ec0c3cba76d9e07101b52e08d08105776821953878"
+    }
+  ]
 }
