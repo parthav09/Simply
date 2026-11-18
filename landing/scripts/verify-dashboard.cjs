@@ -15,9 +15,18 @@ function compile(file,dependencies={}){
  const pilotRuns=data.runs.filter(r=>r.group==='qwen_pilot');
  const mlxRuns=data.runs.filter(r=>r.group==='qwen_mlx');
  const localRuns=data.runs.filter(r=>r.group==='local_mps');
- // 12 fixed direct-OpenAI recordings (8 main, 2 pilot, 2 historical); OpenRouter and local recordings vary as they are collected.
+ // Direct-OpenAI recordings are fixed (8 main, 2 pilot); OpenRouter and local recordings vary as they are collected.
  const openrouterRuns=data.runs.filter(r=>r.group==='openrouter');
- assert.equal(data.coverage.retained_runs,12+openrouterRuns.length+qwenRuns.length+pilotRuns.length+mlxRuns.length+localRuns.length);assert.equal(data.coverage.retained_trips,120+(openrouterRuns.length+qwenRuns.length+pilotRuns.length+mlxRuns.length+localRuns.length)*10);
+ const directRuns=data.runs.filter(r=>['main','pilot','historical'].includes(r.group));
+ assert(directRuns.length>=10&&data.runs.filter(r=>r.group==='main').length===8,'Main study recordings missing');
+ const others=openrouterRuns.length+qwenRuns.length+pilotRuns.length+mlxRuns.length+localRuns.length;
+ assert.equal(data.coverage.retained_runs,directRuns.length+others);assert.equal(data.coverage.retained_trips,(directRuns.length+others)*10);
+ assert(data.coverage.groups.every(g=>g.runs>0),'Empty evidence groups must not be listed');
+ // Tampered fixtures need one unreferenced recording to re-label: an OpenRouter run if present, else a copy of a Qwen baseline
+ // run written over an OpenAI pilot slot (totals unchanged, never referenced by a headline view).
+ const donorBase=openrouterRuns[0]??qwenRuns[0];
+ const donor=copy=>{const t=copy.runs.find(r=>r.group==='openrouter')??copy.runs.find(r=>r.group==='pilot');
+  if(t.group!=='openrouter')Object.assign(t,structuredClone(donorBase),{run_id:t.run_id,source_url:t.source_url,replay_url:t.replay_url,group:'openrouter'});return t;};
  assert(data.measures.some(m=>m.id==='impulse_units_per_trip')&&data.distribution_measures.some(m=>m.id==='impulse'),'Impulse measures missing');
  assert.equal(data.views[0].runs,4);assert.equal(data.views[0].trips,40);
  assert.equal(data.views[1].runs,7);assert.equal(data.views[2].runs,8);
@@ -25,7 +34,7 @@ function compile(file,dependencies={}){
  await assert.rejects(reader.decodeDashboard(text+' ',index.dashboard));
  const fake=JSON.parse(text);fake.views[0].models[2].cells.costco_back_anchor.metrics.checkout_completion=0;
  const fakeText=JSON.stringify(fake);await assert.rejects(reader.decodeDashboard(fakeText,entry(fakeText)));
- const wrong=JSON.parse(text);wrong.views[0].models[0].cells.costco_back_anchor.run_ids=[data.runs.find(r=>r.group==='openrouter').run_id];
+ const wrong=JSON.parse(text);wrong.views[0].models[0].cells.costco_back_anchor.run_ids=[donor(wrong).run_id];
  const wrongText=JSON.stringify(wrong);await assert.rejects(reader.decodeDashboard(wrongText,entry(wrongText)));
  const history=compile('lib/evidence.ts',{'./replay':replay,'./recordings':{}});
  let states=[];
@@ -56,7 +65,7 @@ function compile(file,dependencies={}){
  assert.match(pending,/OpenRouter-reported charge/);assert.match(pending,/N\/A/);
  // Explicit offline fixture exercises the measured Qwen reader and React path.
  const measured=JSON.parse(text),qview=measured.views.find(v=>v.id==='qwen_baseline');
- const source=measured.runs.find(r=>r.group==='openrouter');
+ const source=donor(measured);
  source.group='qwen_baseline';source.model='qwen2.5-7b-instruct';
  const model=qview.models[2];model.status='recorded';
  for(const cell of Object.values(model.cells)){Object.assign(cell,{status:'missing',runs:0,trips:0,finished:0,requested:0,purchased:0,stopped_runs:0,run_ids:[]});for(const key of Object.keys(cell.metrics))cell.metrics[key]=null;}
@@ -71,7 +80,7 @@ function compile(file,dependencies={}){
  source.group='main';const mixed=JSON.stringify(measured);
  await assert.rejects(reader.decodeDashboard(mixed,entry(mixed)));
  const local=JSON.parse(text),localView=local.views.find(v=>v.id==='qwen_baseline');
- const localSource=local.runs.find(r=>r.group==='openrouter');
+ const localSource=donor(local);
  Object.assign(localSource,{group:'qwen_pilot',provider:'local_mps',model:'qwen2.5-7b-pilot-mps'});
  const localModel=localView.models[3];localModel.status='recorded';
  for(const cell of Object.values(localModel.cells)){Object.assign(cell,{status:'missing',runs:0,trips:0,finished:0,requested:0,purchased:0,stopped_runs:0,run_ids:[]});for(const key of Object.keys(cell.metrics))cell.metrics[key]=null;}
@@ -88,7 +97,7 @@ function compile(file,dependencies={}){
  await assert.rejects(reader.decodeDashboard(unrelated,entry(unrelated)));
  if(localView.models.length===5){
   const mlx=JSON.parse(text),mv=mlx.views.find(v=>v.id==='qwen_baseline');
-  const ms=mlx.runs.find(r=>r.group==='openrouter');Object.assign(ms,{group:'qwen_mlx',provider:'local_mps',model:'qwen2.5-7b-pilot-mlx'});
+  const ms=donor(mlx);Object.assign(ms,{group:'qwen_mlx',provider:'local_mps',model:'qwen2.5-7b-pilot-mlx'});
   const mm=mv.models[4];mm.status='recorded';const mc=mm.cells[ms.layout_id];
   Object.assign(mc,{status:'recorded',runs:1,trips:10,finished:0,requested:ms.points.reduce((n,p)=>n+p.requested,0),purchased:0,stopped_runs:1,run_ids:[ms.run_id]});
   const mt=JSON.stringify(mlx),decodedMlx=await reader.decodeDashboard(mt,entry(mt));

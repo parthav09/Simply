@@ -242,7 +242,7 @@ def assemble(records, main_study_id, mlx_selected=False):
             'completed_runs':sum(r['status']=='completed' and not r['warnings'] for r in records),
             'stopped_runs':sum(r['status']!='completed' or bool(r['warnings']) for r in records),
             'main_runs':len(main),'main_trips':sum(len(r['points']) for r in main),
-            'groups':[{'id':g,'label':GROUPS[g],'runs':counts[g],'trips':sum(len(r['points']) for r in records if r['group']==g)} for g in GROUPS if g not in ('local_mps','qwen_pilot','qwen_mlx') or counts[g]]},
+            'groups':[{'id':g,'label':GROUPS[g],'runs':counts[g],'trips':sum(len(r['points']) for r in records if r['group']==g)} for g in GROUPS if counts[g]]},
         'limitations':[
             'These are simulated shopping trips, not independent people or predictions validated against human behavior.',
             'An impulse buy is a paid unit of a product that was not on the shopper’s list (Python off_list_units, checked-out trips only). It records an unplanned purchase and the model’s stated reason, not a verified psychological impulse.',

@@ -2,7 +2,7 @@
 
 Start with **Qwen3-4B-Instruct-2507 + QLoRA supervised fine-tuning**. Use
 `Simply_Qwen3_4B_QLoRA_Colab.ipynb` and the existing
-`data/simply_qwen_finetuning_demo.zip` bundle.
+`data/finetuning/legacy/simply_qwen_finetuning_demo.zip` bundle.
 
 This is a learning experiment. No model has been trained by this notebook's
 author, and no tuned-model performance is claimed.

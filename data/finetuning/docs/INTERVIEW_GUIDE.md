@@ -195,6 +195,6 @@ I haven't completed GPU training or a tuned full-trip evaluation. To test the hy
 
 ## 11. Source map and further reading
 
-Package sources: [Qwen2.5 Colab notebook](Simply_Qwen2_5_7B_QLoRA_Colab.ipynb), [starter instructions](START_HERE.md), and the dataset README, manifest, provenance and fixture recordings inside `simply_qwen_finetuning_demo.zip`. The project contains the Python provider, engine and evidence sources.
+Package sources: [Qwen2.5 Colab notebook](../../notebooks/Simply_Qwen2_5_7B_QLoRA_Colab.ipynb), [starter instructions](START_HERE.md), and the dataset README, manifest, provenance and fixture recordings inside `simply_qwen_finetuning_demo.zip`. The project contains the Python provider, engine and evidence sources.
 
 Primary references: [Qwen2.5 7B model card](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct), [Unsloth quantized checkpoint](https://huggingface.co/unsloth/Qwen2.5-7B-Instruct-bnb-4bit), [LoRA paper](https://arxiv.org/abs/2106.09685), [QLoRA paper](https://arxiv.org/abs/2305.14314), and [Hugging Face SFT documentation](https://huggingface.co/docs/trl/sft_trainer). The notebook's explicit masking implementation is the source of truth for this experiment.

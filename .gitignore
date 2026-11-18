@@ -76,4 +76,4 @@ Thumbs.db
 /hive/
 /roster.json
 /roster-backups/
-data/simply_qwen25_7b_colab_starter/*_adapter*.zip
+data/finetuning/adapters/

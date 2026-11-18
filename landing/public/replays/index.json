@@ -2,38 +2,6 @@
   "schema_version": 1,
   "runs": [
     {
-      "run_id": "995c65c0e4b04b5ebfecf7b67c7379cd",
-      "sha256": "819365d8b37b1949a6528173148413e2b6f45caae4c19651b8e82135b547667d",
-      "provider": "openai",
-      "model": "gpt-6-luna",
-      "status": "completed",
-      "recorded_at": "2026-10-28T23:42:16.371197+00:00",
-      "prompt_variant": "informed",
-      "prompt_version": "informed:5f5b2659bfab5c1ad0b4ecdc4b198348b7c247cd7fed3e8b33431882b9a9b913",
-      "warnings": [],
-      "layout_id": "costco_back_anchor",
-      "shopper_count": 10,
-      "url": "/replays/995c65c0e4b04b5ebfecf7b67c7379cd.json",
-      "evidence_url": "/replays/995c65c0e4b04b5ebfecf7b67c7379cd.source.jsonl",
-      "bundle_sha256": "5ceb84fac5cc24ba86677d72b6b4cc19ea7a6cb77135d6153bdcc6e2fce24ccc"
-    },
-    {
-      "run_id": "7aae885ed4004235ac4c3a237440d72a",
-      "sha256": "822fbfd8d6fbd4da2cee877e8643020230c9183a53032b68c5791981361d2191",
-      "provider": "openai",
-      "model": "gpt-6-luna",
-      "status": "completed",
-      "recorded_at": "2026-10-29T00:17:57.796161+00:00",
-      "prompt_variant": "informed",
-      "prompt_version": "informed:5f5b2659bfab5c1ad0b4ecdc4b198348b7c247cd7fed3e8b33431882b9a9b913",
-      "warnings": [],
-      "layout_id": "neighborhood_express",
-      "shopper_count": 10,
-      "url": "/replays/7aae885ed4004235ac4c3a237440d72a.json",
-      "evidence_url": "/replays/7aae885ed4004235ac4c3a237440d72a.source.jsonl",
-      "bundle_sha256": "e09f0dfe3e95c9e8dd609ac1dd593d5165cde6a8f641c64ced146d349ff1e09d"
-    },
-    {
       "run_id": "1e5be585cfcd4d09bb198967c3281d79",
       "sha256": "16aef9e962d0ca5dbafd76470fe7140c011ac0cff437adc2a54be8d00450672e",
       "provider": "openai",
@@ -194,22 +162,6 @@
       }
     },
     {
-      "run_id": "96caa4c88a3044e6bd2c21065fe05642",
-      "sha256": "b43b8440f9aaed9213fb37fb2ff80954394aeb82355197ca4f1fe84442e3b780",
-      "provider": "openrouter",
-      "model": "gpt-6-luna",
-      "status": "aborted",
-      "recorded_at": "2026-10-30T02:58:56.076604+00:00",
-      "prompt_variant": "informed",
-      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
-      "warnings": [],
-      "layout_id": "neighborhood_express",
-      "shopper_count": 10,
-      "url": "/replays/96caa4c88a3044e6bd2c21065fe05642.json",
-      "evidence_url": "/replays/96caa4c88a3044e6bd2c21065fe05642.source.jsonl",
-      "bundle_sha256": "83274c73699f09156ebe4acdb9abea03321f6958d3ad2e433b0722e5ca69f6c7"
-    },
-    {
       "run_id": "2d81adccb9d64be98e196d046aac7e82",
       "sha256": "9e1ecc9d0f0abd3def4b4f4fd97ca7182cf4ae3abb34e2d95d417a1bfc7e2279",
       "provider": "openai",
@@ -322,22 +274,6 @@
       "url": "/replays/c8e6de0c076e449f97824472dfe59688.json",
       "evidence_url": "/replays/c8e6de0c076e449f97824472dfe59688.source.jsonl",
       "bundle_sha256": "56d1705133283db71995ff1a17597e47f3bc783049006f6013a75e3610140d07"
-    },
-    {
-      "run_id": "311d63f0df3a4d2d9d94c05b3619b388",
-      "sha256": "7d3dbf69d47e1c30f407afd1ff777a4869845b3824f03bb6caf59d1ecd5f3b16",
-      "provider": "openrouter",
-      "model": "gpt-6-luna",
-      "status": "cancelled",
-      "recorded_at": "2026-11-16T19:17:02.743593+00:00",
-      "prompt_variant": "informed",
-      "prompt_version": "informed:99baf5d1da8c5a22ee6c808931f0a892982ccd4fb02804d6f91bd848bbc86f9e",
-      "warnings": [],
-      "layout_id": "costco_back_anchor",
-      "shopper_count": 10,
-      "url": "/replays/311d63f0df3a4d2d9d94c05b3619b388.json",
-      "evidence_url": "/replays/311d63f0df3a4d2d9d94c05b3619b388.source.jsonl",
-      "bundle_sha256": "aaa9cc4aeb13830aa919fb193d9b5a3fd32a881978fa07e9270c4e1c308486f8"
     }
   ],
   "reports": [
@@ -369,7 +305,7 @@
   ],
   "history": {
     "url": "/replays/history.json",
-    "sha256": "1cc1d46239eb5546dcc986937cb5d6f153a9d2c449bf572b8b31cd66d962faf3"
+    "sha256": "330264acbf58e8a3d675b98fc11795121bf4ee38da007905d8e500c9fc76bbc9"
   },
   "matrix": {
     "url": "/replays/matrix-48ea3402f27344af949f1002123fe826.json",
@@ -378,7 +314,7 @@
   },
   "dashboard": {
     "url": "/replays/evidence-dashboard.json",
-    "sha256": "06fc40c685734d741da1a5f5a82b5915037c9d82de502940e85f2de4b2be4e16"
+    "sha256": "941c00470dada5ac937de2f93c1d7c7f4ef78d068baabe92d5f210cbdabf14fd"
   },
   "qwen_baseline": {
     "protocol_url": "/replays/study-a16f989767b34b4e9ce525607e076e05.protocol.json",
