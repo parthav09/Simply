@@ -21,7 +21,7 @@ export default function Landing() {
     <SiteNav/>
     <section className="hero" id="main-content">
       <div className="hero-copy">
-        <p className="hero-pill"><span className="status-dot"/>Impulse-buy simulator</p>
+        <p className="hero-pill"><span className="status-dot"/>Impulse-buy simulator.</p>
         <h1>Spot the <span className="hl">impulse buy.</span></h1>
         <p className="hero-lede">Simply sends AI shoppers through a store with a list and a budget, then shows which items they <em>didn’t</em> plan to buy: where, what it cost, and why.</p>
         <div className="hero-actions">
