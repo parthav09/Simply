@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ThemeControl } from '../ui/ThemeProvider';
-
-const Brand = () => <><span className="brand-mark" aria-hidden="true"><i/><i/><i/></span>simply<span className="brand-dot">.</span></>;
+import { Wordmark } from './Brand';
 
 type Page = 'home' | 'lab' | 'replays' | 'evaluation';
 const links: { id: Page; href: string; label: string }[] = [
@@ -14,7 +13,7 @@ export default function SiteNav({ active = 'home' }: { active?: Page }) {
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a>
     <nav className={`product-nav ${active === 'lab' || active === 'replays' ? 'lab-nav' : ''}`} aria-label="Main navigation">
-      <Link href="/" className="brand" aria-label="Simply home"><Brand/></Link>
+      <Link href="/" className="brand" aria-label="Simply home"><Wordmark/></Link>
       <div className="nav-links">{links.map(l => <Link key={l.id} href={l.href} aria-current={active === l.id ? 'page' : undefined}>{l.label}</Link>)}</div>
       <div className="nav-end"><ThemeControl/></div>
     </nav>
