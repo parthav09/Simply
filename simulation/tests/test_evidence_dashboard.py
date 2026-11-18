@@ -115,6 +115,31 @@ class EvidenceDashboardTests(unittest.TestCase):
         unselected=dashboard.record(next(directory.glob('*.jsonl')),self.protocols)
         self.assertEqual(unselected['group'],'openrouter')
 
+    def test_latest_openrouter_v3_view_is_default_and_keeps_older_rows_labelled(self):
+        from test_openrouter_provider import OpenRouterTests
+        protocols=[];rows=[]
+        for model in ('gpt-6-luna','gpt-6.1-terra'):
+            directory=self.root/model
+            protocol=study.prepare(directory,provider='openrouter',kind='layout',models=[model],repetitions=1,turn_budget=1)
+            with patch('agents.openrouter_provider.api_key',return_value='OFFLINE'),patch('urllib.request.urlopen',side_effect=OpenRouterTests.response),patch('evaluation.study.DECISION_RUNS_DIR',self.root/'accounting'):
+                study.execute(directory)
+            protocols.append(protocol)
+            rows+=[dashboard.record(p,[*self.protocols,protocol]) for p in sorted(directory.glob('*.jsonl'))]
+        self.assertTrue(all(r['group']=='openrouter_v3' and r['policy']=='guided_nav_v3' for r in rows))
+        result=dashboard.assemble([*self.records,*rows],self.plan['study_id'])
+        self.assertEqual(result['default_view'],'openrouter_v3');view=result['views'][0]
+        self.assertEqual(view['id'],'openrouter_v3');self.assertEqual((view['runs'],view['trips']),(4,40))
+        self.assertEqual([m['id'] for m in view['models']],['gpt-6-luna','gpt-6.1-terra','qwen2.5-7b-instruct'])
+        for model in view['models'][:2]:
+            self.assertEqual(model['provider'],'openrouter')
+            for c in model['cells'].values():
+                self.assertEqual((c['runs'],c['trips']),(1,10))
+                self.assertIsNotNone(c['metrics']['provider_reported_cost_per_run_usd'])
+        for c in view['models'][2]['cells'].values():self.assertEqual(c['status'],'not_evaluated')
+        # The earlier direct-OpenAI views are untouched and never receive the OpenRouter rows.
+        self.assertEqual(result['views'][1]['runs'],4);self.assertEqual(result['views'][1]['id'],'matched_first')
+        self.assertEqual(sum(g['runs'] for g in result['coverage']['groups'] if g['id']=='openrouter_v3'),4)
+
     def test_published_dashboard_reconstructs_and_detects_changed_table_values(self):
         public=self.root/'public';public.mkdir()
         def save(name,value):

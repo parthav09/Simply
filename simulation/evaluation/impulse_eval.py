@@ -14,15 +14,21 @@ from collections import Counter, defaultdict
 TREAT_DEPARTMENTS = ('Snacks', 'Bakery', 'Beverages', 'Frozen', 'Prepared Meals')
 HEALTHY_DEPARTMENTS = ('Produce', 'Dairy & Eggs')
 URGENT = ('high', 'critical')
-# Visible style -> how far an unplanned item may go. Rates in the source CSV:
-# planner ~0.12, mixed ~0.24, impulsive ~0.53 mean impulse_buy_probability.
+# The v3 prompt shows `impulse_buy_probability` (and `shopping_style`) in Current state. The tier is a
+# function of that probability: how far an unplanned item may go. Source CSV means: planner ~0.12,
+# mixed ~0.24, impulsive ~0.53.
+TIER_BOUNDS = (('impulsive', 0.40), ('mixed', 0.20), ('planner', 0.10))   # below 0.10: no impulse buys
+STYLE_MEAN_PROBABILITY = {'planner': 0.12, 'mixed': 0.24, 'impulsive': 0.53}   # only for pre-v3 prompts
 TIERS = {
     'impulsive': {'cap': 2, 'max_price_cents': 800},
     'mixed': {'cap': 1, 'max_price_cents': 400},
     'planner': {'cap': 1, 'max_price_cents': 250},
 }
-STATES = ('not_at_shelf', 'list_item_reachable', 'list_complete', 'urgent', 'cap_reached',
-          'no_fitting_candidate', 'eligible')
+STATES = ('not_at_shelf', 'urgent', 'low_probability', 'cap_reached', 'no_fitting_candidate', 'list_first', 'eligible')
+
+
+def tier_for(probability):
+    return next((name for name, bound in TIER_BOUNDS if probability >= bound), None)
 
 
 def observation(prompt):
@@ -39,9 +45,14 @@ def parse_profile(prompt):
             raise ValueError(f'Persona field missing: {pattern}')
         return match.group(1)
 
+    facts = observation(prompt)
+    style = facts.get('shopping_style') or find(r'Style (\w+),')
+    probability = facts.get('impulse_buy_probability')
+    if probability is None:
+        probability = STYLE_MEAN_PROBABILITY[style]
     return {
         'shopper_id': find(r'You are shopper .*? \(([^)]+)\)\.'),
-        'style': find(r'Style (\w+),'),
+        'style': style, 'impulse_probability': float(probability), 'tier': tier_for(float(probability)),
         'diet': find(r'diet ([^,]+),'),
         'allergy': find(r'allergy ([^,]+),'),
         'drinks_alcohol': 'does not drink alcohol' not in head,
@@ -93,38 +104,45 @@ def budget_slack_cents(facts):
 
 
 def impulse_context(facts, profile):
-    """(state, candidates). The teacher grabs candidates[0] exactly when state == 'eligible'."""
+    """(state, candidates). The teacher takes an unlisted product exactly when state == 'eligible'.
+
+    'list_first': an off-list candidate exists but a list item is grabbable too; the teacher takes the
+    list item first (the prompt says needed items first) and the impulse decision comes next turn.
+    Per the v3 prompt, impulse buys are allowed after the list is complete, while checkout urgency is
+    low or medium. guided_nav_v3 keeps a reachable off-list grab only while turns_left > 15 and > 30%.
+    """
     grabbable = facts['grabbable_products']
     if 'grab' not in facts['allowed_steps'] or not grabbable:
         return 'not_at_shelf', []
-    if any(p['matches_remaining_list'] for p in grabbable):
-        return 'list_item_reachable', []          # prompt + guided_nav_v2: list items first
-    if not facts['remaining_items']:
-        return 'list_complete', []                # prompt: skip extras when the list is done
-    if facts['checkout_urgency'] in URGENT:
-        return 'urgent', []                       # prompt: skip extras when urgency is high/critical
-    tier = TIERS.get(profile['style'])
-    if tier is None or extras_in_cart(facts) >= tier['cap']:
+    left, limit = facts['turns_remaining'], max(facts['action_limit'], 1)
+    if facts['checkout_urgency'] in URGENT or left <= 15 or left / limit <= .30:
+        return 'urgent', []
+    tier = TIERS.get(profile['tier'])
+    if tier is None:
+        return 'low_probability', []
+    if extras_in_cart(facts) >= tier['cap']:
         return 'cap_reached', []
     departments = product_departments(facts)
     appeal = HEALTHY_DEPARTMENTS if profile['health'] >= 4 else TREAT_DEPARTMENTS
     slack, budget = budget_slack_cents(facts), facts['budget_cents']
     candidates = []
     for product in grabbable:
-        price = product['unit_price_cents']
-        if departments.get(product['product_id']) not in appeal or not fits_profile(product, profile):
+        price, department = product['unit_price_cents'], departments.get(product['product_id'])
+        if product['matches_remaining_list'] or department not in appeal or not fits_profile(product, profile):
             continue
         if price > tier['max_price_cents']:
             continue
-        if profile['style'] == 'impulsive' and price > slack + budget // 4:
+        if profile['tier'] == 'impulsive' and price > slack + budget // 4:
             continue
-        if profile['style'] == 'mixed' and slack - price < budget // 5:
+        if profile['tier'] == 'mixed' and slack - price < budget // 5:
             continue
-        if profile['style'] == 'planner' and (slack - price < budget // 2 or departments.get(product['product_id']) != appeal[0]):
+        if profile['tier'] == 'planner' and (slack - price < budget // 2 or department != appeal[0]):
             continue
         candidates.append(product)
     candidates.sort(key=lambda p: (p['unit_price_cents'], p['product_id']))
-    return ('eligible' if candidates else 'no_fitting_candidate'), candidates
+    if not candidates:
+        return 'no_fitting_candidate', []
+    return ('list_first' if any(p['matches_remaining_list'] for p in grabbable) else 'eligible'), candidates
 
 
 def check_action(text, facts):
@@ -163,12 +181,10 @@ def is_off_list_grab(action, facts):
 def moment_kind(facts, profile, target):
     if target['step'] == 'checkout':
         return 'checkout'
-    state, _ = impulse_context(facts, profile)
-    if state == 'list_item_reachable':
+    at_shelf = 'grab' in facts['allowed_steps'] and bool(facts['grabbable_products'])
+    if at_shelf and any(p['matches_remaining_list'] for p in facts['grabbable_products']):
         return 'list_grab'
-    if state != 'not_at_shelf':
-        return 'impulse_decision'
-    return 'move'
+    return 'impulse_decision' if at_shelf else 'move'
 
 
 def _rate(numerator, denominator):
@@ -188,12 +204,13 @@ def score_offline(rows, responses):
         model_impulse = is_off_list_grab(action, facts)
         violation = None
         if model_impulse:
-            if state != 'eligible':
+            if state not in ('eligible', 'list_first'):
                 violation = state
             elif action['product_id'] not in {p['product_id'] for p in candidates}:
                 violation = 'unfit_or_over_budget_product'
         records.append({
-            'kind': moment_kind(facts, profile, target), 'style': profile['style'], 'state': state,
+            'kind': moment_kind(facts, profile, target), 'style': profile['style'], 'tier': profile['tier'],
+            'probability': profile['impulse_probability'], 'state': state,
             'strict_schema': action is not None, 'observation_valid': valid,
             'exact_agreement': bool(action) and (action['step'], action['product_id']) == (target['step'], target['product_id']),
             'step_agreement': bool(action) and action['step'] == target['step'],
@@ -229,6 +246,12 @@ def score_offline(rows, responses):
         'f1': (2 * precision * recall / (precision + recall)) if precision and recall else (0.0 if moments else None),
         'grab_vs_pass_agreement': _rate(sum(r['teacher_impulse'] == r['model_impulse'] for r in moments), len(moments)),
     }
+    metrics['impulse_by_tier'] = {}
+    for tier in sorted({r['tier'] or 'none' for r in moments}):
+        own = [r for r in moments if (r['tier'] or 'none') == tier]
+        metrics['impulse_by_tier'][tier] = {'moments': len(own),
+            'teacher_grab_rate': _rate(sum(r['teacher_impulse'] for r in own), len(own)),
+            'model_grab_rate': _rate(sum(r['model_impulse'] for r in own), len(own))}
     for style in sorted({r['style'] for r in moments}):
         own = [r for r in moments if r['style'] == style]
         metrics['impulse_by_style'][style] = {'moments': len(own),
@@ -282,6 +305,8 @@ def trip_report(path):
                 raise ValueError(f'{agent}: cart extras do not reconcile to Python off_list_units')
             spend = sum(prices[pid] * q for pid, q in extra) if shopper['finished'] else 0
         trips.append({'shopper_id': agent, 'style': customers[agent]['shopping_style'],
+            'impulse_probability': customers[agent]['impulse_buy_probability'],
+            'tier': tier_for(customers[agent]['impulse_buy_probability']) or 'none',
             'finished': shopper['finished'], 'requested_units': shopper['requested_units'],
             'purchased_units': shopper['purchased_fulfilled_units'], 'impulse_units': impulse,
             'impulse_spend_cents': spend, 'impulse_products': [pid for pid, _ in extra] if shopper['finished'] else [],
@@ -311,5 +336,7 @@ def trip_report(path):
         'overall': aggregate(trips),
         'by_style': {style: aggregate([t for t in trips if t['style'] == style])
                      for style in sorted({t['style'] for t in trips})},
+        'by_tier': {tier: aggregate([t for t in trips if t['tier'] == tier])
+                    for tier in sorted({t['tier'] for t in trips})},
         'failures': summary.get('failures'), 'trips': trips,
         'impulse_source': 'Python summary off_list_units (finished trips only; unfinished count as 0)'}

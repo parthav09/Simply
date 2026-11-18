@@ -3,7 +3,7 @@ import os
 import re
 from urllib.parse import urlparse
 
-from agents.cuda_runtime import IMPULSE_MODEL, MODEL, MODELS, SETTINGS, pricing
+from agents.cuda_runtime import IMPULSE_MODEL, IMPULSE_V3_MODEL, MODEL, MODELS, SETTINGS, pricing
 from agents.mps_provider import MPSProvider, local_json
 
 
@@ -37,6 +37,10 @@ def impulse_health():
     return health_for(IMPULSE_MODEL)
 
 
+def impulse_v3_health():
+    return health_for(IMPULSE_V3_MODEL)
+
+
 class CUDAProvider(MPSProvider):
     model = MODEL
     pricing = pricing(MODEL)
@@ -53,5 +57,11 @@ class CUDAImpulseV2Provider(CUDAProvider):
     serving_health = staticmethod(impulse_health)
 
 
-PROVIDERS = {MODEL: CUDAProvider, IMPULSE_MODEL: CUDAImpulseV2Provider}
+class CUDAImpulseV3Provider(CUDAProvider):
+    model = IMPULSE_V3_MODEL
+    pricing = pricing(IMPULSE_V3_MODEL)
+    serving_health = staticmethod(impulse_v3_health)
+
+
+PROVIDERS = {MODEL: CUDAProvider, IMPULSE_MODEL: CUDAImpulseV2Provider, IMPULSE_V3_MODEL: CUDAImpulseV3Provider}
 PRICES = {name: cls.pricing for name, cls in PROVIDERS.items()}

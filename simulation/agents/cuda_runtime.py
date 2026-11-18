@@ -9,10 +9,12 @@ from time import perf_counter
 
 BASE_MODEL = 'Qwen/Qwen2.5-7B-Instruct'
 MODEL = 'qwen2.5-7b-pilot-cuda'               # v1 recipe on offline_demo_v1
-IMPULSE_MODEL = 'qwen2.5-7b-impulse-v2-cuda'  # v2 recipe on impulse_teacher_v2
+IMPULSE_MODEL = 'qwen2.5-7b-impulse-v2-cuda'  # v2 recipe on impulse_teacher_v2 (guided_nav_v2 prompt; superseded)
+IMPULSE_V3_MODEL = 'qwen2.5-7b-impulse-v3-cuda'  # impulse_teacher_v3: impulse-aware prompt + guided_nav_v3
 MODELS = {
     MODEL: {'training_mode': 'pilot', 'dataset': 'simply_offline_synthetic_demo_v1'},
     IMPULSE_MODEL: {'training_mode': 'impulse_v2', 'dataset': 'simply_impulse_teacher_v2'},
+    IMPULSE_V3_MODEL: {'training_mode': 'impulse_v3', 'dataset': 'simply_impulse_teacher_v3'},
 }
 SETTINGS = {'max_output_tokens': 256, 'do_sample': False, 'device': 'cuda',
     'quantization': 'bnb-nf4', 'max_context_tokens': 16384,

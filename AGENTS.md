@@ -184,3 +184,14 @@ only from a cell adjacent to the product's own cell, with no line-of-sight rule 
 no shelf front/back. Implement it as a new frozen rule version recorded in each run,
 with the navigation assist updated in the same change, and keep older recordings
 verifiable under the old shelf-level rule.
+
+## November 17 collection and compact Evidence
+The user authorized new OpenRouter runs for Luna and Terra (10 fixed profiles, Layouts A and B,
+`guided_nav_v3`). Studies: `or-v3-gpt-6-luna-20261117`, `or-v3-gpt-6.1-terra-20261117`, and
+`or-v3-gpt-6-luna-layout-b-rerun-20261117` (Luna Layout B only, seed 20261120). The first Luna Layout B
+attempt aborted after 548 actions (OpenAI content-filter HTTP 400 on an ordinary prompt) and is retained,
+excluded from headline cells and replaced by the completed re-run. Qwen2.5 7B Instruct has no OpenRouter
+endpoint any more; the Evidence Qwen row stays the Nov 3 `guided_nav_v2` baseline, labelled as an earlier run.
+The user chose not to substitute Qwen2.5 72B or a local base model. Evidence now shows only these latest runs
+(at-a-glance bars, Python-written highlights, one compact table); distribution charts and the study archive
+were removed from the page at the user's request. `index.json` key `openrouter_v3` lists the three protocols.

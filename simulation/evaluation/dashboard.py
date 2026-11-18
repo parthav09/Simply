@@ -54,8 +54,11 @@ DISTRIBUTIONS=[{'id':'moves','label':'Movement steps / trip','unit':'number'},
     {'id':'requests','label':'Submitted API requests / trip','unit':'number'},
     {'id':'estimated_cost_usd','label':'Estimated API cost / attempted trip','unit':'usd'},
     {'id':'impulse','label':'Impulse buys / trip','unit':'integer'}]
+V3_MODELS=('gpt-6-luna','gpt-6.1-terra')
+V3_POLICY='guided_nav_v3'
 GROUPS={'main':'Main controlled OpenAI study','pilot':'Separate OpenAI pilots',
         'historical':'Historical OpenAI demonstrations','openrouter':'OpenRouter · separate transport',
+        'openrouter_v3':'Latest OpenRouter study · guided_nav_v3',
         'qwen_baseline':'Qwen2.5 7B · controlled OpenRouter baseline',
         'qwen_pilot':'Qwen pilot · controlled local MPS study',
         'qwen_mlx':'Qwen pilot · controlled local MLX study',
@@ -80,7 +83,7 @@ def record(path, main_protocols):
             raise ValueError('Dashboard source differs from frozen main-study controls')
         if experiment.get('protocol_sha256')!=protocol['sha256'] or header['provider']!=protocol['provider']:
             raise ValueError('Invalid main-study source identity')
-        group=('qwen_baseline' if protocol['provider']=='openrouter' else
+        group=(('openrouter_v3' if header['model'] in V3_MODELS else 'qwen_baseline') if protocol['provider']=='openrouter' else
             ('qwen_mlx' if header['model']=='qwen2.5-7b-pilot-mlx' else 'qwen_pilot') if protocol['provider']=='local_mps' else 'main')
     elif header['provider']=='openrouter':group='openrouter'
     elif header['provider']=='local_mps':group='local_mps'
@@ -235,15 +238,45 @@ def assemble(records, main_study_id, mlx_selected=False):
         'runs':len(comparison),'trips':sum(len(r['points']) for r in comparison),
         'models':[{**m,'cells':{l['id']:cell([r for r in comparison if r['model']==m['id'] and r['layout_id']==l['id']],
             status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in models]})
+    v3=[r for r in records if r['group']=='openrouter_v3']
+    if v3:
+        latest_models=[{**MODELS[0],'provider':'openrouter','caption':'Measured · OpenRouter · guided_nav_v3'},
+            {**MODELS[1],'provider':'openrouter','caption':'Measured · OpenRouter · guided_nav_v3'},
+            {'id':'qwen2.5-7b-instruct','label':'Qwen2.5 7B Instruct · OpenRouter / Phala','status':'recorded' if qwen else 'not_evaluated','provider':'openrouter',
+             'caption':'Untuned baseline · measured Nov 3 via Phala · guided_nav_v2 · endpoint no longer offered'}]
+        # Headline cells use completed v3 runs only; an aborted attempt stays retained and listed under all recordings.
+        v3_done=[r for r in v3 if r['status']=='completed' and not r['warnings']]
+        v3_aborted=[r for r in v3 if r not in v3_done]
+        latest=[*v3_done,*qwen]
+        note=('Luna and Terra each ran once per layout through OpenRouter: the same ten shopper profiles, the same 120-action limit and the same guided_nav_v3 navigation assistance. '
+            'The Qwen2.5 7B Instruct baseline is the earlier Nov 3 run (qwen/qwen-2.5-7b-instruct, served by Phala, fallbacks disabled) under guided_nav_v2, because OpenRouter no longer serves that model. '
+            'Its date and assistance version differ, so read the Qwen row as context, not a same-conditions comparison. One run per cell is exploratory and gives no confidence interval.'
+            +''.join(f' An earlier {r["model"]} attempt on {r["layout_id"]} ended early ({r["status"]}); it is retained but not counted here, and this table uses its completed replacement.' for r in v3_aborted))
+        models_view=[{**m,'cells':{l['id']:cell([r for r in latest if r['model']==m['id'] and r['layout_id']==l['id']],
+                status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in latest_models]
+        pct=lambda v:f'{v*100:.0f}%'
+        num=lambda v:f'{v:.2f}'.rstrip('0').rstrip('.')
+        highlights=[]
+        for m in models_view:
+            a,b=(m['cells'][l['id']] for l in LAYOUTS)
+            if a['status']!='recorded' or b['status']!='recorded':continue
+            ia,ib=a['metrics']['impulse_units_per_trip'],b['metrics']['impulse_units_per_trip']
+            if ia is None or ib is None:continue
+            direction='more in Layout B' if ib>ia else 'more in Layout A' if ia>ib else 'the same in both layouts'
+            highlights.append(f"{m['label']}: {num(ia)} impulse buys per trip in Layout A and {num(ib)} in Layout B ({direction}). "
+                f"{pct(a['metrics']['checkout_completion'])} / {pct(b['metrics']['checkout_completion'])} finished the trip and "
+                f"{pct(a['metrics']['purchased_unit_fulfillment'])} / {pct(b['metrics']['purchased_unit_fulfillment'])} of the list was bought (A / B).")
+        views.insert(0,{'id':'openrouter_v3','label':'Latest runs','note':note,'highlights':highlights,
+            'runs':len(latest),'trips':sum(len(r['points']) for r in latest),'models':models_view})
     counts=Counter(r['group'] for r in records)
-    return {'dashboard_version':1,'main_study_id':main_study_id,'default_view':'qwen_baseline' if qwen else 'matched_first',
+    return {'dashboard_version':1,'main_study_id':main_study_id,'default_view':'openrouter_v3' if v3 else 'qwen_baseline' if qwen else 'matched_first',
         'layouts':LAYOUTS,'measures':MEASURES,'distribution_measures':DISTRIBUTIONS,'views':views,'runs':records,
         'coverage':{'retained_runs':len(records),'retained_trips':sum(len(r['points']) for r in records),
             'completed_runs':sum(r['status']=='completed' and not r['warnings'] for r in records),
             'stopped_runs':sum(r['status']!='completed' or bool(r['warnings']) for r in records),
             'main_runs':len(main),'main_trips':sum(len(r['points']) for r in main),
             'groups':[{'id':g,'label':GROUPS[g],'runs':counts[g],'trips':sum(len(r['points']) for r in records if r['group']==g)} for g in GROUPS if counts[g]]},
-        'limitations':[
+        'limitations':LATEST_LIMITATIONS if v3 else [
             'These are simulated shopping trips, not independent people or predictions validated against human behavior.',
             'An impulse buy is a paid unit of a product that was not on the shopper’s list (Python off_list_units, checked-out trips only). It records an unplanned purchase and the model’s stated reason, not a verified psychological impulse.',
             'The historical table uses four matched OpenAI runs. The Qwen comparison adds its two separate OpenRouter runs. One repetition provides descriptive results, not a confidence interval or statistical significance.',
@@ -255,6 +288,16 @@ def assemble(records, main_study_id, mlx_selected=False):
             'API cost per checkout pools all selected costs and divides by completed checkouts, retaining costs from unfinished trips. Other per-trip rates pool their numerators and denominators.',
             'Simulated checkout sales are not real revenue. Both models use recorded Python navigation assistance; this does not isolate unassisted model intelligence.',
             'Qwen3-4B-Instruct-2507 is unevaluated. Local MPS and MLX pilot cells contain only exported attempts from their respective selected frozen studies. N/A means no exported evaluation, never zero performance.']}
+
+
+LATEST_LIMITATIONS=[
+    'These are simulated shopping trips, not independent people or predictions validated against human behavior.',
+    'An impulse buy is a paid unit of a product that was not on the shopper’s list (Python off_list_units, checked-out trips only). It records an unplanned purchase and the model’s stated reason, not a verified psychological impulse.',
+    'Each cell is one run of the same ten fixed shopper profiles. Results are descriptive and exploratory: no confidence intervals, no significance claims, and the ten profiles repeat across layouts and models.',
+    'Purchased-list fulfillment counts requested units in paid carts. Unfinished shoppers keep zero purchased units; unpaid baskets are not sales.',
+    'Luna and Terra use guided_nav_v3 through OpenRouter. The Qwen2.5 7B Instruct baseline is an earlier Nov 3 run under guided_nav_v2 that cannot be repeated, so it is context rather than a same-conditions comparison.',
+    'OpenRouter-reported charges come from the provider. Python’s estimates use each recording’s frozen token prices. They are shown separately and are never merged.',
+    'All models receive Python navigation assistance, so results measure the assisted system, not unassisted model intelligence. Simulated checkout sales are not real revenue.']
 
 
 def load_main(public):
@@ -288,6 +331,18 @@ def load_main(public):
             or {a['layout_id'] for a in qwen['arms']}!={l['id'] for l in LAYOUTS}):
             raise ValueError('Invalid frozen Qwen baseline protocol')
         children.append(qwen)
+    seen_v3=set()
+    for entry_v3 in index.get('openrouter_v3',[]):
+        v3=json.loads((public/Path(entry_v3['protocol_url']).name).read_text())
+        if (fingerprint({k:v for k,v in v3.items() if k!='sha256'})!=v3['sha256']
+            or v3['sha256']!=entry_v3['sha256'] or v3['provider']!='openrouter'
+            or v3['kind']!='layout' or v3['cohort_size']!=10 or v3['repetitions']!=1
+            or v3['turn_budget']!=120 or v3['shopping_rules']!='unique_single_checkout_v1' or len(v3['arms'])!=2
+            or any(a['model']!=v3['arms'][0]['model'] or a['policy']!=V3_POLICY for a in v3['arms'])
+            or v3['arms'][0]['model'] not in V3_MODELS
+            or {a['layout_id'] for a in v3['arms']}!={l['id'] for l in LAYOUTS}):
+            raise ValueError('Invalid frozen OpenRouter guided_nav_v3 protocol')
+        seen_v3.add(v3['arms'][0]['model']);children.append(v3)
     selected=index.get('qwen_pilot')
     if selected:
         pilot=json.loads((public/Path(selected['protocol_url']).name).read_text())
