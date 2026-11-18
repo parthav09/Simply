@@ -1,18 +1,54 @@
 {
   "rule": "Completed runs under the current shopping rules where all ten shoppers checked out, ranked by list items fulfilled, then fewest failed actions. Outcomes such as impulse buys are not used to choose. Models with fewer qualifying runs list what exists; incomplete recordings are labelled in the page.",
   "models": [
-    {"model": "gpt-6-luna", "cells": {
-      "costco_back_anchor": ["2d81adccb9d64be98e196d046aac7e82", "9488c19617e1432d85be3e1ec2ba4e2c"],
-      "neighborhood_express": ["fde2de5cf2824b30adc47c9174bd764d", "45c58a6162f4450091c3caa16e0e701c"]}},
-    {"model": "gpt-6.1-terra", "cells": {
-      "costco_back_anchor": ["1512b82600664e66ae4db51c29841a6a", "43604b0a77ca4643b6bd07be96b5a89b"],
-      "neighborhood_express": ["1e5be585cfcd4d09bb198967c3281d79", "6be24fc157fc4ff699114695bb002184"]}},
-    {"model": "qwen2.5-7b-instruct", "cells": {
-      "costco_back_anchor": ["c5c26fb5137a40bc9d8ebfdd12dfcaa9"],
-      "neighborhood_express": ["10fd15cb8f634223b56652b0ea284251"]}},
-    {"model": "qwen2.5-7b-pilot-mlx", "cells": {
-      "costco_back_anchor": ["2e5afc29dc9540ababeecd0ed7e0f48d"],
-      "neighborhood_express": ["c8e6de0c076e449f97824472dfe59688", "28e77581b0d9433da4baf719b6d33e62"]}}
+    {
+      "model": "gpt-6-luna",
+      "cells": {
+        "costco_back_anchor": [
+          "2d81adccb9d64be98e196d046aac7e82",
+          "9488c19617e1432d85be3e1ec2ba4e2c"
+        ],
+        "neighborhood_express": [
+          "fde2de5cf2824b30adc47c9174bd764d",
+          "45c58a6162f4450091c3caa16e0e701c"
+        ]
+      }
+    },
+    {
+      "model": "gpt-6.1-terra",
+      "cells": {
+        "costco_back_anchor": [
+          "1512b82600664e66ae4db51c29841a6a",
+          "43604b0a77ca4643b6bd07be96b5a89b"
+        ],
+        "neighborhood_express": [
+          "1e5be585cfcd4d09bb198967c3281d79",
+          "6be24fc157fc4ff699114695bb002184"
+        ]
+      }
+    },
+    {
+      "model": "qwen2.5-7b-instruct",
+      "cells": {
+        "costco_back_anchor": [
+          "c5c26fb5137a40bc9d8ebfdd12dfcaa9"
+        ],
+        "neighborhood_express": [
+          "10fd15cb8f634223b56652b0ea284251"
+        ]
+      }
+    },
+    {
+      "model": "qwen2.5-7b-impulse-v3-cuda",
+      "cells": {
+        "costco_back_anchor": [
+          "f8b8dca86aa84bae868cfa5a57c66f3f"
+        ],
+        "neighborhood_express": [
+          "1f9a510be29546d28f4b1f5d7f796d0a"
+        ]
+      }
+    }
   ],
-  "incomplete_allowed": ["c8e6de0c076e449f97824472dfe59688", "28e77581b0d9433da4baf719b6d33e62"]
+  "incomplete_allowed": []
 }
