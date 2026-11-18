@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ImpulseReceipt from '../ui/ImpulseReceipt';
 import SiteNav from './SiteNav';
 import HoverFx from './HoverFx';
+import ShelfField from './ShelfField';
 import { Wordmark } from './Brand';
 import { Icon, type IconName } from '../ui/Icons';
 
@@ -19,6 +20,7 @@ const surfaces: { href: string; icon: IconName; title: string; body: string; cta
 
 export default function Landing() {
   return <main className="marketing-page">
+    <ShelfField/>
     <HoverFx/>
     <SiteNav/>
     <section className="hero" id="main-content">
@@ -35,7 +37,16 @@ export default function Landing() {
           <li><span className="tag tag-impulse">Impulse</span>not on the list</li>
         </ul>
       </div>
-      <div className="hero-stage"><ImpulseReceipt/></div>
+      <div className="hero-stage">
+        <div className="app-window">
+          <div className="app-bar" aria-hidden="true">
+            <span className="app-dots"><i/><i/><i/></span>
+            <span className="app-title">simply · recorded run</span>
+            <span className="app-badge">Replay</span>
+          </div>
+          <ImpulseReceipt/>
+        </div>
+      </div>
     </section>
 
     <section className="band" aria-label="How Simply works">

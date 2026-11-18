@@ -15,7 +15,7 @@ export default function SiteNav({ active = 'home' }: { active?: Page }) {
     <nav className={`product-nav ${active === 'lab' || active === 'replays' ? 'lab-nav' : ''}`} aria-label="Main navigation">
       <Link href="/" className="brand" aria-label="Simply home"><Wordmark/></Link>
       <div className="nav-links">{links.map(l => <Link key={l.id} href={l.href} aria-current={active === l.id ? 'page' : undefined}>{l.label}</Link>)}</div>
-      <div className="nav-end"><ThemeControl/></div>
+      <div className="nav-end"><ThemeControl/>{active === 'home' && <Link href="/replays" className="product-primary nav-cta">Watch a replay</Link>}</div>
     </nav>
   </>;
 }
