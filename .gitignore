@@ -72,6 +72,9 @@ runs/
 .DS_Store
 Thumbs.db
 
+# Local Claude Code instructions (machine-local, not shared).
+/CLAUDE.md
+
 # Downloaded model adapters (large / machine-local).
 data/finetuning/adapters/
 data/finetuning/colab_runs/*_adapter*.zip
