@@ -20,7 +20,7 @@ from core.evidence import METRICS, run_row
 from core.export_replay import export_run
 from core.grid import build_store
 from core.integrity import fingerprint
-from core.navigation import GUIDED_CURRENT, MODEL_ONLY
+from core.navigation import GUIDED_V2, GUIDED_CURRENT, MODEL_ONLY
 from core.run_log import read_run
 from core.session import SimulationSession, build_run_start
 from core.shopping import SIMPLE_SHOPPING
@@ -35,7 +35,9 @@ def provider_spec(name, model=None):
     if name=='local_mps':
         from agents.mps_provider import MPSProvider,MODEL as local_model,PRICING as local_price
         from agents.mlx_provider import MLXProvider,MODEL as mlx_model,PRICING as mlx_price
-        return (MLXProvider if model==mlx_model else MPSProvider),{local_model:local_price,mlx_model:mlx_price}
+        from agents.cuda_provider import PROVIDERS as cuda_providers,PRICES as cuda_prices
+        cls={mlx_model:MLXProvider,**cuda_providers}.get(model,MPSProvider)
+        return cls,{local_model:local_price,mlx_model:mlx_price,**cuda_prices}
     if name=='openrouter':
         from agents.openrouter_provider import OpenRouterProvider, MODEL_PRICING as prices
         return OpenRouterProvider, prices
@@ -81,7 +83,7 @@ def prepare(directory, *, kind='layout', models=None, layout=ACTIVE_LAYOUT_IDS[0
         raise ValueError('Study settings must be integers')
     if not 10 <= shoppers <= 15 or not 1 <= repetitions <= 50 or not 1 <= turn_budget <= 120 or not 1 <= concurrency <= 15 or requests_per_minute < 0:
         raise ValueError('Invalid study settings')
-    if layout not in ACTIVE_LAYOUT_IDS or policy not in (GUIDED_CURRENT, MODEL_ONLY):
+    if layout not in ACTIVE_LAYOUT_IDS or policy not in (GUIDED_V2, GUIDED_CURRENT, MODEL_ONLY):
         raise ValueError('Unsupported layout or policy')
     if provider=='local_mps':
         if concurrency!=1:raise ValueError('Local MPS studies require concurrency 1')
@@ -307,7 +309,7 @@ def main(argv=None):
     parser.add_argument('--kind', choices=KINDS, default='layout')
     parser.add_argument('--models', nargs='+')
     parser.add_argument('--layout', choices=ACTIVE_LAYOUT_IDS, default=ACTIVE_LAYOUT_IDS[0])
-    parser.add_argument('--policy', choices=(GUIDED_CURRENT, MODEL_ONLY), default=GUIDED_CURRENT)
+    parser.add_argument('--policy', choices=(GUIDED_V2, GUIDED_CURRENT, MODEL_ONLY), default=GUIDED_CURRENT)
     parser.add_argument('--provider', choices=('openai', 'openrouter', 'fake','local_mps'), default='openai')
     parser.add_argument('--shoppers', type=int, default=10)
     parser.add_argument('--repetitions', type=int, default=5)

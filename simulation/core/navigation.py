@@ -10,8 +10,10 @@ from agents.steps import MOVES
 
 MODEL_ONLY = 'model_only'
 GUIDED_V1 = 'guided_nav_v1'
-GUIDED_CURRENT = 'guided_nav_v2'
-ASSISTED = (GUIDED_V1, GUIDED_CURRENT)
+GUIDED_V2 = 'guided_nav_v2'
+GUIDED_V3 = 'guided_nav_v3'
+GUIDED_CURRENT = GUIDED_V3
+ASSISTED = (GUIDED_V1, GUIDED_V2, GUIDED_V3)
 POLICIES = (MODEL_ONLY, *ASSISTED)
 
 
@@ -28,13 +30,13 @@ def adjusted_action(proposal, before, layout, visits, policy=GUIDED_V1, action_l
     for item in before['requirements']:
         needed[item['product_id']] += item['quantity']
     remaining = needed - owned
-    limit = min(before['turn_budget'], action_limit or before['turn_budget']) if policy == GUIDED_CURRENT else before['turn_budget']
+    limit = min(before['turn_budget'], action_limit or before['turn_budget']) if policy in (GUIDED_V2, GUIDED_V3) else before['turn_budget']
     turns_left = limit - before['turns_used']
     reachable = [product for shelf in layout['shelves']
                  if shelf['offsets'] and min(abs(x - shelf['x'] - dx) + abs(y - shelf['y'] - dy)
                                             for dx, dy in shelf['offsets']) == 1
                  for product in shelf['products']]
-    if policy == GUIDED_CURRENT:
+    if policy in (GUIDED_V2, GUIDED_V3):
         # Inspect adjacent shelves left, right, up, then down. Preserve
         # that priority when multiple Simply shelf groups are within reach.
         reachable = []
@@ -57,6 +59,14 @@ def adjusted_action(proposal, before, layout, visits, policy=GUIDED_V1, action_l
     # Prioritize checkout near the action limit, then reachable targets.
     if owned and 'checkout' in allowed and turns_left <= 15:
         return choose('checkout', 'checkout with few turns remaining')
+    if (policy == GUIDED_V3 and proposal.step == 'grab' and proposal.product_id and 'grab' in allowed
+            and not owned[proposal.product_id] and not remaining[proposal.product_id]
+            and any(p['id'] == proposal.product_id for p in reachable)
+            and turns_left > 15 and turns_left / limit > .30):
+        # v3: a physically reachable, unowned off-list grab is the shopper's own
+        # impulse decision. Keep it even when the list is complete or a list item
+        # is also in reach; checkout and routing assistance resume afterwards.
+        return proposal, None
     if 'grab' in allowed:
         for product in reachable:
             if remaining[product['id']] > 0:

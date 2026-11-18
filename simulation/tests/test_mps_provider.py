@@ -80,7 +80,7 @@ class MPSTests(unittest.TestCase):
         from evaluation import study
         directory=self.root/'study'
         with patch('agents.mps_provider.local_json',side_effect=self.response):
-            protocol=study.prepare(directory,provider='local_mps',concurrency=1,repetitions=1,turn_budget=1)
+            protocol=study.prepare(directory,policy='guided_nav_v2',provider='local_mps',concurrency=1,repetitions=1,turn_budget=1)
             self.assertEqual(len(protocol['schedule']),2)
             self.assertTrue(all(c['config']['generation']['serving_identity']==IDENTITY for c in protocol['contracts'].values()))
             with patch('evaluation.study.DECISION_RUNS_DIR',self.root/'accounting'):
@@ -96,7 +96,7 @@ class MPSTests(unittest.TestCase):
         from evaluation import mps_study,study
         directory=self.root/'worker'
         with patch('agents.mps_provider.local_json',side_effect=self.response):
-            protocol=study.prepare(directory,provider='local_mps',concurrency=1,repetitions=1)
+            protocol=study.prepare(directory,policy='guided_nav_v2',provider='local_mps',concurrency=1,repetitions=1)
         counter=[]
         def report(_):return {'status':'completed' if len(counter)==2 else 'pilot_or_incomplete'}
         def advance(_,max_new_runs):
@@ -113,7 +113,7 @@ class MPSTests(unittest.TestCase):
         from evaluation import study
         directory=self.root/'studies/pilot';public=self.root/'public';public.mkdir()
         with patch('agents.mps_provider.local_json',side_effect=self.response):
-            protocol=study.prepare(directory,provider='local_mps',concurrency=1,repetitions=1,turn_budget=1)
+            protocol=study.prepare(directory,policy='guided_nav_v2',provider='local_mps',concurrency=1,repetitions=1,turn_budget=1)
             with patch('evaluation.study.DECISION_RUNS_DIR',self.root/'accounting'):study.execute(directory)
         first,second=[study.slot_path(directory,s) for s in protocol['schedule']]
         # An explicit offline fixture representing a flushed recording before run_end.

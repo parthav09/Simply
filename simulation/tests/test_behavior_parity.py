@@ -11,7 +11,7 @@ from agents.base import Decision, ProposalResult
 from core.accounting import basket, cents
 from core.grid import build_store
 from core.customers import instantiate_agents
-from core.navigation import GUIDED_V1, GUIDED_CURRENT, MODEL_ONLY, adjusted_action
+from core.navigation import GUIDED_V1, GUIDED_V2, GUIDED_V3, GUIDED_CURRENT, MODEL_ONLY, adjusted_action
 from core.session import SimulationSession
 from core.run_log import read_run
 
@@ -24,7 +24,7 @@ class BehaviorParityTests(unittest.TestCase):
         layout = {'checkout': [[8, 8]], 'shelves': [
             {'x': 4, 'y': 3, 'offsets': [[0, 0]], 'products': [{'id': 'right'}]},
             {'x': 2, 'y': 3, 'offsets': [[0, 0]], 'products': [{'id': 'left'}]}]}
-        self.assertEqual(adjusted_action(Decision('move_down'), before, layout, {}, GUIDED_CURRENT)[0].product_id, 'left')
+        self.assertEqual(adjusted_action(Decision('move_down'), before, layout, {}, GUIDED_V2)[0].product_id, 'left')
         self.assertEqual(adjusted_action(Decision('move_down'), before, layout, {}, GUIDED_V1)[0].product_id, 'right')
 
     def test_checkout_urgency_overrides_impulse_and_historical_policy_is_preserved(self):
@@ -34,12 +34,23 @@ class BehaviorParityTests(unittest.TestCase):
         layout = {'checkout': [[8, 3]], 'shelves': [{'x': 3, 'y': 4, 'offsets': [[0, 0]], 'products': [{'id': 'treat'}]}]}
         proposal = Decision('grab', 'treat', 'A fitting treat')
         self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_V1)[0], proposal)
-        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_CURRENT)[0].step, 'move_right')
+        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_V2)[0].step, 'move_right')
         before['turns_used'] = 0
-        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_CURRENT)[0], proposal)
-        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_CURRENT, action_limit=1)[0].step, 'grab')
+        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_V2)[0], proposal)
+        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_V2, action_limit=1)[0].step, 'grab')
         before['allowed_steps'].append('checkout')
-        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_CURRENT, action_limit=10)[0].step, 'checkout')
+        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_V2, action_limit=10)[0].step, 'checkout')
+
+    def test_v3_keeps_reachable_off_list_grab_after_list_is_complete(self):
+        before = {'x': 3, 'y': 3, 'cart': [{'product_id': 'owned', 'quantity': 1}],
+            'requirements': [{'product_id': 'owned', 'quantity': 1}],
+            'allowed_steps': ['grab', 'checkout', 'move_left'], 'turn_budget': 120, 'turns_used': 10}
+        layout = {'checkout': [[8, 3]], 'shelves': [{'x': 3, 'y': 4, 'offsets': [[0, 0]], 'products': [{'id': 'treat'}]}]}
+        proposal = Decision('grab', 'treat', 'A fitting treat')
+        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_V3)[0], proposal)
+        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_V2)[0].step, 'checkout')
+        before['turns_used'] = 100
+        self.assertEqual(adjusted_action(proposal, before, layout, {}, GUIDED_V3)[0].step, 'checkout')
 
     def test_over_budget_grab_and_checkout_are_applied_and_measured_without_trimming(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -68,7 +79,7 @@ class BehaviorParityTests(unittest.TestCase):
         for case in fixture['cases']:
             with self.subTest(case=case['name']):
                 visits = {tuple(cell): count for cell, count in case['visits']}
-                decision, _ = adjusted_action(Decision(**case['proposal']), case['before'], case['layout'], visits, GUIDED_CURRENT)
+                decision, _ = adjusted_action(Decision(**case['proposal']), case['before'], case['layout'], visits, GUIDED_V2)
                 self.assertEqual([decision.step, decision.product_id], case['expected'])
 
     def test_model_only_study_uses_one_request_per_action_without_plans(self):

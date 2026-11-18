@@ -36,6 +36,10 @@ def build_provider(name,ledger,run_id,seed=42,bucket='manual',stage_limit_usd=No
         if model==MLX_MODEL:
             from agents.mlx_provider import MLXProvider
             return MLXProvider(ledger,run_id,seed,bucket,stage_limit_usd,requests_per_minute,model=model)
+        from agents.cuda_runtime import MODELS as CUDA_MODELS
+        if model in CUDA_MODELS:
+            from agents.cuda_provider import PROVIDERS as CUDA_PROVIDERS
+            return CUDA_PROVIDERS[model](ledger,run_id,seed,bucket,stage_limit_usd,requests_per_minute,model=model)
         from agents.mps_provider import MPSProvider,MODEL
         return MPSProvider(ledger,run_id,seed,bucket,stage_limit_usd,requests_per_minute,model=model or MODEL)
     if name=='openrouter':

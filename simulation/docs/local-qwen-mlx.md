@@ -10,9 +10,9 @@ From the repository root, prepare an isolated environment and model once:
 ```bash
 python3 -m venv simulation/models/mlx-venv
 simulation/models/mlx-venv/bin/python -m pip install -r requirements-mlx.txt
-.venv/bin/python simulation/mps_setup.py --adapter data/simply_qwen25_7b_colab_starter/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
+.venv/bin/python simulation/mps_setup.py --adapter data/finetuning/adapters/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
 simulation/models/mlx-venv/bin/python -m mlx_lm convert --hf-path simulation/models/huggingface/hub/models--Qwen--Qwen2.5-7B-Instruct/snapshots/a09a35458c702b33eeacc393d103063234e8bc28 --mlx-path simulation/models/qwen25-7b-mlx-int4 -q --q-bits 4 --q-group-size 64
-simulation/models/mlx-venv/bin/python simulation/mlx_adapter.py --adapter data/simply_qwen25_7b_colab_starter/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
+simulation/models/mlx-venv/bin/python simulation/mlx_adapter.py --adapter data/finetuning/adapters/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
 ```
 
 The converter checks the pilot configuration and verifies the 392 converted
@@ -23,7 +23,7 @@ adapter is unchanged. The 4-bit MLX base is approximately 4 GB on disk.
 Start the server and leave it running:
 
 ```bash
-simulation/models/mlx-venv/bin/python simulation/mlx_server.py --adapter data/simply_qwen25_7b_colab_starter/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
+simulation/models/mlx-venv/bin/python simulation/mlx_server.py --adapter data/finetuning/adapters/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
 ```
 
 Wait for `Ready`, start `.venv/bin/python simulation/serve.py` separately, and

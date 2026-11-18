@@ -105,6 +105,7 @@ def informed_prompt(shopper, observation=None, *, action_plan=False):
                 for y in range(grid.height)]
     facts = {
         'prompt_revision': 'observe-plan-v5-unique-checkout' if simple else 'observe-plan-v4-soft-budget',
+        'impulse_buy_probability': profile.impulse_buy_probability, 'shopping_style': profile.shopping_style,
         'position': [obs.x, obs.y], 'phase': obs.phase,
         'coordinate_system': 'Top-left origin (0,0). x increases right; y increases down.',
         'legal_move_destinations': {step: [obs.x+dx, obs.y+dy] for step, (dx,dy) in moves.items()},
@@ -135,7 +136,7 @@ def informed_prompt(shopper, observation=None, *, action_plan=False):
     response_instructions = ([
         f'Choose a short plan of 1–{MAX_PLAN_ACTIONS} primitive actions. Use several moves through a clear corridor instead of asking again at every cell. Every action still costs one turn.',
         'The FIRST action must be allowed_steps. Later actions must be physically legal after preceding actions; use floor_map to check every planned destination. The engine never fills in a route for you.',
-        'AT A SHELF, plan needed grabs first, one action per remaining unit. You may then grab one off-list item whose matches_remaining_list is false when it fits this shopper and the budget. Skip that extra when checkout_urgency is high or critical.',
+        'AT A SHELF, plan needed grabs first, one action per remaining unit. You may then grab one off-list item whose matches_remaining_list is false when it fits your impulse_buy_probability and shopper style. Skip that extra when checkout_urgency is high or critical.',
         'Movement is interrupted as soon as a new shelf assortment becomes grabbable, so stop to inspect and choose purchases there. Never plan a grab for a product whose details are not currently grabbable_products.',
         'Plans stop on failure, unexpected state changes, completion or the turn limit. Reconsider from the next observation; no automatic purchase, rerouting, or checkout occurs.',
         'Return exactly one JSON object with one short public reason and actions in order. Each action has step and product_id (empty for moves/checkout). No prose outside JSON.',
@@ -152,8 +153,8 @@ def informed_prompt(shopper, observation=None, *, action_plan=False):
         'WORK ONE TARGET AT A TIME: use remaining_items to choose a specific product and its department. Keep that destination until it is collected or you deliberately abandon it.',
         'Your reason is one short public plan for your next turn: name the target or checkout and intended destination. Continue your_last_plan unless the recorded outcome or needs changed.',
         'AT A SHELF: inspect grabbable_products. A product with matches_remaining_list true is still needed — prioritize it while considering its price and your spending preferences. Use only an ID in that array.',
-        'IMPULSE: matches_remaining_list false means the product is not on the remaining list. You may grab one unit when it fits this shopper — a deal, a treat, or something the profile would actually want. Consider the budget target and say why in the reason. Do not grab an unrelated product, and do not grab a product already in the cart.',
-        'Skip extras when checkout_urgency is high or critical, or when remaining_items is empty. Then go to checkout.',
+        'IMPULSE: matches_remaining_list false means the product is not on your list. Real shoppers buy unplanned items. Your impulse_buy_probability is your chance on each shelf visit of adding one unit of an appealing unlisted product (a treat, a deal, a favourite). Decide as this shopper would: high probability means you usually take something that catches your eye, low means rarely. Name the product and why in the reason. Never grab a product already in the cart.',
+        'Impulse buys are allowed even after your list is complete, while you are still at a shelf and checkout_urgency is low or medium. Skip extras only when checkout_urgency is high or critical; then go to checkout.',
         'LOOK AHEAD: nearby_shelves lists assortments within six cells and marks remaining targets. Use those signs to approach a needed department; only grabbable_products is within reach and has current price and preference evidence.',
         ('Each target is a unique product. Grab at most one unit of any product; products already in your cart are omitted from grabbable_products.' if simple else
          'Each grab adds exactly one unit. Another unit of a needed product is allowed only while remaining_requested_quantity is above zero.'),

@@ -19,7 +19,7 @@ def main(argv=None):
     parser.add_argument('--turn-budget',type=int,default=120)
     parser.add_argument('--concurrency',type=int,default=DEFAULT_CONCURRENCY)
     parser.add_argument('--provider',choices=('openrouter','openai','gemini','fake','local_mps'),default='openrouter')
-    parser.add_argument('--model',choices=('gpt-6-luna','gpt-6.1-terra','qwen2.5-7b-instruct','qwen2.5-7b-pilot-mps','qwen2.5-7b-pilot-mlx'),help='Shopper model; provider and weights are frozen per run')
+    parser.add_argument('--model',choices=('gpt-6-luna','gpt-6.1-terra','qwen2.5-7b-instruct','qwen2.5-7b-pilot-mps','qwen2.5-7b-pilot-mlx','qwen2.5-7b-pilot-cuda','qwen2.5-7b-impulse-v2-cuda'),help='Shopper model; provider and weights are frozen per run')
     parser.add_argument('--prompt',choices=('baseline','informed'),default='informed')
     parser.add_argument('--seed',type=int,default=42)
     parser.add_argument('--requests-per-minute',type=int,help='Admission pacing (OpenRouter default 18/min; other providers 0)')

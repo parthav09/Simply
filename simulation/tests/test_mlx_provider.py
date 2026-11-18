@@ -64,7 +64,7 @@ class MLXProviderTests(unittest.TestCase):
             with patch.object(MLXProvider, 'serving_health', return_value=IDENTITY), \
                     patch('agents.mps_provider.local_json', return_value=response), \
                     patch('evaluation.study.DECISION_RUNS_DIR', Path(root) / 'accounting'):
-                protocol = study.prepare(directory, provider='local_mps', models=[MODEL], concurrency=1,
+                protocol = study.prepare(directory, policy='guided_nav_v2', provider='local_mps', models=[MODEL], concurrency=1,
                     repetitions=1, turn_budget=1)
                 study.execute(directory)
             rows = [dashboard.record(path, [protocol]) for path in directory.glob('*.jsonl')]
@@ -82,7 +82,7 @@ class MLXProviderTests(unittest.TestCase):
             with patch.object(MLXProvider, 'serving_health', return_value=IDENTITY), \
                     patch('agents.mps_provider.local_json', return_value=response), \
                     patch('evaluation.study.DECISION_RUNS_DIR', Path(root) / 'accounting'):
-                study.prepare(directory, provider='local_mps', models=[MODEL], concurrency=1,
+                study.prepare(directory, policy='guided_nav_v2', provider='local_mps', models=[MODEL], concurrency=1,
                     repetitions=1, turn_budget=1)
                 study.execute(directory, max_new_runs=1)
                 existing = next(directory.glob('*.jsonl'))
@@ -106,7 +106,7 @@ class MLXProviderTests(unittest.TestCase):
                     patch('agents.mps_provider.local_json', return_value=response), \
                     patch('evaluation.study.DECISION_RUNS_DIR', Path(root) / 'accounting'), \
                     patch('evaluation.continue_mlx.DECISION_RUNS_DIR', Path(root) / 'accounting'):
-                protocol = study.prepare(directory, provider='local_mps', models=[MODEL], concurrency=1,
+                protocol = study.prepare(directory, policy='guided_nav_v2', provider='local_mps', models=[MODEL], concurrency=1,
                     repetitions=1, turn_budget=2)
                 study.execute(directory, max_new_runs=1)
                 source = next(directory.glob('*.jsonl'))

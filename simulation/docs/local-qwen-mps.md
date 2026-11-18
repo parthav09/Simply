@@ -27,8 +27,8 @@ The initial official base download is approximately 15 GB.
 
 ```bash
 .venv/bin/python -m pip install -r requirements-mps.txt
-.venv/bin/python simulation/mps_setup.py --adapter data/simply_qwen25_7b_colab_starter/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
-.venv/bin/python simulation/mps_server.py --adapter data/simply_qwen25_7b_colab_starter/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
+.venv/bin/python simulation/mps_setup.py --adapter data/finetuning/adapters/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
+.venv/bin/python simulation/mps_server.py --adapter data/finetuning/adapters/simply_qwen25_7b_pilot_20261104_045543_adapter_lora.zip
 ```
 
 Keep that process running; wait for `Ready` at `http://127.0.0.1:8766`.
