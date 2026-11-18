@@ -5,7 +5,7 @@
 export default function OpenQuestions(){
   return <section className="open-questions" aria-labelledby="open-questions-title">
     <h2 id="open-questions-title">Two things we are still learning</h2>
-    <p className="evidence-footnote">Observations and open questions, not findings. Ten shoppers, one run each.</p>
+    <p className="evidence-footnote">Observations and open questions, not findings. Ten shoppers, one or two runs each.</p>
     <div className="open-questions-grid">
       <article>
         <h3>Do shoppers follow their profile, or the model’s assumptions?</h3>
@@ -14,10 +14,11 @@ export default function OpenQuestions(){
         <ul>
           <li>Neither model is the baseline. We have no real shopper to compare to, and her 45% impulse rate is a number we chose.</li>
           <li>Per visit, Terra is close to what 45% predicts. She is not a statistical outlier.</li>
+          <li>A repeat Terra run on Layout A did it again: 11 off-list items for her, against 12 before. The pattern is stable for Terra, not a fluke.</li>
           <li>Luna taking none for an impulsive shopper is also questionable. It may be treating the list as the whole job.</li>
           <li>We can’t say yet. Next step: change one profile field at a time and check that behaviour moves with it.</li>
         </ul>
-        <p className="evidence-footnote">Source runs: or-v3-gpt-6.1-terra-20261117 and or-v3-gpt-6-luna-20261117.</p>
+        <p className="evidence-footnote">Source runs: or-v3-gpt-6.1-terra-20261117, or-v3-gpt-6-luna-20261117 and or-v3-gpt-6.1-terra-layout-a-replicate-20261118.</p>
       </article>
       <article>
         <h3>How far can a shopper see?</h3>
