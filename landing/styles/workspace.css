@@ -1,6 +1,6 @@
 @layer pages {
 .lab-application { min-height: 100vh; background: var(--color-canvas); }
-.lab-nav { height: 56px; max-width: 1440px; padding: 0 var(--space-6); }
+.lab-nav { height: 56px; max-width: none; width: 100%; padding: 0 max(var(--space-6), calc((100vw - 1400px) / 2 + var(--space-4))); }
 .lab-content {
   min-width: 0;
   width: 100%;
