@@ -6,11 +6,11 @@ import { Icon } from './Icons';
 type Preference = 'system' | 'light' | 'dark';
 const storageKey = 'simply-appearance';
 const changeEvent = 'simply-appearance-change';
-let fallbackPreference: Preference = 'system';
-const ThemeContext = createContext<Preference>('system');
+let fallbackPreference: Preference = 'dark';
+const ThemeContext = createContext<Preference>('dark');
 
 function preference(): Preference {
-  try { const value = localStorage.getItem(storageKey); return value === 'light' || value === 'dark' ? value : 'system'; }
+  try { const value = localStorage.getItem(storageKey); return value === 'light' || value === 'dark' || value === 'system' ? value : 'dark'; }
   catch { return fallbackPreference; }
 }
 function subscribe(callback: () => void) {
@@ -23,7 +23,7 @@ function applyTheme(value: Preference) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const value = useSyncExternalStore(subscribe, preference, () => 'system' as Preference);
+  const value = useSyncExternalStore(subscribe, preference, () => 'dark' as Preference);
   useEffect(() => {
     // Read the actual client preference during hydration; preserve the bootstrap colors.
     applyTheme(preference());

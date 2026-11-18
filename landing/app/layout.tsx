@@ -22,9 +22,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
+    <html lang="en" data-theme="dark" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
       <body>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=localStorage.getItem('simply-appearance');document.documentElement.dataset.theme=p==='light'||p==='dark'?p:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=localStorage.getItem('simply-appearance');document.documentElement.dataset.theme=p==='light'||p==='dark'?p:p==='system'&&!matchMedia('(prefers-color-scheme: dark)').matches?'light':'dark'}catch(e){}})()` }} />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
