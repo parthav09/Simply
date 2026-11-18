@@ -77,3 +77,4 @@ Thumbs.db
 /roster.json
 /roster-backups/
 data/finetuning/adapters/
+data/finetuning/colab_runs/*_adapter*.zip
