@@ -544,3 +544,4 @@
 .linked-note { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 }
 @layer pages { .replay-picker .seg { flex-wrap: wrap; } }
+@layer pages { .replay-provenance { margin-top: var(--space-5); font-size: var(--text-xs); color: var(--color-text-secondary); } .replay-provenance summary { cursor: pointer; color: var(--color-text-muted); } .replay-provenance p { max-width: 900px; line-height: 1.65; } .run-facts { margin-bottom: var(--space-3); } }

@@ -40,3 +40,27 @@ class LandingDemoTests(unittest.TestCase):
         events = [e for e in run['events'] if e['agent_id'] == selected['shopper_id']]
         cart = events[-1]['after']['cart']
         self.assertEqual(sum(i['quantity'] for i in cart if i['product_id'] not in planned), metric['off_list_units'])
+
+    def test_replay_selection_names_real_matching_published_runs(self):
+        """The Replays tab uses a fixed list; every id must exist and match its model and layout."""
+        public = ROOT / 'landing/public'
+        selection = json.loads((ROOT / 'landing/data/replay-selection.json').read_text())
+        catalog = {entry['run_id']: entry for entry in json.loads((public / 'replays/index.json').read_text())['runs']}
+        allowed_incomplete = set(selection['incomplete_allowed'])
+        seen = set()
+        for model in selection['models']:
+            for layout, ids in model['cells'].items():
+                self.assertLessEqual(len(ids), 2)
+                for run_id in ids:
+                    self.assertNotIn(run_id, seen, 'A run may appear only once')
+                    seen.add(run_id)
+                    entry = catalog[run_id]
+                    self.assertEqual((entry['model'], entry['layout_id']), (model['model'], layout))
+                    if run_id not in allowed_incomplete:
+                        self.assertEqual(entry['warnings'], [])
+                    if run_id not in allowed_incomplete:
+                        self.assertEqual(entry['status'], 'completed')
+                        if model['model'].startswith('gpt-'):
+                            # Luna and Terra have enough runs to require every shopper to have paid.
+                            self.assertEqual(read_run(public / entry['evidence_url'].lstrip('/'))['summary']['finished_count'], entry['shopper_count'])
+        self.assertTrue(allowed_incomplete <= seen)

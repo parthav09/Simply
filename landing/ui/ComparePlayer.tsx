@@ -4,7 +4,7 @@ import {useEffect, useMemo, useState, type CSSProperties} from 'react';
 import {loadRecording} from '../lib/recordings';
 import {frameAt, type ReplayData} from '../lib/replay';
 import {impulseBuys, money, totalOffListUnits} from '../lib/impulse';
-import type {DemoCell} from '../lib/demo-runs';
+import type {DemoPick} from '../lib/demo-runs';
 import RecordedStoreMap from './RecordedStoreMap';
 import {productEmoji} from './map-theme';
 import {Icon} from './Icons';
@@ -13,7 +13,7 @@ import {Icon} from './Icons';
  * Presentation only: two verified recordings advanced by one shared decision counter.
  * Each pane shows its own recorded state at min(step, its length); nothing is simulated.
  */
-export default function ComparePlayer({cells}: {cells: DemoCell[]}) {
+export default function ComparePlayer({cells}: {cells: DemoPick[]}) {
   const [runs, setRuns] = useState<(ReplayData | null)[]>(cells.map(() => null));
   const [error, setError] = useState('');
   const [step, setStep] = useState(0);
@@ -60,7 +60,7 @@ export default function ComparePlayer({cells}: {cells: DemoCell[]}) {
   </section>;
 }
 
-function ComparePane({cell, run, step}: {cell: DemoCell; run: ReplayData | null; step: number}) {
+function ComparePane({cell, run, step}: {cell: DemoPick; run: ReplayData | null; step: number}) {
   const cursor = run ? Math.min(step, run.events.length) : 0;
   const frame = useMemo(() => run ? frameAt(run, cursor) : null, [run, cursor]);
   const found = useMemo(() => run ? impulseBuys(run, cursor) : [], [run, cursor]);

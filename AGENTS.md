@@ -163,3 +163,24 @@ the evidence index were regenerated. This supersedes the earlier "never relabel
 historical recordings" rule for this identifier rename only: counts, layouts,
 models, prompts, decisions and outcomes are untouched. Do not reintroduce the
 old names.
+
+## November 17 decisions: impulse behaviour, replays and shelf visibility
+The user reopened the impulse-behaviour work ("get back to work about improving
+that behaviour") and approved building on the uncommitted `guided_nav_v3` assist
+and impulse-aware prompt edits, replacing the earlier "do not reintroduce"
+restriction. `guided_nav_v1` and `guided_nav_v2` are frozen history: recordings
+validate their recorded adjustments with the same pure function, so they must
+not be deleted. Two OpenRouter Luna/Terra studies (`or-impulse-*-20261117`) froze
+the prompt and v3 at launch; do not edit `agents/prompts.py`, `core/` or
+`evaluation/study.py` while a study is running, because the engine fingerprint
+would no longer match. The Qwen2.5 7B OpenRouter run failed with HTTP 404 (no
+endpoint) and is retained; do not retry or substitute without a new instruction.
+The Replays tab shows a fixed, documented selection
+(`landing/data/replay-selection.json`, guarded by a Python test): the two best
+completed runs per model per layout where they exist, chosen by list fulfilment and
+failed actions, never by impulse outcome.
+Shelf visibility decision (not yet implemented): a product is grabbable and visible
+only from a cell adjacent to the product's own cell, with no line-of-sight rule and
+no shelf front/back. Implement it as a new frozen rule version recorded in each run,
+with the navigation assist updated in the same change, and keep older recordings
+verifiable under the old shelf-level rule.
