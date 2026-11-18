@@ -3,8 +3,8 @@ import {sha256,type Catalog} from './replay';
 
 export type Measure={id:string;label:string;unit:string;primary?:boolean};
 export type DashboardCell={status:'recorded'|'not_evaluated'|'missing';run_ids:string[];runs:number;trips:number;finished:number;requested:number;purchased:number;stopped_runs:number;metrics:Record<string,number|null>};
-export type DashboardModel={id:string;label:string;status:'recorded'|'not_evaluated';cells:Record<string,DashboardCell>};
-export type DashboardView={id:string;label:string;note:string;runs:number;trips:number;models:DashboardModel[]};
+export type DashboardModel={id:string;label:string;status:'recorded'|'not_evaluated';provider?:string;caption?:string;cells:Record<string,DashboardCell>};
+export type DashboardView={id:string;label:string;note:string;highlights?:string[];runs:number;trips:number;models:DashboardModel[]};
 export type Distribution={known:number;unknown:number;min:number|null;q1:number|null;median:number|null;q3:number|null;max:number|null};
 export type TripPoint={profile_id:string;finished:boolean;requested:number;purchased:number;values:Record<string,number|null>};
 export type DashboardRun={run_id:string;source_sha256:string;provider:string;model:string;layout_id:string;recorded_at:string;status:string;warnings:string[];group:string;repetition:number|null;cohort_sha256:string;shopping_rules:string;policy:string;source_url:string;replay_url:string;run_metrics:Record<string,number|null>;continuation?:{source_run_id:string;source_sha256:string;source_event_count:number}|null;points:TripPoint[];distributions:Record<string,Distribution>};
@@ -26,7 +26,7 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
   const runIds=new Set(d.runs.map(r=>r.run_id));
   for(const r of d.runs){
     check(/^[a-f0-9]{32}$/.test(r.run_id)&&/^[a-f0-9]{64}$/.test(r.source_sha256)&&/^[a-f0-9]{64}$/.test(r.cohort_sha256),'Invalid source identity');
-    check(['main','pilot','historical','openrouter','qwen_baseline','qwen_pilot','qwen_mlx','local_mps'].includes(r.group)&&['openai','openrouter','gemini','local_mps'].includes(r.provider)&&d.layouts.some(l=>l.id===r.layout_id),'Invalid source scope');
+    check(['main','pilot','historical','openrouter','openrouter_v3','qwen_baseline','qwen_pilot','qwen_mlx','local_mps'].includes(r.group)&&['openai','openrouter','gemini','local_mps'].includes(r.provider)&&d.layouts.some(l=>l.id===r.layout_id),'Invalid source scope');
     check(r.source_url===`/replays/${r.run_id}.source.jsonl`&&r.replay_url===`/replays/${r.run_id}.json`,'Invalid evidence source link');
     if(r.continuation){const c=r.continuation;const source=d.runs.find(x=>x.run_id===c.source_run_id);
       check(source&&source.source_sha256===c.source_sha256&&source.layout_id===r.layout_id&&source.model===r.model&&count(c.source_event_count)&&c.source_event_count>0,'Invalid continuation source');}
@@ -42,11 +42,12 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
         [s.min,s.q1,s.median,s.q3,s.max].every(numeric)&&s.min!<=s.q1!&&s.q1!<=s.median!&&s.median!<=s.q3!&&s.q3!<=s.max!),'Invalid distribution bounds');
     }
   }
-  check(Array.isArray(d.views)&&[3,4].includes(d.views.length)&&d.views.some(v=>v.id===d.default_view)&&new Set(d.views.map(v=>v.id)).size===d.views.length,'Invalid comparison views');
+  check(Array.isArray(d.views)&&[3,4,5].includes(d.views.length)&&d.views.some(v=>v.id===d.default_view)&&new Set(d.views.map(v=>v.id)).size===d.views.length,'Invalid comparison views');
   for(const v of d.views){
-    const qwen=v.id==='qwen_baseline';
-    check(count(v.runs)&&count(v.trips)&&typeof v.note==='string'&&(v.models?.length===4||(qwen&&v.models?.length===5)),'Invalid comparison sample');
-    const expected=qwen?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct,qwen2.5-7b-pilot-mps'+(v.models.length===5?',qwen2.5-7b-pilot-mlx':''):'gpt-6-luna,gpt-6.1-terra,qwen3-4b-instruct-2507,qwen3-4b-instruct-2507-finetuned';
+    const qwen=v.id==='qwen_baseline';const latest=v.id==='openrouter_v3';const mixed=qwen||latest;
+    check(count(v.runs)&&count(v.trips)&&typeof v.note==='string'&&(v.highlights===undefined||(Array.isArray(v.highlights)&&v.highlights.every(t=>typeof t==='string')))&&(v.models?.length===4||(qwen&&[4,5].includes(v.models?.length))||(latest&&v.models?.length===3)),'Invalid comparison sample');
+    const expected=latest?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct':
+      qwen?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct,qwen2.5-7b-pilot-mps'+(v.models.length===5?',qwen2.5-7b-pilot-mlx':''):'gpt-6-luna,gpt-6.1-terra,qwen3-4b-instruct-2507,qwen3-4b-instruct-2507-finetuned';
     check(v.models.map(m=>m.id).join(',')===expected,'Invalid model comparison rows');
     for(const model of v.models)for(const layout of d.layouts){const c=model.cells[layout.id];
       check(c&&[c.runs,c.trips,c.finished,c.requested,c.purchased,c.stopped_runs].every(count)&&c.finished<=c.trips&&c.purchased<=c.requested&&c.stopped_runs<=c.runs,'Invalid model/layout coverage');
@@ -54,10 +55,12 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
       check(d.measures.every(m=>nullable(c.metrics[m.id])),'Invalid Python table metric');
       if(model.status==='not_evaluated')check(c.status==='not_evaluated'&&!c.runs&&!c.trips&&Object.values(c.metrics).every(n=>n===null),'Unevaluated Qwen has fabricated results');
       for(const id of c.run_ids){const r=d.runs.find(r=>r.run_id===id)!;
-        const qwenModel=qwen&&model.id==='qwen2.5-7b-instruct';
+        const qwenModel=mixed&&model.id==='qwen2.5-7b-instruct';
         const pilotModel=qwen&&model.id==='qwen2.5-7b-pilot-mps';
-        const mlxModel=qwen&&model.id==='qwen2.5-7b-pilot-mlx';
-        check(r.group===(mlxModel?'qwen_mlx':pilotModel?'qwen_pilot':qwenModel?'qwen_baseline':'main')&&r.provider===(pilotModel||mlxModel?'local_mps':qwenModel?'openrouter':'openai')&&r.model===model.id&&r.layout_id===layout.id,'Non-comparable source in headline table');
+        const mlxModel=mixed&&model.id==='qwen2.5-7b-pilot-mlx';
+        const openrouterGpt=latest&&(model.id==='gpt-6-luna'||model.id==='gpt-6.1-terra');
+        check(r.group===(mlxModel?'qwen_mlx':pilotModel?'qwen_pilot':qwenModel?'qwen_baseline':openrouterGpt?'openrouter_v3':'main')&&r.provider===(pilotModel||mlxModel?'local_mps':qwenModel||openrouterGpt?'openrouter':'openai')&&r.model===model.id&&r.layout_id===layout.id,'Non-comparable source in headline table');
+        if(openrouterGpt)check(r.policy==='guided_nav_v3'&&r.shopping_rules==='unique_single_checkout_v1','OpenRouter v3 source has different controls');
         if(!qwenModel&&!pilotModel&&!mlxModel&&v.id!=='all_attempts')check(r.status==='completed'&&!r.warnings.length,'Stopped source in completed-run view');
       }
     }
