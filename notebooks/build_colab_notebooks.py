@@ -556,6 +556,26 @@ def main():
         md('### 5 · Memory check, then train (QLoRA)'), code(FT_TRAIN),
         md('### 6 · Score the tuned model, save, verify and download the adapter'), code(FT_SAVE)])
     (out / '01_finetune_qwen25_7b_impulse_v3.ipynb').write_text(json.dumps(ft, indent=1) + '\n')
+
+    # Variant "b": same pipeline and same adapter contract (02/03 accept it); only the data mix and epochs change.
+    def swap(text, old, new):
+        assert old in text, old
+        return text.replace(old, new, 1)
+    intro_b = swap(swap(FT_INTRO, '# 01 · Fine-tune Qwen2.5-7B-Instruct to make impulse buys (QLoRA, Unsloth)',
+        '# 01b · Retrain: more movement practice, 2 epochs (QLoRA, Unsloth)\n\nSame as notebook 01, with a data mix aimed at the Layout A/B weak spots: **250 movement examples (was 60)**, 200 pass examples (was 400), all 125 impulse grabs, and **2 epochs**. Upload the same `impulse_v3_dataset.csv`.'),
+        '**Time:** about 60 minutes (install ≈ 4, load ≈ 3, untuned check ≈ 4, train ≈ 38, tuned check ≈ 4, save ≈ 2).',
+        '**Time:** about 100 minutes (install ≈ 4, load ≈ 3, untuned check ≈ 4, train ≈ 75, tuned check ≈ 4, save ≈ 2).')
+    data_b = swap(FT_DATA, 'CAPS = {"impulse_pass": 400, "list_grab": 140, "checkout": 60, "move": 60}',
+        'CAPS = {"impulse_pass": 200, "list_grab": 120, "checkout": 50, "move": 250}')
+    train_b = swap(FT_TRAIN, 'num_train_epochs=1,', 'num_train_epochs=2,')
+    save_b = swap(FT_SAVE, '"epochs": 1,', '"epochs": 2, "variant": "v3b_more_movement",')
+    ft_b = notebook([md(intro_b), code(gpu_a100), md('### 1 · Install'), code(INSTALL),
+        md('### 2 · Unpack the scoring code, then provide the dataset CSV'), code(unpack_ft, form=True), code(UPLOAD_CSV),
+        md('### 3 · Verify the data, choose settings and training rows'), code(data_b),
+        md('### 4 · Load the 4-bit model, tokenize, and score the untuned model'), code(FT_MODEL),
+        md('### 5 · Memory check, then train (QLoRA)'), code(train_b),
+        md('### 6 · Score the tuned model, save, verify and download the adapter'), code(save_b)])
+    (out / '01b_retrain_more_movement.ipynb').write_text(json.dumps(ft_b, indent=1) + '\n')
     unpack_run, run_sha, size_run = unpack_cell({}, '')
     assert run_sha == source_sha
     gpu_any = fill(GPU_CHECK, MIN_MIB=22000, GPU_MESSAGE='Use an A100 or L4 GPU runtime.')

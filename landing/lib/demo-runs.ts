@@ -21,6 +21,7 @@ const names: Record<string, [string, string]> = {
   'gpt-6.1-terra': ['GPT-6.1 Terra', 'OpenAI'],
   'qwen2.5-7b-instruct': ['Qwen 7B · base', 'OpenRouter'],
   'qwen2.5-7b-pilot-mlx': ['Qwen 7B · fine-tuned', 'Local MLX 4-bit'],
+  'qwen2.5-7b-impulse-v3-cuda': ['Qwen 7B · fine-tuned v3', 'Colab A100 4-bit'],
 };
 export const modelShort = (id: string) => names[id]?.[0] ?? id;
 

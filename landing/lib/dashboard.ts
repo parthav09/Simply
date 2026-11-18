@@ -26,7 +26,7 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
   const runIds=new Set(d.runs.map(r=>r.run_id));
   for(const r of d.runs){
     check(/^[a-f0-9]{32}$/.test(r.run_id)&&/^[a-f0-9]{64}$/.test(r.source_sha256)&&/^[a-f0-9]{64}$/.test(r.cohort_sha256),'Invalid source identity');
-    check(['main','pilot','historical','openrouter','openrouter_v3','qwen_baseline','qwen_pilot','qwen_mlx','local_mps'].includes(r.group)&&['openai','openrouter','gemini','local_mps'].includes(r.provider)&&d.layouts.some(l=>l.id===r.layout_id),'Invalid source scope');
+    check(['main','pilot','historical','openrouter','openrouter_v3','qwen_baseline','qwen_pilot','qwen_mlx','qwen_v3','local_mps'].includes(r.group)&&['openai','openrouter','gemini','local_mps'].includes(r.provider)&&d.layouts.some(l=>l.id===r.layout_id),'Invalid source scope');
     check(r.source_url===`/replays/${r.run_id}.source.jsonl`&&r.replay_url===`/replays/${r.run_id}.json`,'Invalid evidence source link');
     if(r.continuation){const c=r.continuation;const source=d.runs.find(x=>x.run_id===c.source_run_id);
       check(source&&source.source_sha256===c.source_sha256&&source.layout_id===r.layout_id&&source.model===r.model&&count(c.source_event_count)&&c.source_event_count>0,'Invalid continuation source');}
@@ -45,8 +45,8 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
   check(Array.isArray(d.views)&&[3,4,5].includes(d.views.length)&&d.views.some(v=>v.id===d.default_view)&&new Set(d.views.map(v=>v.id)).size===d.views.length,'Invalid comparison views');
   for(const v of d.views){
     const qwen=v.id==='qwen_baseline';const latest=v.id==='openrouter_v3';const mixed=qwen||latest;
-    check(count(v.runs)&&count(v.trips)&&typeof v.note==='string'&&(v.highlights===undefined||(Array.isArray(v.highlights)&&v.highlights.every(t=>typeof t==='string')))&&(v.models?.length===4||(qwen&&[4,5].includes(v.models?.length))||(latest&&v.models?.length===3)),'Invalid comparison sample');
-    const expected=latest?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct':
+    check(count(v.runs)&&count(v.trips)&&typeof v.note==='string'&&(v.highlights===undefined||(Array.isArray(v.highlights)&&v.highlights.every(t=>typeof t==='string')))&&(v.models?.length===4||(qwen&&[4,5].includes(v.models?.length))||(latest&&v.models?.length===4)),'Invalid comparison sample');
+    const expected=latest?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct,qwen2.5-7b-impulse-v3-cuda':
       qwen?'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct,qwen2.5-7b-pilot-mps'+(v.models.length===5?',qwen2.5-7b-pilot-mlx':''):'gpt-6-luna,gpt-6.1-terra,qwen3-4b-instruct-2507,qwen3-4b-instruct-2507-finetuned';
     check(v.models.map(m=>m.id).join(',')===expected,'Invalid model comparison rows');
     for(const model of v.models)for(const layout of d.layouts){const c=model.cells[layout.id];
@@ -59,8 +59,9 @@ export async function decodeDashboard(text:string,entry:NonNullable<Catalog['das
         const pilotModel=qwen&&model.id==='qwen2.5-7b-pilot-mps';
         const mlxModel=mixed&&model.id==='qwen2.5-7b-pilot-mlx';
         const openrouterGpt=latest&&(model.id==='gpt-6-luna'||model.id==='gpt-6.1-terra');
-        check(r.group===(mlxModel?'qwen_mlx':pilotModel?'qwen_pilot':qwenModel?'qwen_baseline':openrouterGpt?'openrouter_v3':'main')&&r.provider===(pilotModel||mlxModel?'local_mps':qwenModel||openrouterGpt?'openrouter':'openai')&&r.model===model.id&&r.layout_id===layout.id,'Non-comparable source in headline table');
-        if(openrouterGpt)check(r.policy==='guided_nav_v3'&&r.shopping_rules==='unique_single_checkout_v1','OpenRouter v3 source has different controls');
+        const colabModel=latest&&model.id==='qwen2.5-7b-impulse-v3-cuda';
+        check(r.group===(colabModel?'qwen_v3':mlxModel?'qwen_mlx':pilotModel?'qwen_pilot':qwenModel?'qwen_baseline':openrouterGpt?'openrouter_v3':'main')&&r.provider===(colabModel||pilotModel||mlxModel?'local_mps':qwenModel||openrouterGpt?'openrouter':'openai')&&r.model===model.id&&r.layout_id===layout.id,'Non-comparable source in headline table');
+        if(openrouterGpt||colabModel)check(r.policy==='guided_nav_v3'&&r.shopping_rules==='unique_single_checkout_v1','Latest-run source has different controls');
         if(!qwenModel&&!pilotModel&&!mlxModel&&v.id!=='all_attempts')check(r.status==='completed'&&!r.warnings.length,'Stopped source in completed-run view');
       }
     }

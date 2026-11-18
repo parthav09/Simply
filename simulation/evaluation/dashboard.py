@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -56,9 +57,11 @@ DISTRIBUTIONS=[{'id':'moves','label':'Movement steps / trip','unit':'number'},
     {'id':'impulse','label':'Impulse buys / trip','unit':'integer'}]
 V3_MODELS=('gpt-6-luna','gpt-6.1-terra')
 V3_POLICY='guided_nav_v3'
+COLAB_MODEL='qwen2.5-7b-impulse-v3-cuda'   # fine-tuned Qwen served from a Colab A100 (notebooks 02/03)
 GROUPS={'main':'Main controlled OpenAI study','pilot':'Separate OpenAI pilots',
         'historical':'Historical OpenAI demonstrations','openrouter':'OpenRouter · separate transport',
         'openrouter_v3':'Latest OpenRouter study · guided_nav_v3',
+        'qwen_v3':'Fine-tuned Qwen v3 · Colab A100 recordings',
         'qwen_baseline':'Qwen2.5 7B · controlled OpenRouter baseline',
         'qwen_pilot':'Qwen pilot · controlled local MPS study',
         'qwen_mlx':'Qwen pilot · controlled local MLX study',
@@ -85,6 +88,13 @@ def record(path, main_protocols):
             raise ValueError('Invalid main-study source identity')
         group=(('openrouter_v3' if header['model'] in V3_MODELS else 'qwen_baseline') if protocol['provider']=='openrouter' else
             ('qwen_mlx' if header['model']=='qwen2.5-7b-pilot-mlx' else 'qwen_pilot') if protocol['provider']=='local_mps' else 'main')
+    elif header['provider']=='local_mps' and header['model']==COLAB_MODEL and experiment.get('kind')=='qwen_impulse_v3_layout_run':
+        config=header['config']
+        if (experiment.get('cohort_size')!=10 or config.get('navigation_policy')!=V3_POLICY or config.get('turn_budget')!=120
+            or config.get('shopping_rules')!='unique_single_checkout_v1'
+            or not re.fullmatch(r'[a-f0-9]{64}',experiment.get('adapter_sha256') or '')):
+            raise ValueError('Fine-tuned Qwen Colab recording does not match the frozen v3 controls')
+        group='qwen_v3'
     elif header['provider']=='openrouter':group='openrouter'
     elif header['provider']=='local_mps':group='local_mps'
     elif experiment.get('stage')=='main':group='pilot'
@@ -124,7 +134,6 @@ def record(path, main_protocols):
     unknown_usage=summary['resources']['unknown_usage_requests']
     continuation = None
     if experiment.get('stage') == 'continuation':
-        import re
         continuation = {key: experiment.get(key) for key in ('source_run_id', 'source_sha256', 'source_event_count')}
         if (not re.fullmatch(r'[a-f0-9]{32}', continuation['source_run_id'] or '')
             or not re.fullmatch(r'[a-f0-9]{64}', continuation['source_sha256'] or '')
@@ -239,18 +248,23 @@ def assemble(records, main_study_id, mlx_selected=False):
         'models':[{**m,'cells':{l['id']:cell([r for r in comparison if r['model']==m['id'] and r['layout_id']==l['id']],
             status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in models]})
     v3=[r for r in records if r['group']=='openrouter_v3']
+    colab=[r for r in records if r['group']=='qwen_v3' and r['status']=='completed' and not r['warnings']]
     if v3:
         latest_models=[{**MODELS[0],'provider':'openrouter','caption':'Measured · OpenRouter · guided_nav_v3'},
             {**MODELS[1],'provider':'openrouter','caption':'Measured · OpenRouter · guided_nav_v3'},
             {'id':'qwen2.5-7b-instruct','label':'Qwen2.5 7B Instruct · OpenRouter / Phala','status':'recorded' if qwen else 'not_evaluated','provider':'openrouter',
-             'caption':'Untuned baseline · measured Nov 3 via Phala · guided_nav_v2 · endpoint no longer offered'}]
+             'caption':'Untuned baseline · measured Nov 3 via Phala · guided_nav_v2 · endpoint no longer offered'},
+            {'id':COLAB_MODEL,'label':'Qwen2.5 7B · fine-tuned (impulse v3)','status':'recorded' if colab else 'not_evaluated','provider':'local_mps',
+             'caption':'Measured · QLoRA adapter, 4-bit on a Colab A100 · guided_nav_v3'}]
         # Headline cells use completed v3 runs only; an aborted attempt stays retained and listed under all recordings.
         v3_done=[r for r in v3 if r['status']=='completed' and not r['warnings']]
         v3_aborted=[r for r in v3 if r not in v3_done]
-        latest=[*v3_done,*qwen]
+        latest=[*v3_done,*qwen,*colab]
         note=('Luna and Terra each ran once per layout through OpenRouter: the same ten shopper profiles, the same 120-action limit and the same guided_nav_v3 navigation assistance. '
             'The Qwen2.5 7B Instruct baseline is the earlier Nov 3 run (qwen/qwen-2.5-7b-instruct, served by Phala, fallbacks disabled) under guided_nav_v2, because OpenRouter no longer serves that model. '
-            'Its date and assistance version differ, so read the Qwen row as context, not a same-conditions comparison. One run per cell is exploratory and gives no confidence interval.'
+            'Its date and assistance version differ, so read the Qwen row as context, not a same-conditions comparison. '
+            'The fine-tuned Qwen row is the QLoRA adapter trained on synthetic rule-teacher data (not on Luna or Terra decisions), served 4-bit on a Colab A100 with the same ten profiles, 120 actions and guided_nav_v3; a missing layout means it has not been run yet. '
+            'One run per cell is exploratory and gives no confidence interval.'
             +''.join(f' An earlier {r["model"]} attempt on {r["layout_id"]} ended early ({r["status"]}); it is retained but not counted here, and this table uses its completed replacement.' for r in v3_aborted))
         models_view=[{**m,'cells':{l['id']:cell([r for r in latest if r['model']==m['id'] and r['layout_id']==l['id']],
                 status='not_evaluated' if m['status']=='not_evaluated' else 'missing') for l in LAYOUTS}} for m in latest_models]
@@ -295,6 +309,7 @@ LATEST_LIMITATIONS=[
     'An impulse buy is a paid unit of a product that was not on the shopper’s list (Python off_list_units, checked-out trips only). It records an unplanned purchase and the model’s stated reason, not a verified psychological impulse.',
     'Each cell is one run of the same ten fixed shopper profiles. Results are descriptive and exploratory: no confidence intervals, no significance claims, and the ten profiles repeat across layouts and models.',
     'Purchased-list fulfillment counts requested units in paid carts. Unfinished shoppers keep zero purchased units; unpaid baskets are not sales.',
+    'The fine-tuned Qwen adapter learned from a deterministic rule teacher on synthetic shoppers (the 15 benchmark shoppers were excluded from training), is served 4-bit on a Colab A100, and is not distilled from Luna or Terra; its transport, precision and collection date differ from the other rows.',
     'Luna and Terra use guided_nav_v3 through OpenRouter. The Qwen2.5 7B Instruct baseline is an earlier Nov 3 run under guided_nav_v2 that cannot be repeated, so it is context rather than a same-conditions comparison.',
     'OpenRouter-reported charges come from the provider. Python’s estimates use each recording’s frozen token prices. They are shown separately and are never merged.',
     'All models receive Python navigation assistance, so results measure the assisted system, not unassisted model intelligence. Simulated checkout sales are not real revenue.']

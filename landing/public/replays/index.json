@@ -552,6 +552,38 @@
       "url": "/replays/c5322fd1b46f470385e0f77c77b3b1c3.json",
       "evidence_url": "/replays/c5322fd1b46f470385e0f77c77b3b1c3.source.jsonl",
       "bundle_sha256": "2b28d12d11bdd768542631a79f46e944ce9100bca1f2838bf015fc9a77577538"
+    },
+    {
+      "run_id": "f8b8dca86aa84bae868cfa5a57c66f3f",
+      "sha256": "1347adb33315e15dbe3447003d5e0241e82c0753c5931d9da3d689003a69c492",
+      "provider": "local_mps",
+      "model": "qwen2.5-7b-impulse-v3-cuda",
+      "status": "completed",
+      "recorded_at": "2026-11-18T02:42:47.841465+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "costco_back_anchor",
+      "shopper_count": 10,
+      "url": "/replays/f8b8dca86aa84bae868cfa5a57c66f3f.json",
+      "evidence_url": "/replays/f8b8dca86aa84bae868cfa5a57c66f3f.source.jsonl",
+      "bundle_sha256": "f92b21a2a2f50299c12fd4aa600f17d92d3e757f2e0d8fe04567a59d2a846ea3"
+    },
+    {
+      "run_id": "1f9a510be29546d28f4b1f5d7f796d0a",
+      "sha256": "b00ab3d733341e142eeb394516ab16ab5778c681b19e3ffb0c522dee90b6c2c2",
+      "provider": "local_mps",
+      "model": "qwen2.5-7b-impulse-v3-cuda",
+      "status": "completed",
+      "recorded_at": "2026-11-18T02:50:25.436113+00:00",
+      "prompt_variant": "informed",
+      "prompt_version": "informed:aa1129f254618098af804c6b8b17ca014f1c935c58ec090af7c7bfd0666d6c85",
+      "warnings": [],
+      "layout_id": "neighborhood_express",
+      "shopper_count": 10,
+      "url": "/replays/1f9a510be29546d28f4b1f5d7f796d0a.json",
+      "evidence_url": "/replays/1f9a510be29546d28f4b1f5d7f796d0a.source.jsonl",
+      "bundle_sha256": "e60abb40221b9fd1595c5e34ec7d9a87c20f7c4e8769e09ee1335707fb159b44"
     }
   ],
   "reports": [
@@ -598,7 +630,7 @@
   ],
   "history": {
     "url": "/replays/history.json",
-    "sha256": "56441580c2f9c51cd5d570a45f4adb12c0bc6e49cfb98df44b559395d4f3c3ba"
+    "sha256": "d8673216f20e57575ebd77d83ae82803dd0633912612a621c574c8de648809ab"
   },
   "matrix": {
     "url": "/replays/matrix-48ea3402f27344af949f1002123fe826.json",
@@ -607,7 +639,7 @@
   },
   "dashboard": {
     "url": "/replays/evidence-dashboard.json",
-    "sha256": "62b6e70da015eb0bb5ea61d41e7622622c522c981f87c5eb207cdca75483edad"
+    "sha256": "0f172b75fb32b74446c283cb7c03a2c991ac7926eee522f13bc345a5f447067d"
   },
   "qwen_baseline": {
     "protocol_url": "/replays/study-a16f989767b34b4e9ce525607e076e05.protocol.json",

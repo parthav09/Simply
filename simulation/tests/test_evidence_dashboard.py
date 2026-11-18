@@ -129,13 +129,14 @@ class EvidenceDashboardTests(unittest.TestCase):
         result=dashboard.assemble([*self.records,*rows],self.plan['study_id'])
         self.assertEqual(result['default_view'],'openrouter_v3');view=result['views'][0]
         self.assertEqual(view['id'],'openrouter_v3');self.assertEqual((view['runs'],view['trips']),(4,40))
-        self.assertEqual([m['id'] for m in view['models']],['gpt-6-luna','gpt-6.1-terra','qwen2.5-7b-instruct'])
+        self.assertEqual([m['id'] for m in view['models']],['gpt-6-luna','gpt-6.1-terra','qwen2.5-7b-instruct','qwen2.5-7b-impulse-v3-cuda'])
         for model in view['models'][:2]:
             self.assertEqual(model['provider'],'openrouter')
             for c in model['cells'].values():
                 self.assertEqual((c['runs'],c['trips']),(1,10))
                 self.assertIsNotNone(c['metrics']['provider_reported_cost_per_run_usd'])
-        for c in view['models'][2]['cells'].values():self.assertEqual(c['status'],'not_evaluated')
+        for model in view['models'][2:]:   # no Qwen recordings in this fixture: honest N/A, never zeros
+            for c in model['cells'].values():self.assertEqual(c['status'],'not_evaluated')
         # The earlier direct-OpenAI views are untouched and never receive the OpenRouter rows.
         self.assertEqual(result['views'][1]['runs'],4);self.assertEqual(result['views'][1]['id'],'matched_first')
         self.assertEqual(sum(g['runs'] for g in result['coverage']['groups'] if g['id']=='openrouter_v3'),4)

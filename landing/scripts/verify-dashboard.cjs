@@ -19,14 +19,16 @@ function compile(file,dependencies={}){
  await assert.rejects(reader.decodeDashboard(text+' ',index.dashboard));
  // The default view is the latest OpenRouter collection: Luna/Terra under guided_nav_v3 plus the earlier untuned Qwen baseline.
  assert.equal(data.default_view,'openrouter_v3');const view=data.views.find(v=>v.id==='openrouter_v3');
- assert.equal(view.models.map(m=>m.id).join(','),'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct');
- assert.equal(view.runs,6);assert.equal(view.trips,60);assert(view.highlights.length===3,'Python highlights missing');
+ assert.equal(view.models.map(m=>m.id).join(','),'gpt-6-luna,gpt-6.1-terra,qwen2.5-7b-instruct,qwen2.5-7b-impulse-v3-cuda');
+ assert.equal(view.runs,8);assert.equal(view.trips,80);assert(view.highlights.length===4,'Python highlights missing');
  for(const model of view.models)for(const layout of data.layouts){
-  const c=model.cells[layout.id];assert.equal(c.status,'recorded');assert.equal(c.runs,1);assert.equal(c.trips,10);assert.equal(c.stopped_runs,0);
+  const c=model.cells[layout.id];
+  assert.equal(c.status,'recorded');assert.equal(c.runs,1);assert.equal(c.trips,10);assert.equal(c.stopped_runs,0);
   const run=data.runs.find(r=>r.run_id===c.run_ids[0]);assert.equal(run.status,'completed');assert.equal(run.points.length,10);
-  assert.equal(run.group,model.id==='qwen2.5-7b-instruct'?'qwen_baseline':'openrouter_v3');
+  const colab=model.id==='qwen2.5-7b-impulse-v3-cuda';
+  assert.equal(run.group,colab?'qwen_v3':model.id==='qwen2.5-7b-instruct'?'qwen_baseline':'openrouter_v3');
   assert.equal(run.policy,model.id==='qwen2.5-7b-instruct'?'guided_nav_v2':'guided_nav_v3');assert.equal(run.shopping_rules,'unique_single_checkout_v1');
-  assert.equal(run.provider,'openrouter');assert.equal(c.finished,run.points.filter(p=>p.finished).length);
+  assert.equal(run.provider,colab?'local_mps':'openrouter');assert.equal(c.finished,run.points.filter(p=>p.finished).length);
  }
  // Retained but replaced attempts never enter the headline table.
  const retained=data.runs.filter(r=>r.group==='openrouter_v3');
@@ -49,11 +51,11 @@ function compile(file,dependencies={}){
  const ui=compile('ui/EvidenceDashboard.tsx',{react:{useState:value=>[value,()=>{}],useEffect:()=>{}},'react/jsx-runtime':require('react/jsx-runtime'),
   '../lib/dashboard':reader,'../lib/recordings':{},'../lib/evidence':history,'./EvidenceCharts':chartsUI});
  const html=renderer.renderToStaticMarkup(React.createElement(ui.DashboardContent,{data}));
- for(const pattern of [/Results at a glance/,/What the runs show/,/GPT-6 Luna/,/GPT-6[.]1 Terra/,/Qwen2[.]5 7B Instruct/,/guided_nav_v2/,/guided_nav_v3/,/6 recorded runs · 60 simulated trips/,
+ for(const pattern of [/Results at a glance/,/What the runs show/,/GPT-6 Luna/,/GPT-6[.]1 Terra/,/Qwen2[.]5 7B Instruct/,/guided_nav_v2/,/guided_nav_v3/,/8 recorded runs · 80 simulated trips/,
   /Impulse buys per trip/,/Higher is better/,/Unplanned purchases/,/OpenRouter-reported charge/,/Recordings behind this table/,/not a same-conditions comparison/])assert.match(html,pattern);
  for(const pattern of [/Exact run distributions/,/Distribution measure/,/Study archive/,/Local MLX/,/Local MPS/])assert.doesNotMatch(html,pattern);
  // Python numbers appear exactly as exported.
- for(const model of view.models)for(const layout of data.layouts){const c=model.cells[layout.id];
+ for(const model of view.models)for(const layout of data.layouts){const c=model.cells[layout.id];if(c.status!=='recorded')continue;
   assert.ok(html.includes(`${c.finished}/${c.trips} checked out`));assert.ok(html.includes(`${c.purchased}/${c.requested} requested units paid`));}
  // Local pilot progress reader stays strict (used by the lab, not by this page).
  const progressReader=compile('lib/pilot-progress.ts');
