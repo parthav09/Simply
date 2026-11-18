@@ -21,7 +21,7 @@ export default function ImpulseReceipt() {
     loadShowcaseRecording().then(value => {if (active) setState(value);}).catch(cause => {if (active) setError(cause.message);});
     return () => {active = false;};
   }, []);
-  if (!state) return <div className="receipt receipt-empty" role={error ? 'alert' : 'status'}><Icon name="bag" size={26}/><p>{error ? `${error} No receipt is shown without its recording.` : 'Printing a recorded receipt…'}</p></div>;
+  if (!state) return <div className="receipt receipt-empty" role={error ? 'alert' : 'status'}><Icon name="bag" size={26}/><p>{error ? `${error} No receipt is shown without its recording.` : 'Printing a recorded receipt…'}</p>{!error && <div className="receipt-skeleton" aria-hidden="true"><i/><i/><i/><i/></div>}</div>;
   const {run} = state;
   const shopper = run.shoppers.find(s => s.id === showcase.shopper_id)!;
   const final = run.final.states[shopper.id];

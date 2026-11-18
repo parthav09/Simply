@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import ImpulseReceipt from '../ui/ImpulseReceipt';
 import SiteNav from './SiteNav';
+import HoverFx from './HoverFx';
 import { Wordmark } from './Brand';
 import { Icon, type IconName } from '../ui/Icons';
 
@@ -18,6 +19,7 @@ const surfaces: { href: string; icon: IconName; title: string; body: string; cta
 
 export default function Landing() {
   return <main className="marketing-page">
+    <HoverFx/>
     <SiteNav/>
     <section className="hero" id="main-content">
       <div className="hero-copy">
@@ -28,6 +30,10 @@ export default function Landing() {
           <Link href="/replays" className="marketing-primary">Watch a replay <Icon name="arrow" size={17}/></Link>
           <Link href="/evaluation" className="marketing-secondary">See the results</Link>
         </div>
+        <ul className="hero-legend" aria-label="Receipt legend">
+          <li><span className="tag tag-planned">On list</span>planned</li>
+          <li><span className="tag tag-impulse">Impulse</span>not on the list</li>
+        </ul>
       </div>
       <div className="hero-stage"><ImpulseReceipt/></div>
     </section>
