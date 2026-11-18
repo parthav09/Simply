@@ -1,22 +1,11 @@
 """Legacy compatibility helpers. The authoritative lab interface is React."""
 
-from agents.state import BrowsingState, FinishedState
+from agents.state import FinishedState
 
 
 def cart_count(shopper, product_id):
     """Return an item count for display; this does not make decisions."""
     return sum(item.product_id == product_id for item in shopper.state.cart)
-
-
-def cart_spend(grid, shopper):
-    """Calculate basket spend for display; this does not make decisions."""
-    total = 0.0
-    by_name = {product["name"]: product for product in grid.products.values()}
-    for item in shopper.state.cart:
-        product = grid.products.get(item.product_id) or by_name.get(item.name)
-        if product:
-            total += product["price"] * item.quantity
-    return round(total, 2)
 
 
 def next_target(shopper):
@@ -25,20 +14,6 @@ def next_target(shopper):
         if cart_count(shopper, item.product_id) < item.quantity:
             return item
     return None
-
-
-def planned_path(grid, shopper):
-    """Draw a shortest-path overlay; Gemini is still responsible for the action."""
-    if not isinstance(shopper.state, BrowsingState):
-        return []
-    target = next_target(shopper)
-    start = (shopper.state.x, shopper.state.y)
-    if target is None:
-        return grid.find_path(start, grid.checkout) or []
-    product = grid.products.get(target.product_id)
-    if product is None:
-        return []
-    return grid.find_path(start, grid.stand_cells_for((product["x"], product["y"]))) or []
 
 
 def decide_step(grid, shopper):

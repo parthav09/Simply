@@ -23,21 +23,6 @@ export function loadCatalog(refresh = false): Promise<Catalog> {
 /** Newly published evidence must be visible immediately after a live export. */
 export function invalidateCatalog() { catalogRequest = undefined; }
 
-export function preferredRecording(catalog: Catalog): CatalogEntry | undefined {
-  const newest = [...catalog.runs].sort((a,b)=>b.recorded_at.localeCompare(a.recorded_at));
-  const real=(run:CatalogEntry)=>['openrouter','openai','gemini'].includes(run.provider);
-  return newest.find(run => real(run) && run.status === 'completed')
-    ?? newest.find(real) ?? newest[0];
-}
-
-/** Landing previews only show completed model recordings of the requested layout. */
-export function completedLayoutRecording(catalog: Catalog, layoutId: string): CatalogEntry | undefined {
-  return [...catalog.runs]
-    .filter(run => run.layout_id === layoutId && run.status === 'completed'
-      && ['openrouter', 'openai', 'gemini'].includes(run.provider))
-    .sort((a, b) => b.recorded_at.localeCompare(a.recorded_at))[0];
-}
-
 export function loadRecording(entry: CatalogEntry): Promise<ReplayData> {
   const key = `${entry.url}:${entry.bundle_sha256}:${entry.run_id}:${entry.sha256}:${entry.provider}:${entry.model}:${entry.status}`;
   const cached = recordings.get(key);

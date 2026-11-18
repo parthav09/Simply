@@ -73,7 +73,7 @@ const normal=value=>JSON.parse(JSON.stringify(value));
   for(const s of demo.summary.shoppers)assert.equal(impulse.impulseBuys(demo,demo.events.length,s.agent_id).length,s.off_list_units,`Impulse lens disagrees for ${s.agent_id}`);
   assert.equal(impulse.totalOffListUnits(demo.summary),demo.summary.shoppers.reduce((n,s)=>n+s.off_list_units,0));
   console.log('Impulse showcase passed: pinned identity, bundle integrity, and the impulse lens matches Python off_list_units for every shopper.');
-  const featured=cache.preferredRecording(published);
+  const featured=published.runs.find(run=>run.run_id===showcase.run_id);
   if(!featured)return;
   const data=JSON.parse(JSON.parse(fs.readFileSync(path.join(root,'public',featured.url.replace(/^\//,'')),'utf8')).payload_json);
   replay.validateReplay(data);replay.frameAt(data,1);

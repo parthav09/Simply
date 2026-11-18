@@ -58,9 +58,8 @@ Providers return proposals. React replays the exported actions and states throug
 its map, playback controls, timeline, and shopper inspector. No display
 contains a shopping policy or computes independent business outcomes.
 
-The old `ui/grid_ui.py` prints migration instructions. It no longer executes a
-separate Tkinter shopping loop. The old Pygame prototype was retired. The lab UI
-is in `landing/ui/`. `run.py` is a legacy proposal-only inspection tool, not the
+The old Tkinter and Pygame prototypes were retired. The lab UI is in
+`landing/ui/`. `run.py` is a legacy proposal-only inspection tool, not the
 complete-trip launcher.
 
 ## Evidence and metric versions
