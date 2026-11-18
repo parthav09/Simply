@@ -1,0 +1,1672 @@
+{
+ "report_version": 1,
+ "source": "evidence-dashboard.json default view",
+ "view": "openrouter_v3",
+ "thresholds": {
+  "invalid_rate_review": 0.05,
+  "invalid_rate_fail": 0.2,
+  "no_progress_review": 30,
+  "impulse_tiers": {
+   "impulsive": {
+    "cap": 2,
+    "max_price_cents": 800
+   },
+   "mixed": {
+    "cap": 1,
+    "max_price_cents": 400
+   },
+   "planner": {
+    "cap": 1,
+    "max_price_cents": 250
+   }
+  }
+ },
+ "rules": [
+  {
+   "check": "checkout_incomplete",
+   "severity": "fail",
+   "label": "Shopper never finished checkout",
+   "description": "The recording ends without a completed checkout for this shopper."
+  },
+  {
+   "check": "provider_exception",
+   "severity": "fail",
+   "label": "Model provider error",
+   "description": "At least one request failed at the provider (not a bad reply from the model)."
+  },
+  {
+   "check": "allergen_conflict",
+   "severity": "fail",
+   "label": "Allergen in an unplanned purchase",
+   "description": "A paid off-list product lists the shopper's declared allergen in the catalogue data."
+  },
+  {
+   "check": "invalid_reply_rate_high",
+   "severity": "fail",
+   "label": "Most actions invalid or rejected",
+   "description": "More than 20% of the shopper's actions were invalid replies or grid rejections."
+  },
+  {
+   "check": "invalid_reply_rate",
+   "severity": "review",
+   "label": "Some actions invalid or rejected",
+   "description": "More than 5% of the shopper's actions were invalid replies or grid rejections."
+  },
+  {
+   "check": "impulse_cap",
+   "severity": "review",
+   "label": "More unplanned items than the impulse tier allows",
+   "description": "Paid off-list units exceed impulse_eval.TIERS for the shopper's impulse probability (and any off-list item below probability 0.10). A teacher rule, not necessarily in the prompt."
+  },
+  {
+   "check": "impulse_price",
+   "severity": "review",
+   "label": "Unplanned item above the tier price ceiling",
+   "description": "A paid off-list product costs more than impulse_eval.TIERS allows for the tier."
+  },
+  {
+   "check": "diet_or_alcohol_mismatch",
+   "severity": "review",
+   "label": "Unplanned item may not fit the shopper's diet",
+   "description": "Catalogue tags do not show the item fits the diet or alcohol preference (unknown counts as not fitting). Tags are catalogue metadata and are not independently verified."
+  },
+  {
+   "check": "over_budget",
+   "severity": "review",
+   "label": "Final basket above the shopper's budget",
+   "description": "Budgets are soft preferences in Simply, so this is recorded for review, not rejected."
+  },
+  {
+   "check": "above_acceptable_price",
+   "severity": "review",
+   "label": "Listed item bought above the acceptable price",
+   "description": "A listed product was paid above the shopper's stated maximum acceptable unit price."
+  },
+  {
+   "check": "list_incomplete",
+   "severity": "review",
+   "label": "Finished with part of the list unbought",
+   "description": "Checkout finished but fewer listed units were paid than requested."
+  },
+  {
+   "check": "loop_detected",
+   "severity": "review",
+   "label": "Repeated action loop",
+   "description": "Python core's loop detector fired for this shopper."
+  },
+  {
+   "check": "stuck",
+   "severity": "review",
+   "label": "No progress for 30+ turns",
+   "description": "The cart and phase did not change for a long stretch of consecutive turns."
+  }
+ ],
+ "runs": [
+  {
+   "model_id": "gpt-6-luna",
+   "model_label": "GPT-6 Luna",
+   "layout_id": "costco_back_anchor",
+   "layout_label": "Layout A",
+   "run_id": "2b123694e3464410b74ef5baea461ff4",
+   "model": "gpt-6-luna",
+   "navigation_policy": "guided_nav_v3",
+   "status": "completed",
+   "verdict": "review",
+   "shoppers_total": 10,
+   "shoppers_pass": 5,
+   "shoppers_review": 5,
+   "shoppers_fail": 0,
+   "checks": [
+    {
+     "check": "diet_or_alcohol_mismatch",
+     "severity": "review",
+     "shoppers": [
+      "Chloe",
+      "Ananya"
+     ]
+    },
+    {
+     "check": "impulse_cap",
+     "severity": "review",
+     "shoppers": [
+      "Ananya",
+      "Ruth"
+     ]
+    },
+    {
+     "check": "impulse_price",
+     "severity": "review",
+     "shoppers": [
+      "Ruth"
+     ]
+    },
+    {
+     "check": "invalid_reply_rate",
+     "severity": "review",
+     "shoppers": [
+      "Nina"
+     ]
+    },
+    {
+     "check": "list_incomplete",
+     "severity": "review",
+     "shoppers": [
+      "Ananya",
+      "Isabella"
+     ]
+    },
+    {
+     "check": "loop_detected",
+     "severity": "review",
+     "shoppers": [
+      "Chloe",
+      "Ananya"
+     ]
+    },
+    {
+     "check": "stuck",
+     "severity": "review",
+     "shoppers": [
+      "Chloe",
+      "Ananya"
+     ]
+    }
+   ],
+   "flagged": [
+    {
+     "shopper_id": "C0025",
+     "name": "Chloe",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "diet_or_alcohol_mismatch",
+       "severity": "review",
+       "detail": "1 off-list product(s) not shown to fit diet \"vegetarian\""
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "1 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "58 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0008",
+     "name": "Ananya",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_cap",
+       "severity": "review",
+       "detail": "5 off-list units against a cap of 2 (impulsive tier, probability 0.48)"
+      },
+      {
+       "check": "diet_or_alcohol_mismatch",
+       "severity": "review",
+       "detail": "1 off-list product(s) not shown to fit diet \"vegetarian\""
+      },
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "8 of 9 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "1 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "32 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0024",
+     "name": "Nina",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "invalid_reply_rate",
+       "severity": "review",
+       "detail": "3 of 43 actions (7%)"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0007",
+     "name": "Isabella",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "10 of 11 listed units paid"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0034",
+     "name": "Ruth",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_cap",
+       "severity": "review",
+       "detail": "7 off-list units against a cap of 1 (mixed tier, probability 0.27)"
+      },
+      {
+       "check": "impulse_price",
+       "severity": "review",
+       "detail": "3 off-list product(s) above $4.00"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "model_id": "gpt-6-luna",
+   "model_label": "GPT-6 Luna",
+   "layout_id": "neighborhood_express",
+   "layout_label": "Layout B",
+   "run_id": "10505e431b78480bafbb541abe9f2710",
+   "model": "gpt-6-luna",
+   "navigation_policy": "guided_nav_v3",
+   "status": "completed",
+   "verdict": "review",
+   "shoppers_total": 10,
+   "shoppers_pass": 8,
+   "shoppers_review": 2,
+   "shoppers_fail": 0,
+   "checks": [
+    {
+     "check": "invalid_reply_rate",
+     "severity": "review",
+     "shoppers": [
+      "Ruth"
+     ]
+    },
+    {
+     "check": "loop_detected",
+     "severity": "review",
+     "shoppers": [
+      "Sofia"
+     ]
+    },
+    {
+     "check": "stuck",
+     "severity": "review",
+     "shoppers": [
+      "Sofia"
+     ]
+    }
+   ],
+   "flagged": [
+    {
+     "shopper_id": "C0034",
+     "name": "Ruth",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "invalid_reply_rate",
+       "severity": "review",
+       "detail": "3 of 52 actions (6%)"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0026",
+     "name": "Sofia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "7 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "49 turns in a row"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "model_id": "gpt-6.1-terra",
+   "model_label": "GPT-6.1 Terra",
+   "layout_id": "costco_back_anchor",
+   "layout_label": "Layout A",
+   "run_id": "b0ba564da4124ed99a569e29dca0d036",
+   "model": "gpt-6.1-terra",
+   "navigation_policy": "guided_nav_v3",
+   "status": "completed",
+   "verdict": "review",
+   "shoppers_total": 10,
+   "shoppers_pass": 5,
+   "shoppers_review": 5,
+   "shoppers_fail": 0,
+   "checks": [
+    {
+     "check": "impulse_cap",
+     "severity": "review",
+     "shoppers": [
+      "Ananya",
+      "Isabella",
+      "Elena"
+     ]
+    },
+    {
+     "check": "impulse_price",
+     "severity": "review",
+     "shoppers": [
+      "Isabella",
+      "Ruth",
+      "Elena"
+     ]
+    },
+    {
+     "check": "over_budget",
+     "severity": "review",
+     "shoppers": [
+      "Hugo"
+     ]
+    }
+   ],
+   "flagged": [
+    {
+     "shopper_id": "C0040",
+     "name": "Hugo",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "over_budget",
+       "severity": "review",
+       "detail": "$0.11 over the $14.15 budget"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0008",
+     "name": "Ananya",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_cap",
+       "severity": "review",
+       "detail": "3 off-list units against a cap of 2 (impulsive tier, probability 0.48)"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0007",
+     "name": "Isabella",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_cap",
+       "severity": "review",
+       "detail": "12 off-list units against a cap of 2 (impulsive tier, probability 0.45)"
+      },
+      {
+       "check": "impulse_price",
+       "severity": "review",
+       "detail": "1 off-list product(s) above $8.00"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0034",
+     "name": "Ruth",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_price",
+       "severity": "review",
+       "detail": "1 off-list product(s) above $4.00"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0014",
+     "name": "Elena",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_cap",
+       "severity": "review",
+       "detail": "2 off-list units against a cap of 1 (mixed tier, probability 0.23)"
+      },
+      {
+       "check": "impulse_price",
+       "severity": "review",
+       "detail": "2 off-list product(s) above $4.00"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "model_id": "gpt-6.1-terra",
+   "model_label": "GPT-6.1 Terra",
+   "layout_id": "neighborhood_express",
+   "layout_label": "Layout B",
+   "run_id": "56967e288de94649b8a89e30dc08df06",
+   "model": "gpt-6.1-terra",
+   "navigation_policy": "guided_nav_v3",
+   "status": "completed",
+   "verdict": "review",
+   "shoppers_total": 10,
+   "shoppers_pass": 9,
+   "shoppers_review": 1,
+   "shoppers_fail": 0,
+   "checks": [
+    {
+     "check": "impulse_cap",
+     "severity": "review",
+     "shoppers": [
+      "Isabella"
+     ]
+    },
+    {
+     "check": "impulse_price",
+     "severity": "review",
+     "shoppers": [
+      "Isabella"
+     ]
+    }
+   ],
+   "flagged": [
+    {
+     "shopper_id": "C0007",
+     "name": "Isabella",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_cap",
+       "severity": "review",
+       "detail": "12 off-list units against a cap of 2 (impulsive tier, probability 0.45)"
+      },
+      {
+       "check": "impulse_price",
+       "severity": "review",
+       "detail": "1 off-list product(s) above $8.00"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "model_id": "qwen2.5-7b-instruct",
+   "model_label": "Qwen2.5 7B Instruct · OpenRouter / Phala",
+   "layout_id": "costco_back_anchor",
+   "layout_label": "Layout A",
+   "run_id": "c5c26fb5137a40bc9d8ebfdd12dfcaa9",
+   "model": "qwen2.5-7b-instruct",
+   "navigation_policy": "guided_nav_v2",
+   "status": "completed",
+   "verdict": "fail",
+   "shoppers_total": 10,
+   "shoppers_pass": 0,
+   "shoppers_review": 6,
+   "shoppers_fail": 4,
+   "checks": [
+    {
+     "check": "checkout_incomplete",
+     "severity": "fail",
+     "shoppers": [
+      "Mia",
+      "Nina",
+      "Olivia",
+      "Sofia"
+     ]
+    },
+    {
+     "check": "list_incomplete",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Chloe",
+      "Ananya",
+      "Isabella",
+      "Ruth",
+      "Elena"
+     ]
+    },
+    {
+     "check": "loop_detected",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Chloe",
+      "Ananya",
+      "Isabella",
+      "Ruth",
+      "Elena"
+     ]
+    },
+    {
+     "check": "stuck",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Mia",
+      "Chloe",
+      "Ananya",
+      "Nina",
+      "Olivia",
+      "Isabella",
+      "Ruth",
+      "Elena",
+      "Sofia"
+     ]
+    }
+   ],
+   "flagged": [
+    {
+     "shopper_id": "C0040",
+     "name": "Hugo",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 2 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "12 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "53 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0002",
+     "name": "Mia",
+     "verdict": "fail",
+     "findings": [
+      {
+       "check": "checkout_incomplete",
+       "severity": "fail",
+       "detail": "Stopped: turn_budget_exhausted after 120 turns"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "120 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0025",
+     "name": "Chloe",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 2 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "11 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "59 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0008",
+     "name": "Ananya",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "4 of 9 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "12 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "46 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0024",
+     "name": "Nina",
+     "verdict": "fail",
+     "findings": [
+      {
+       "check": "checkout_incomplete",
+       "severity": "fail",
+       "detail": "Stopped: turn_budget_exhausted after 120 turns"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "120 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0011",
+     "name": "Olivia",
+     "verdict": "fail",
+     "findings": [
+      {
+       "check": "checkout_incomplete",
+       "severity": "fail",
+       "detail": "Stopped: turn_budget_exhausted after 120 turns"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "120 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0007",
+     "name": "Isabella",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "3 of 11 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "16 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "44 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0034",
+     "name": "Ruth",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "2 of 7 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "4 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "69 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0014",
+     "name": "Elena",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "4 of 10 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "9 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "45 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0026",
+     "name": "Sofia",
+     "verdict": "fail",
+     "findings": [
+      {
+       "check": "checkout_incomplete",
+       "severity": "fail",
+       "detail": "Stopped: turn_budget_exhausted after 120 turns"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "120 turns in a row"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "model_id": "qwen2.5-7b-instruct",
+   "model_label": "Qwen2.5 7B Instruct · OpenRouter / Phala",
+   "layout_id": "neighborhood_express",
+   "layout_label": "Layout B",
+   "run_id": "10fd15cb8f634223b56652b0ea284251",
+   "model": "qwen2.5-7b-instruct",
+   "navigation_policy": "guided_nav_v2",
+   "status": "completed",
+   "verdict": "fail",
+   "shoppers_total": 10,
+   "shoppers_pass": 0,
+   "shoppers_review": 9,
+   "shoppers_fail": 1,
+   "checks": [
+    {
+     "check": "checkout_incomplete",
+     "severity": "fail",
+     "shoppers": [
+      "Mia"
+     ]
+    },
+    {
+     "check": "list_incomplete",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Chloe",
+      "Ananya",
+      "Nina",
+      "Olivia",
+      "Isabella",
+      "Ruth",
+      "Elena",
+      "Sofia"
+     ]
+    },
+    {
+     "check": "loop_detected",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Chloe",
+      "Ananya",
+      "Olivia",
+      "Isabella",
+      "Ruth",
+      "Elena",
+      "Sofia"
+     ]
+    },
+    {
+     "check": "stuck",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Mia",
+      "Chloe",
+      "Ananya",
+      "Nina",
+      "Olivia",
+      "Isabella",
+      "Ruth",
+      "Elena",
+      "Sofia"
+     ]
+    }
+   ],
+   "flagged": [
+    {
+     "shopper_id": "C0040",
+     "name": "Hugo",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 2 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "7 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "53 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0002",
+     "name": "Mia",
+     "verdict": "fail",
+     "findings": [
+      {
+       "check": "checkout_incomplete",
+       "severity": "fail",
+       "detail": "Stopped: turn_budget_exhausted after 120 turns"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "120 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0025",
+     "name": "Chloe",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 2 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "14 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "59 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0008",
+     "name": "Ananya",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "5 of 9 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "11 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "44 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0024",
+     "name": "Nina",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 4 listed units paid"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "101 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0011",
+     "name": "Olivia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 4 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "11 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "44 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0007",
+     "name": "Isabella",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "3 of 11 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "16 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "44 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0034",
+     "name": "Ruth",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "2 of 7 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "4 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "69 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0014",
+     "name": "Elena",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "2 of 10 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "11 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "45 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0026",
+     "name": "Sofia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 3 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "13 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "48 turns in a row"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "model_id": "qwen2.5-7b-impulse-v3-cuda",
+   "model_label": "Qwen2.5 7B · fine-tuned (impulse v3)",
+   "layout_id": "costco_back_anchor",
+   "layout_label": "Layout A",
+   "run_id": "f8b8dca86aa84bae868cfa5a57c66f3f",
+   "model": "qwen2.5-7b-impulse-v3-cuda",
+   "navigation_policy": "guided_nav_v3",
+   "status": "completed",
+   "verdict": "fail",
+   "shoppers_total": 10,
+   "shoppers_pass": 0,
+   "shoppers_review": 9,
+   "shoppers_fail": 1,
+   "checks": [
+    {
+     "check": "checkout_incomplete",
+     "severity": "fail",
+     "shoppers": [
+      "Ruth"
+     ]
+    },
+    {
+     "check": "impulse_cap",
+     "severity": "review",
+     "shoppers": [
+      "Sofia"
+     ]
+    },
+    {
+     "check": "invalid_reply_rate",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Ananya",
+      "Ruth"
+     ]
+    },
+    {
+     "check": "list_incomplete",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Chloe",
+      "Ananya",
+      "Nina",
+      "Olivia",
+      "Isabella",
+      "Elena"
+     ]
+    },
+    {
+     "check": "loop_detected",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Mia",
+      "Ananya",
+      "Nina",
+      "Isabella",
+      "Ruth",
+      "Elena"
+     ]
+    },
+    {
+     "check": "over_budget",
+     "severity": "review",
+     "shoppers": [
+      "Sofia"
+     ]
+    },
+    {
+     "check": "stuck",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Mia",
+      "Chloe",
+      "Ananya",
+      "Nina",
+      "Olivia",
+      "Isabella",
+      "Ruth",
+      "Elena",
+      "Sofia"
+     ]
+    }
+   ],
+   "flagged": [
+    {
+     "shopper_id": "C0040",
+     "name": "Hugo",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "invalid_reply_rate",
+       "severity": "review",
+       "detail": "5 of 96 actions (5%)"
+      },
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 2 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "2 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "66 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0002",
+     "name": "Mia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "1 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "65 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0025",
+     "name": "Chloe",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 2 listed units paid"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "88 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0008",
+     "name": "Ananya",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "invalid_reply_rate",
+       "severity": "review",
+       "detail": "6 of 103 actions (6%)"
+      },
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "4 of 9 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "2 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "62 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0024",
+     "name": "Nina",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "2 of 4 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "34 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "59 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0011",
+     "name": "Olivia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "3 of 4 listed units paid"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "55 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0007",
+     "name": "Isabella",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 11 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "38 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "60 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0034",
+     "name": "Ruth",
+     "verdict": "fail",
+     "findings": [
+      {
+       "check": "checkout_incomplete",
+       "severity": "fail",
+       "detail": "Stopped: turn_budget_exhausted after 120 turns"
+      },
+      {
+       "check": "invalid_reply_rate",
+       "severity": "review",
+       "detail": "16 of 120 actions (13%)"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "9 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "120 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0014",
+     "name": "Elena",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "3 of 10 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "46 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "74 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0026",
+     "name": "Sofia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_cap",
+       "severity": "review",
+       "detail": "3 off-list units against a cap of 2 (impulsive tier, probability 0.47)"
+      },
+      {
+       "check": "over_budget",
+       "severity": "review",
+       "detail": "$6.80 over the $16.84 budget"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "46 turns in a row"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "model_id": "qwen2.5-7b-impulse-v3-cuda",
+   "model_label": "Qwen2.5 7B · fine-tuned (impulse v3)",
+   "layout_id": "neighborhood_express",
+   "layout_label": "Layout B",
+   "run_id": "1f9a510be29546d28f4b1f5d7f796d0a",
+   "model": "qwen2.5-7b-impulse-v3-cuda",
+   "navigation_policy": "guided_nav_v3",
+   "status": "completed",
+   "verdict": "fail",
+   "shoppers_total": 10,
+   "shoppers_pass": 1,
+   "shoppers_review": 8,
+   "shoppers_fail": 1,
+   "checks": [
+    {
+     "check": "invalid_reply_rate_high",
+     "severity": "fail",
+     "shoppers": [
+      "Ruth"
+     ]
+    },
+    {
+     "check": "impulse_cap",
+     "severity": "review",
+     "shoppers": [
+      "Elena"
+     ]
+    },
+    {
+     "check": "impulse_price",
+     "severity": "review",
+     "shoppers": [
+      "Elena"
+     ]
+    },
+    {
+     "check": "invalid_reply_rate",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Mia",
+      "Olivia"
+     ]
+    },
+    {
+     "check": "list_incomplete",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Chloe",
+      "Ananya",
+      "Olivia",
+      "Isabella",
+      "Ruth",
+      "Elena",
+      "Sofia"
+     ]
+    },
+    {
+     "check": "loop_detected",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Mia",
+      "Ananya",
+      "Olivia",
+      "Ruth",
+      "Elena",
+      "Sofia"
+     ]
+    },
+    {
+     "check": "stuck",
+     "severity": "review",
+     "shoppers": [
+      "Hugo",
+      "Mia",
+      "Chloe",
+      "Ananya",
+      "Olivia",
+      "Isabella",
+      "Ruth",
+      "Elena",
+      "Sofia"
+     ]
+    }
+   ],
+   "flagged": [
+    {
+     "shopper_id": "C0040",
+     "name": "Hugo",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "invalid_reply_rate",
+       "severity": "review",
+       "detail": "9 of 100 actions (9%)"
+      },
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 2 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "4 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "79 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0002",
+     "name": "Mia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "invalid_reply_rate",
+       "severity": "review",
+       "detail": "15 of 113 actions (13%)"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "9 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "104 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0025",
+     "name": "Chloe",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 2 listed units paid"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "98 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0008",
+     "name": "Ananya",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 9 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "46 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "70 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0011",
+     "name": "Olivia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "invalid_reply_rate",
+       "severity": "review",
+       "detail": "9 of 89 actions (10%)"
+      },
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 4 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "3 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "77 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0007",
+     "name": "Isabella",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "3 of 11 listed units paid"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "54 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0034",
+     "name": "Ruth",
+     "verdict": "fail",
+     "findings": [
+      {
+       "check": "invalid_reply_rate_high",
+       "severity": "fail",
+       "detail": "27 of 102 actions (26%)"
+      },
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "6 of 7 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "8 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "66 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0014",
+     "name": "Elena",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "impulse_cap",
+       "severity": "review",
+       "detail": "5 off-list units against a cap of 1 (mixed tier, probability 0.23)"
+      },
+      {
+       "check": "impulse_price",
+       "severity": "review",
+       "detail": "1 off-list product(s) above $4.00"
+      },
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "2 of 10 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "30 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "60 turns in a row"
+      }
+     ]
+    },
+    {
+     "shopper_id": "C0026",
+     "name": "Sofia",
+     "verdict": "review",
+     "findings": [
+      {
+       "check": "list_incomplete",
+       "severity": "review",
+       "detail": "1 of 3 listed units paid"
+      },
+      {
+       "check": "loop_detected",
+       "severity": "review",
+       "detail": "38 loop detection(s)"
+      },
+      {
+       "check": "stuck",
+       "severity": "review",
+       "detail": "55 turns in a row"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

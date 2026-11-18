@@ -1,0 +1,40 @@
+/* Added sections at the foot of the Results page: cost against quality, run checks, questions.
+   Semantic tokens only; no literal colours (see tokens.css). */
+@layer pages {
+  .results-extra { margin:var(--space-10) 0 0; }
+  .results-extra h2 { margin:0 0 var(--space-2);font-size:28px;letter-spacing:-.01em; }
+  .results-extra .report-table { margin-top:var(--space-4); }
+
+  .cost-quality-chart { margin:var(--space-4) 0;padding:var(--space-4);border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface); }
+  .cost-quality-chart svg { display:block;width:100%;height:auto; }
+  .cq-band { fill:var(--color-surface-subtle); }
+  .cq-grid { stroke:var(--color-border);stroke-width:1; }
+  .cq-tick { fill:var(--color-text-muted);font-size:12px; }
+  .cq-axis { fill:var(--color-text-secondary);font-size:12.5px;font-weight:500; }
+  .cq-link { stroke:var(--color-border-strong);stroke-width:2;stroke-dasharray:4 3; }
+  .cq-label { fill:var(--color-text);font-size:13px;font-weight:600; }
+  .cq-point { stroke:var(--color-surface);stroke-width:2; }
+  .cq-point.is-a { fill:var(--chart-a); }
+  .cq-point.is-b { fill:var(--chart-b); }
+  .cq-legend { display:flex;gap:var(--space-5);margin-top:var(--space-2);font-size:var(--text-xs);color:var(--color-text-secondary); }
+  .cq-legend i { display:inline-block;width:11px;height:11px;margin-right:var(--space-2);vertical-align:-1px; }
+  .cq-legend i.is-a { border-radius:50%;background:var(--chart-a); }
+  .cq-legend i.is-b { background:var(--chart-b);transform:rotate(45deg) scale(.85); }
+  .cost-quality-notes { margin:var(--space-3) 0 0;padding-left:var(--space-5);display:grid;gap:var(--space-2); }
+
+  .run-check-key { list-style:none;margin:var(--space-4) 0;padding:0;display:grid;gap:var(--space-2);font-size:var(--text-sm);color:var(--color-text-secondary);line-height:1.6; }
+  .run-badge { display:inline-block;min-width:3.6rem;padding:1px var(--space-2);margin-right:var(--space-2);border-radius:999px;text-align:center;font-size:11px;font-weight:600;border:1px solid transparent; }
+  .run-badge.is-pass { background:var(--color-success-soft);color:var(--color-success);border-color:var(--color-success); }
+  .run-badge.is-review { background:var(--color-warning-soft);color:var(--color-warning);border-color:var(--color-warning); }
+  .run-badge.is-fail { background:var(--color-danger-soft);color:var(--color-danger);border-color:var(--color-danger); }
+  .run-flag { display:block;margin-bottom:var(--space-1); }
+  .run-flag small { display:inline;margin-left:var(--space-2); }
+  .run-flagged { margin:var(--space-3) 0; }
+  .run-flagged ul,.results-extra .evidence-details ul { margin:var(--space-2) 0 0;padding-left:var(--space-5);display:grid;gap:var(--space-2);font-size:var(--text-sm);color:var(--color-text-secondary);line-height:1.6; }
+
+  .results-faq { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);margin-top:var(--space-4); }
+  .results-faq article { padding:var(--space-5);border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface);min-width:0; }
+  .results-faq h3 { margin:0 0 var(--space-3);font-size:var(--text-body);letter-spacing:-.01em; }
+  .results-faq p { font-size:var(--text-sm);line-height:1.7;color:var(--color-text-secondary); }
+  @media(max-width:820px) { .results-faq { grid-template-columns:1fr; } }
+}

@@ -72,9 +72,6 @@ runs/
 .DS_Store
 Thumbs.db
 
-# Local agent tooling and downloaded model adapters (large / machine-local).
-/hive/
-/roster.json
-/roster-backups/
+# Downloaded model adapters (large / machine-local).
 data/finetuning/adapters/
 data/finetuning/colab_runs/*_adapter*.zip

@@ -1,6 +1,7 @@
 import 'server-only';
 import { buildQuiz } from './quiz-content';
 import { mleQuestions, mleQuiz } from './mle-interview';
+import { evalConcepts, evalDrills, evalQuiz } from './agent-evals';
 import type { Concept, Question, StudyData } from './types';
 
 const concepts: Concept[] = [
@@ -61,4 +62,4 @@ const extra: Question[] = [
 
 const projectQuestions: Question[] = [...concepts.map((c): Question => ({id:c.id,area:c.area,title:c.title,prompt:c.question,answer:`${c.idea}\n\n${c.implementation}\n\n${c.tradeoff}`,rubric:c.rubric,followup:`Avoid this trap: ${c.trap}`,source:c.source})), ...extra];
 
-export const studyData: StudyData = { concepts, questions: [...projectQuestions, ...mleQuestions], quiz: [...buildQuiz(projectQuestions), ...mleQuiz] };
+export const studyData: StudyData = { concepts: [...concepts, ...evalConcepts], questions: [...projectQuestions, ...mleQuestions, ...evalConcepts.map((c): Question => ({id:c.id,area:c.area,title:c.title,prompt:c.question,answer:`${c.idea}\n\n${c.implementation}\n\n${c.tradeoff}`,rubric:c.rubric,followup:`Avoid this trap: ${c.trap}`,source:c.source})), ...evalDrills], quiz: [...buildQuiz(projectQuestions), ...mleQuiz, ...evalQuiz] };
