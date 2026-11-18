@@ -9,7 +9,7 @@ Running notes for the presentation. Not product evidence: these are observations
 ### What we saw
 Source runs: `or-v3-gpt-6.1-terra-20261117` and `or-v3-gpt-6-luna-20261117` (Layouts A and B, ten fixed profiles, one repetition).
 
-Shopper: Isabella Rossi (C0007). Low price sensitivity (2/5), brand loyalty 1, coupon use "sometimes", impulse probability 0.45, `impulsive`, no shopping list, stock-up trip, household of 4, $113 budget (largest in the cohort).
+Shopper: Isabella Rossi (C0007). Low price sensitivity (2/5), brand loyalty 1, coupon use "sometimes", impulse probability 0.45, `impulsive`, `uses_shopping_list` false (she still has a written list of 7 must-haves, plus 4 items not on it), stock-up trip, household of 4, $113 budget (largest in the cohort).
 
 | | Terra | Luna |
 |---|---|---|
@@ -22,9 +22,14 @@ Shopper: Isabella Rossi (C0007). Low price sensitivity (2/5), brand loyalty 1, c
 - The extra off-list volume is mostly **several units at one stop**, not more stops with an impulse.
 - Terra's off-list items were cheap, family-appropriate and within budget. No loops or rejected actions (81 of 81 actions applied).
 
+### Terra replicate (2026-11-18)
+A second Terra run on Layout A (`or-v3-gpt-6.1-terra-layout-a-replicate-20261118`, same 10 profiles, same settings, same seed) gave the same behaviour: Isabella took 11 off-list units (12 before) with impulse items at 4 of 8 stops both times, and the cohort total was 20 vs 22. Most other shoppers were identical or within one unit. So Terra's multi-unit impulse buying is a stable trait of that model on this profile, not sampling noise. It is still one replicate on one layout, and it says nothing about which model is right. Kept separate from Evidence.
+
+Also found: `evaluation/impulse_eval.py` has a tier rule (impulsive tier: at most 2 extras in the cart). Isabella (p=0.45) falls in that tier and exceeds it. Not yet checked whether Terra's prompt states that cap, so this is a prompt-versus-rule mismatch until confirmed.
+
 ### Why different models differ
 This is the thing the eval measures, so a gap between models is not a contradiction.
-- Terra may be reading the fields that point toward buying (`impulsive`, no list, big budget, stock-up trip). That would be following the profile correctly.
+- Terra may be reading the fields that point toward buying (`impulsive`, `uses_shopping_list` false, big budget, stock-up trip). That would be following the profile correctly.
 - Luna may be under-reading it, for example by treating the list as the whole task.
 - Neither model is the baseline. We have no real shopper to compare against, and 0.45 is a number we chose.
 
@@ -53,6 +58,26 @@ No loops, no rejected or invalid actions, spend within budget, items fit diet an
 
 ### Possible metric (not built)
 Pooled impulse rate per shelf visit against stated probability, bucketed by probability. Skip per-shopper outlier flags: most shoppers have 1 to 10 stops. A "shelf visit" needs a Python-owned definition first, and the planned shelf-adjacency rule will change it.
+
+## Results section: two things we are still learning (talk track)
+
+Plain-language script for the audience. Both points are open questions, not findings.
+
+### 1. Does the shopper follow who they are, or who the model assumes they are?
+"Each simulated shopper comes with a profile: budget, how price-sensitive they are, whether they bring a list, how impulsive they are. We want to know whether the AI actually acts on those fields, or acts on a stereotype it builds from them, like 'a family on a budget'.
+
+One shopper showed it. Isabella is impulsive, has the biggest budget in the group, and has a list of seven must-haves but isn't set to stick to it. One model picked up 12 extra items for her, all cheap and sensible. The other picked up none. Neither is automatically right: we have no real shopper to compare to, and her 45% impulse rate is a number we chose.
+
+Per visit, the first model was close to what we'd expect. The second may be treating the list as the whole job. So this is a difference worth measuring, not a verdict. We re-ran the first model on the same store and shoppers and it did it again (11 extra items against 12), so the pattern is stable for that model, not a fluke. With ten shoppers and a couple of runs we can't say more. The next step is to change one profile field at a time and see whether behaviour moves with it."
+
+### 2. What can the shopper actually see?
+"Right now we haven't settled what a shopper can see in the store. In a real shop you notice products within a few steps of you, and a tall aisle doesn't hide the one behind it from the next walkway as much as you'd think.
+
+The idea is to give each shopper a visibility radius: everything within a set number of blocks is visible, including products on the other side of an aisle. That matters for impulse buying, because you can't impulse-buy what you never see, so the layout changes what gets noticed.
+
+We will define the radius in Python and record it in every run, so results stay comparable and older runs still verify under the rule they used."
+
+*Caveat to resolve before building:* the recorded shelf-visibility decision (see AGENTS.md, Nov 17) is that a product is visible and grabbable only from a cell adjacent to the product's cell, with no line of sight. A radius that sees past aisles is a different rule, so it needs to be confirmed as a replacement or as a second, separate rule version. Not implemented.
 
 ## Open items
 - The user's "spend thrift" wording was ambiguous (frugal vs spendthrift). Confirm which was meant.
