@@ -1,0 +1,27 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "landing",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "landing",
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "simulation",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "landing",
+        "run",
+        "simulation:serve"
+      ],
+      "port": 8765
+    }
+  ]
+}
