@@ -33,18 +33,22 @@ function record(results: Record<string, boolean>): boolean {
   }
   return write(history);
 }
+const TALK = 'Presentation (all Talk topics)';
+const isTalk = (q: QuizQuestion) => q.area.startsWith('Talk');
+
 export function useQuizProgress() {
   const raw = useSyncExternalStore(subscribe, snapshot, () => '{}');
   return useMemo(() => parse(raw), [raw]);
 }
 
-export default function StudyQuiz({ questions, focus, autoExam = false }: { questions: QuizQuestion[]; focus?: string; autoExam?: boolean }) {
+export default function StudyQuiz({ questions, focus, preset }: { questions: QuizQuestion[]; focus?: string; preset?: 'talk' | 'exam' }) {
+  const autoExam = preset === 'exam';
   const history = useQuizProgress();
-  const [topic, setTopic] = useState('All topics');
+  const [topic, setTopic] = useState(preset === 'talk' ? TALK : 'All topics');
   const [count, setCount] = useState(10);
   const [mode, setMode] = useState<'practice' | 'exam'>(autoExam ? 'exam' : 'practice');
   const [missedOnly, setMissedOnly] = useState(false);
-  const [round, setRound] = useState<QuizQuestion[]>(() => focus ? prepareQuiz(questions.filter(q => q.id === focus), 1) : autoExam ? prepareQuiz(questions, 8) : []);
+  const [round, setRound] = useState<QuizQuestion[]>(() => focus ? prepareQuiz(questions.filter(q => q.id === focus), 1) : preset === 'talk' ? prepareQuiz(questions.filter(isTalk), 15) : autoExam ? prepareQuiz(questions, 8) : []);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
@@ -53,8 +57,8 @@ export default function StudyQuiz({ questions, focus, autoExam = false }: { ques
   const [seconds, setSeconds] = useState(20 * 60);
   const [saveError, setSaveError] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
-  const topics = ['All topics', ...new Set(questions.map(q => q.area))];
-  const pool = questions.filter(q => (topic === 'All topics' || q.area === topic) && (!missedOnly || history[q.id]?.lastCorrect === false));
+  const topics = ['All topics', TALK, ...new Set(questions.map(q => q.area))];
+  const pool = questions.filter(q => (topic === 'All topics' || q.area === topic || (topic === TALK && isTalk(q))) && (!missedOnly || history[q.id]?.lastCorrect === false));
   const current = round[index];
   const score = scoreQuiz(round, answers);
   const missed = round.filter(q => answers[q.id] !== q.correctIndex);

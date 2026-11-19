@@ -48,7 +48,12 @@ function compile(file, dependencies, environment = 'development', config = {}) {
   }
   const quizContent = compile('study/quiz-content.ts', { 'server-only': {} });
   const mle = compile('study/mle-interview.ts', { 'server-only': {} });
-  const content = compile('study/content.ts', { 'server-only': {}, './quiz-content': quizContent, './mle-interview': mle }).studyData;
+  const evals = compile('study/agent-evals.ts', { 'server-only': {} });
+  const interview = compile('study/interview.ts', { 'server-only': {} });
+  const numbers = compile('study/numbers.ts', { 'server-only': {} });
+  const content = compile('study/content.ts', { 'server-only': {}, './quiz-content': quizContent, './mle-interview': mle, './agent-evals': evals, './interview': interview, './numbers': numbers }).studyData;
+  assert(interview.interviewQuiz.filter(q => q.area.startsWith('Talk')).length >= 30, 'Presentation quiz coverage is incomplete');
+  assert(content.numbers.length >= 5 && content.numbers.every(g => g.rows.length && g.source), 'Numbers sheet is incomplete');
   assert(mle.mleQuestions.length >= 30, 'MLE interview coverage is incomplete');
   assert.deepEqual(mle.mleQuestions.map(q => q.id), mle.mleQuiz.map(q => q.id));
   for (const q of mle.mleQuestions) assert(q.followupAnswer, `${q.id}: missing follow-up answer`);
@@ -131,7 +136,7 @@ function compile(file, dependencies, environment = 'development', config = {}) {
   const html = fs.readFileSync(path.join(root, '.next/server/app/secretstudy23.html'), 'utf8');
   const secrets = fs.existsSync(path.join(root, '.env.local'))
     ? fs.readFileSync(path.join(root, '.env.local'), 'utf8').split('\n').filter(line => /^STUDY_(PASSWORD|SESSION_SECRET)=/.test(line)).map(line => line.slice(line.indexOf('=') + 1)).filter(Boolean) : [];
-  const privateMarkers = ['Go beyond', 'Defend your resume in 90 seconds', 'Make the explanation yours.', 'Your interview workbench', 'Take the quiz.', mle.mleQuestions[0].prompt, mle.mleQuiz[0].prompt, ...secrets];
+  const privateMarkers = ['Go beyond', 'Defend your resume in 90 seconds', 'Make the explanation yours.', 'Your interview workbench', 'Take the quiz.', mle.mleQuestions[0].prompt, mle.mleQuiz[0].prompt, interview.interviewQuiz[0].prompt, interview.whyDrills[0].prompt, ...secrets];
   assert(!privateMarkers.some(marker => html.includes(marker)), 'Private HTML or configuration was prerendered publicly');
   function chunks(directory) {
     return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {

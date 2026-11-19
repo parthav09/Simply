@@ -108,7 +108,7 @@ const drills = [
       "Separate teacher-state loss from rollout success."
     ],
     "followup": "How could long repetitive responses dominate loss while rare checkout decisions remain poor?",
-    "source": "notebooks/README.md · notebooks/Simply_Qwen3_4B_QLoRA_Colab.ipynb",
+    "source": "data/finetuning/README.md · notebooks/Simply_Qwen3_4B_QLoRA_Colab.ipynb",
     "check": "What does lower teacher-forced token loss directly measure?",
     "options": [
       "Better target-token prediction on the evaluated examples, not guaranteed rollout completion.",
@@ -131,7 +131,7 @@ const drills = [
       "Restart cleanly after a validated fix."
     ],
     "followup": "What would you inspect if loss is finite but every decoded action is malformed?",
-    "source": "notebooks/Simply_Qwen3_4B_QLoRA_Colab.ipynb · notebooks/README.md",
+    "source": "notebooks/Simply_Qwen3_4B_QLoRA_Colab.ipynb · data/finetuning/README.md",
     "check": "What is the best first response to a NaN loss?",
     "options": [
       "Reproduce the failing step and inspect data, supervised spans and numerical conditions.",
@@ -200,7 +200,7 @@ const drills = [
       "Prioritize independent mission diversity."
     ],
     "followup": "What do you do after the test set has influenced several design choices?",
-    "source": "data/finetuning_demo/README.md · notebooks/README.md",
+    "source": "data/finetuning_demo/README.md · data/finetuning/README.md",
     "check": "Which dataset should choose checkpoints and hyperparameters?",
     "options": [
       "Validation data, while the held-out test remains reserved for final evaluation.",
@@ -338,7 +338,7 @@ const drills = [
       "Acknowledge the small number of intact blocks."
     ],
     "followup": "What population would a bootstrap over the same ten fixed profiles actually describe?",
-    "source": "simulation/evaluation/matrix.py · simulation/docs/resume-evidence.md",
+    "source": "simulation/evaluation/matrix.py · simulation/docs/evals.md",
     "check": "Why is bootstrapping individual requests a weak basis for a layout-effect interval?",
     "options": [
       "Requests are dependent within trips and repeated conditions, so they are not independent replications.",
@@ -384,7 +384,7 @@ const drills = [
       "Avoid automatic causal blame."
     ],
     "followup": "When is excluding an infrastructure failure defensible, and how must it be labeled?",
-    "source": "simulation/core/decision_log.py · simulation/core/metrics.py · simulation/docs/resume-evidence.md",
+    "source": "simulation/core/decision_log.py · simulation/core/metrics.py · simulation/docs/evals.md",
     "check": "What is the best first step in diagnosing an unfinished trip?",
     "options": [
       "Identify the failure stage from canonical events and provider/execution telemetry.",
@@ -407,7 +407,7 @@ const drills = [
       "Separate synthetic findings from human effects."
     ],
     "followup": "What would go wrong if shoppers in both arms share the same changing store inventory?",
-    "source": "simulation/docs/resume-evidence.md · simulation/evaluation/study.py",
+    "source": "simulation/docs/evals.md · simulation/evaluation/study.py",
     "check": "What claim requires new evidence beyond synthetic Simply runs?",
     "options": [
       "A causal improvement in real customer or retailer outcomes.",
@@ -430,7 +430,7 @@ const drills = [
       "Qualify what seeds can reproduce."
     ],
     "followup": "Which artifacts are needed for inference versus reproducing the entire training run?",
-    "source": "notebooks/README.md · simulation/core/run_log.py · simulation/agents/openrouter_provider.py",
+    "source": "data/finetuning/README.md · simulation/core/run_log.py · simulation/agents/openrouter_provider.py",
     "check": "Which release package best supports reproducibility?",
     "options": [
       "Model/tokenizer/template identity, adapter/data/configuration versions and matched evaluation evidence.",
@@ -706,7 +706,7 @@ const drills = [
       "Use an authentic incident instead of an invented story."
     ],
     "followup": "Walk me through a bug you diagnosed: evidence, hypothesis, fix and verification.",
-    "source": "simulation/docs/architecture.md · simulation/docs/live-replay-flow.md · .github/workflows/offline-evaluation.yml",
+    "source": "simulation/docs/architecture.md · .github/workflows/offline-evaluation.yml",
     "check": "What makes an ownership answer credible?",
     "options": [
       "Specific explainable artifacts, accurate attribution and a real decision or debugging example.",
@@ -775,7 +775,7 @@ const drills = [
       "Evaluate base/tuned full trips under declared assistance."
     ],
     "followup": "What would you do when two different legal routes are equally good but only one is labeled?",
-    "source": "data/finetuning_demo/README.md · simulation/core/navigation.py · notebooks/README.md",
+    "source": "data/finetuning_demo/README.md · simulation/core/navigation.py · data/finetuning/README.md",
     "check": "What policy do post-assistance action labels most directly teach?",
     "options": [
       "The demonstrated assisted behavior, which must be distinguished from raw model proposals.",
