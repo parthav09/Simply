@@ -20,6 +20,17 @@ model suggests an action → Python checks and applies it → saved log
 | --- | --- |
 | [![Layout A replay](landing/public/demos/layout-a-anchor-loop.gif)](landing/public/replays/1512b82600664e66ae4db51c29841a6a.json) | [![Layout B replay](landing/public/demos/layout-b-express-essentials.gif)](landing/public/replays/1e5be585cfcd4d09bb198967c3281d79.json) |
 
+## Screenshots
+
+Replay of a saved GPT-6.1 Terra trip on Layout A, paused mid-trip on Isabella Rossi (amber rings mark impulse pick-ups).
+The live run view uses the same store map, fed by the streamed run instead of a saved log.
+
+![Replay page](landing/public/screenshots/replay.png)
+
+The Results page compares models and layouts on the same ten shoppers.
+
+![Results page](landing/public/screenshots/evaluation.png)
+
 ## Run it
 
 Python 3.11+ and Node.js 22:
