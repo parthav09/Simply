@@ -367,31 +367,6 @@ export function ToolCallFlow() {
 }
 
 
-/* ── Field of view: what the prompt lets the agent see. Radius comes from SHELF_SIGHT_RADIUS (core/perception.py). ── */
-const FOV_RADIUS = 6;
-export function FieldOfView() {
-  const size = FOV_RADIUS * 2 + 1, cell = 15;
-  // Same diamond (steps are Manhattan distance), turned 45° so it sits as a square.
-  const mid = size * cell / 2, half = (FOV_RADIUS + 0.5) * cell / Math.SQRT2 + 2;
-  const upright = cell / Math.SQRT2 - 1.5; // fits between neighbours once the layout is turned
-  const cells: ReactNode[] = [];
-  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
-    const d = Math.abs(x - FOV_RADIUS) + Math.abs(y - FOV_RADIUS);
-    if (d > FOV_RADIUS) continue;
-    const cls = d === 0 ? 'is-self' : d === 1 ? 'is-grab' : 'is-see';
-    const cx = x * cell + cell / 2, cy = y * cell + cell / 2;
-    // Each cell is turned back 45° about its own centre, so it stays upright inside the turned layout.
-    cells.push(<rect key={`${x}-${y}`} x={cx - upright / 2} y={cy - upright / 2} width={upright} height={upright} rx={1.5} transform={`rotate(-45 ${cx} ${cy})`} className={`fov-${cls}`}/>);
-  }
-  return <figure className="pz-fov">
-    <svg viewBox={`${mid - half} ${mid - half} ${half * 2} ${half * 2}`} role="img" aria-label={`Field of view: the agent sees every shelf within ${FOV_RADIUS} steps in all four directions, with no facing. It can grab only from a shelf one step away.`}><g transform={`rotate(45 ${mid} ${mid})`}>{cells}</g></svg>
-    <figcaption>
-      <span><i className="fov-sw is-see"/>Sees shelves within <b>{FOV_RADIUS} steps</b>, every direction, no facing</span>
-      <span><i className="fov-sw is-grab"/>Grabs only from a shelf <b>1 step</b> away</span>
-    </figcaption>
-  </figure>;
-}
-
 /* ── Screenshot of the real app, in a browser frame ─────────────────────── */
 export function Shot({ src, alt, caption, url = 'localhost:3000/replays' }: { src: string; alt: string; caption?: string; url?: string }) {
   return <figure className="pz-shot">

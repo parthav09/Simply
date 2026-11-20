@@ -1,10 +1,10 @@
 'use client';
 
 import { B, DeckShell, type Slide } from './kit';
-import { AgentFlow, FieldOfView, LiveReplay, LoraLab, LossCurve, OfflineOnline, PersonaDial, ResultsTable, RunCheckBars, Shot, ToolCallFlow } from './widgets';
+import { AgentFlow, LiveReplay, LoraLab, LossCurve, PersonaDial, ResultsTable, RunCheckBars, Shot, ToolCallFlow } from './widgets';
 
 /**
- * The presentation: one technical deck, 15 slides.
+ * The presentation: one technical deck, 13 slides.
  * Story: formulation → architecture → demo → system internals → results → fine-tuning → evals →
  * what broke → scaling. Numbers are quoted from Python-written
  * sources (evidence-dashboard.json, run-checks.json, the adapter ZIP's experiment.json and offline
@@ -38,7 +38,7 @@ const slides: Slide[] = [
             <div><dt>Fulfilment</dt><dd>list units paid for</dd></div>
             <div><dt>Impulse / trip</dt><dd className="pz-impulse">off-list units paid</dd></div>
             <div><dt>Cost</dt><dd>$ per checkout</dd></div></dl>
-          <p className="pz-note">Scored from what shoppers <b>paid for</b>, never the model’s stated reasons. No RL: personas are in-context; the fine-tune is supervised.</p></div></div>
+          <p className="pz-note">Scored from what shoppers <b>paid for</b>, never the model’s stated reasons.</p></div></div>
       <B at={1}><div className="pz-authority" style={{ marginTop: 20 }}>
         <div className="pz-actor"><b>LLM agent</b><span>proposes one action</span><small>Luna · Terra · Qwen 7B (base / tuned)</small></div>
         <span className="pz-arrow" aria-hidden="true">→</span>
@@ -71,44 +71,18 @@ const slides: Slide[] = [
             <tr><th>Terra A</th><td>7,994</td><td>34.3</td><td>1.98 / 2.91 s</td></tr>
             <tr><th>Luna A</th><td>7,769</td><td>39.4</td><td>1.24 / 1.98 s</td></tr>
             <tr><th>Qwen tuned A</th><td>6,050</td><td>30.7</td><td>0.97 / 1.39 s</td></tr></tbody></table>
-          <p className="pz-caption">Pinned model IDs, one provider, no fallbacks. Estimate vs OpenRouter-billed tracked separately.</p></div>
-        <div><h3>Field of view</h3><FieldOfView/></div></div></B>
+          <p className="pz-caption">Pinned model IDs, one provider, no fallbacks. Estimate vs OpenRouter-billed tracked separately.</p></div></div></B>
       <B at={2}><ul className="pz-sched">
-        <li><b>Many shoppers at once.</b> One pending request each; commit whatever is ready, so a slow call never stalls a fast one.</li>
-        <li><b>Single writer.</b> Workers only return proposals, so there are no locks.</li>
-        <li><b>Snapshot first.</b> The observation is frozen before the call, so the reply matches what the shopper saw.</li></ul></B></div>,
+        <li><b>All shoppers run asynchronously.</b></li></ul></B></div>,
     notes: 'Tool call: this is our tool call, without a provider tool-calling API. Python lists the legal steps in the prompt, which act as the tool list. The model replies with one strict JSON call: step, product_id, reason, max 256 tokens, reasoning off. Python parses it and checks the step is allowed and the item reachable; failures are recorded as invalid_decision. nav_support may swap the action; we record both the original and the adjusted one. Python then executes it on the grid, and a rejected action is grid_rejected. Every outcome goes to the run log and into the next observation. Each turn Python rebuilds one prompt (persona, position, cart, budget, reachable products, map, last 8 actions and 12 positions). Schema validity is not physical validity; separate failure classes tell you whether model, physics or infrastructure failed. Field of view (SHELF_SIGHT_RADIUS = 6 in core/perception.py): the prompt lists every shelf with a cell within 6 steps (Manhattan distance), with its products, in all four directions; there is no facing or orientation. Grabbing needs a shelf at distance 1. Cost: about 8k input vs 35 output tokens, so cost is driven by the observation; a cached stable prefix is the first lever. Without pinning, a router can silently serve a different backend; estimate = tokens x price snapshot frozen per run (Terra A estimate and billed both $5.1832). Scheduler: default 10 workers; OpenRouter runs used 2 at 60 requests a minute. Threads, not asyncio, because provider SDK calls block. The observation is snapshotted before submit. Shoppers are independent today (no shared stock), so commit order does not change outcomes; shared inventory would need reservations.' },
 
-  { section: 'How it works', title: 'nav_support', steps: 2, body: <div className="pz-two">
-      <div><h2>nav_support: fixed rules that correct bad navigation.</h2>
-        <p>LLMs walk a grid badly: they wander and run out of turns. nav_support checks each proposed step and replaces it only when a simple rule says so.</p>
-        <div className="pz-override"><p className="pz-eyebrow">Recorded · Terra · Layout A · decision 140 · Mia</p>
-          <p><span className="pz-tag">Model proposed</span> <code>move_down</code> “continue down the aisle toward checkout”</p>
-          <p><span className="pz-tag is-assist">Applied</span> <code>move_right</code> “head toward checkout”</p></div>
-        <B at={1}><table className="pz-table"><thead><tr><th>Decisions adjusted</th><th>A</th><th>B</th></tr></thead><tbody>
-          <tr><th>Terra</th><td>6.1%</td><td>5.4%</td></tr><tr><th>Luna</th><td>8.4%</td><td>4.7%</td></tr>
-          <tr><th>Qwen base / tuned</th><td>38.7% / 13.1%</td><td>35.6% / 14.3%</td></tr></tbody></table></B>
-        <B at={2}><p className="pz-note"><b>Bug I caught:</b> v1/v2 swapped a model’s impulse grab for a list item, erasing what I was measuring. v3 keeps it.</p></B></div>
-      <div className="pz-card"><p className="pz-eyebrow">Rules, first match wins</p><ol className="pz-steps">
-        <li><b>≤ 15 turns left</b>, cart not empty → check out.</li>
-        <li><b>Impulse grab</b> within reach → keep it (v3).</li>
-        <li><b>List item</b> within reach → grab it.</li>
-        <li><b>Already owned</b> → step to the least-visited cell.</li>
-        <li><b>List done or &lt; 30% turns</b> → head to checkout.</li>
-        <li><b>Nothing in reach</b>, busy cell → pick a fresher one.</li></ol></div>
-    </div>,
-    notes: 'In code the policy id is guided_nav_v3; nav_support is the plain name. Without it, models waste their 120 actions wandering and the comparison becomes about navigation. The adjusted share is itself a quality signal: base Qwen 36-39%, Terra 6% (31 of 510). choose() keeps the proposal when it already matches, otherwise records both. Honest confound: no model-only ablation yet, so results are model + nav_support. v1 and v2 stay in code because old recordings verify against them.' },
-
-  // ── 3 · Results ──────────────────────────────────────────────────────────
   { section: 'Results', title: 'Results', wide: true, steps: 2, body: <div><h2 className="pz-inline">Same 10 shoppers, four models, two layouts. <small>Nov 17 · each model ran once per layout</small></h2>
       <ResultsTable/>
       <B at={1}><div className="pz-two" style={{ marginTop: 12 }}>
-        <p><b>Models:</b> Luna and Terra finish every trip. Terra buys more off-list (2.2 vs 1.5 per trip on A) at ≈ 8–9× Luna’s cost per checkout. A trade-off, not a ranking.</p>
-        <p><b>Layouts:</b> B needs fewer requests for both (Terra 51 → 41, Luna 61 → 51) and fewer impulse buys. One run each, so directional only.</p></div></B>
-      <B at={2}><div style={{ marginTop: 14 }}>
-        <p><b>Earlier study (Oct 29, Terra, 10 shoppers × 2 runs): Layout B vs A.</b> Requests <b>−19.5%</b> (975 → 785) · cost per trip <b>−18.0%</b> ($9.38 → $7.69) · moves per shopper <b>−21.5%</b> (42.0 → 33.0) · checkouts 20 / 20 on both.</p>
-        <p className="pz-caption">Not 20 people: 10 profiles × 2 runs, so compare pairs. 80 trips attempted, 70 completed; failed runs are kept. Not pooled with Nov 17: different transport and nav_support version.</p></div></B></div>,
-    notes: 'Fulfilment: Luna 96/100, Terra 100/100, Qwen base 28/32, tuned 36/40. Completion: base 60/90, tuned 90/100. Impulse per trip A/B: Luna 1.5/0.4, Terra 2.2/2.0. Cost per checkout: Terra $0.52/$0.40, Luna $0.06/$0.05. Qwen base is an earlier run (Nov 3, older nav_support v2). Descriptive, no intervals, no significance claim. Earlier study (the resume result): 100 x (1 - 785/975) = 19.487%; $9.380412 vs $7.688224 is 18.04%; moves 42.00 vs 32.95 is 21.55%. Moves differ from requests because requests include grabs, checkout and invalid replies. Fulfilment 99.06% vs 100%. Planned 200 trips, attempted 80, completed 70. Estimated cost uses frozen token prices.' },
+        <p><b>Models:</b> Terra buys more off-list, at ≈ 8–9× the cost. A trade-off, not a ranking.</p>
+        <p><b>Layouts:</b> B needs fewer requests and has fewer impulse buys.</p></div></B>
+      <B at={2}><p className="pz-note"><b>Earlier study (Oct 29, Terra):</b> Layout B cut requests 19.5% and cost per trip 18.0%.</p></B></div>,
+    notes: 'Not 20 people: 10 profiles x 2 runs, so compare pairs; 80 trips attempted, 70 completed, failed runs kept; not pooled with Nov 17 (different transport and nav_support version). Earlier study also: moves per shopper -21.5% (42.0 to 33.0), checkouts 20/20 on both, requests 975 to 785, cost $9.38 to $7.69. Models: Terra 2.2 vs Luna 1.5 off-list per trip on A. Layouts: Terra 51 to 41, Luna 61 to 51 requests; one run each, directional only. Fulfilment: Luna 96/100, Terra 100/100, Qwen base 28/32, tuned 36/40. Completion: base 60/90, tuned 90/100. Impulse per trip A/B: Luna 1.5/0.4, Terra 2.2/2.0. Cost per checkout: Terra $0.52/$0.40, Luna $0.06/$0.05. Qwen base is an earlier run (Nov 3, older nav_support v2). Descriptive, no intervals, no significance claim. Earlier study (the resume result): 100 x (1 - 785/975) = 19.487%; $9.380412 vs $7.688224 is 18.04%; moves 42.00 vs 32.95 is 21.55%. Moves differ from requests because requests include grabs, checkout and invalid replies. Fulfilment 99.06% vs 100%. Planned 200 trips, attempted 80, completed 70. Estimated cost uses frozen token prices.' },
 
   // ── 4 · Fine-tuning ──────────────────────────────────────────────────────
   { section: 'Fine-tuning', title: 'Teacher and data', steps: 2, body: <div className="pz-two">
@@ -142,10 +116,10 @@ const slides: Slide[] = [
 
   // ── 5 · Evals ────────────────────────────────────────────────────────────
 
-  { section: 'Fine-tuning', title: 'Serving, results and fixes', steps: 1, body: <div>
-      <h2 className="pz-inline">Fine-tuned model: served on a Mac, strong offline, modest online. <small>Then four fixes.</small></h2>
-      <div className="pz-two">
-        <div><h3>Trained on a cloud GPU, made to run on a Mac</h3>
+  { section: 'Fine-tuning', title: 'Serving, results and fixes', body: <div>
+      <h2 className="pz-inline">Fine-tuned model: trained on a cloud GPU, served on a Mac.</h2>
+      <div>
+        <div>
           <ol className="pz-steps">
             <li><b>Train:</b> Colab A100, 4-bit NF4 base → 161.5 MB adapter.</li>
             <li><b>Problem:</b> NF4 only runs on NVIDIA GPUs, so it would not load on my Mac.</li>
@@ -156,16 +130,7 @@ const slides: Slide[] = [
             <tr><th>Mac · MPS int4</th><td>≈ 114 s</td><td>local pilot</td></tr>
             <tr><th>Mac · MLX int4</th><td>≈ 21 s</td><td>faster local</td></tr></tbody></table>
           <p className="pz-caption">Each setup is a <b>separate model</b>; I never mix their results.</p></div>
-        <div><h3>One tuned model, two tests</h3>
-          <OfflineOnline groups={[
-            { title: 'Offline: big gains', sub: 'one decision at a time · 88 validation rows', rows: [['Step agreement', 0.227, 0.864], ['Impulse decisions (66)', 0.288, 0.818], ['Checkout (8)', 0, 1]] },
-            { title: 'Online: modest gains', sub: 'full trips · 10 unseen shoppers', rows: [['Fulfilment A', 0.283, 0.358], ['Fulfilment B', 0.321, 0.396], ['Completion A', 0.6, 0.9]] }]}/>
-          <p className="pz-caption"><b>Why:</b> offline it sees the teacher’s states; online it visits its own, so errors compound (≈ 95 actions per trip vs 46).</p></div></div>
-      <B at={1}><div className="pz-grid4 pz-fixes">
-        <div className="pz-card"><p><b>1 · Train on its own mistakes.</b> The teacher labels the states the student reaches (DAgger).</p></div>
-        <div className="pz-card"><p><b>2 · Teach recovery.</b> Examples that start off-route or stuck.</p></div>
-        <div className="pz-card"><p><b>3 · Constrain the output.</b> Only legal JSON and steps.</p></div>
-        <div className="pz-card"><p><b>4 · Train how you serve.</b> bf16 LoRA, same precision, shorter prompt.</p></div></div></B></div>,
+</div></div>,
     notes: 'Offline also: reply valid for state 81.8% → 98.9%. Serving: Training and serving precision did not match: bitsandbytes NF4 is CUDA-only. These timings are from the pilot adapter. On the Mac the official base was quantized to int4 (Quanto for MPS, MLX q4 group 64) and the unchanged adapter loaded on top; adapter hash, base revision, tokenizer and package versions are saved in every run. MPS and MLX timings were each measured once on an M3 Pro. That mismatch is why LoRA on a bf16 base would have been more portable. The local server listens only on 127.0.0.1, one generation at a time, and never falls back to a paid API. Results: The key ML lesson: per-step agreement is necessary but not sufficient; the task metric is the finished trip. Impulse grab rate 0% → 57.6% vs teacher 63.6%. Only 4 move rows in the offline subset. 35 / 66 invalid replies each burn a turn. Base row is an earlier run under v2, so not perfectly matched. Four fixes: Order by expected payoff. 1 attacks the core problem from the offline vs online slide: the student drifts into states the teacher never visited. 2 is cheap data generation with the same rule teacher. 3 is grammar-constrained decoding (JSON schema plus the allowed-step enum for this state); it cannot make a bad move good, but it stops wasted turns. 4 removes the NF4 vs int4 mismatch and cuts input tokens; median training row was 8.5k tokens. Then a matched base-vs-tuned rerun on the same day and serving setup. Distilling Terra on non-benchmark shoppers is a separate experiment.' },
 
 
@@ -188,7 +153,7 @@ const slides: Slide[] = [
           <tr><th>Terra</th><td>12</td><td>12</td><td>11</td></tr><tr><th>Luna</th><td>0</td><td>0</td><td>0</td></tr>
           <tr><th>Terra, p = 0.05</th><td colSpan={3}>0 (one-field probe)</td></tr></tbody></table>
         <B at={1}><p>Terra matches her 45% rate per stop. The volume is several units at one stop near checkout.</p></B>
-        <B at={2}><p className="pz-note"><b>Takeaway:</b> Terra follows its customer profile; Luna and Qwen don't.</p></B></div>
+        <B at={2}><p className="pz-note"><b>Takeaway:</b> Terra follows its customer profile; Luna and Qwen don’t.</p></B></div>
       <B at={1}><Shot src="/present/isabella-trip.png" url="localhost:3000/replays · Terra · Layout A" alt="End of Isabella Rossi's Terra trip: 12 impulse items outlined in amber on the map, $111.97 spent of a $113.13 budget." caption="Real recording: Isabella’s Terra trip ends with 12 impulse items, $111.97 of $113.13."/></B>
     </div>,
     notes: 'Debugging non-determinism story. Takeaway: the one-field probe is a prompt-adherence check, i.e. profile sensitivity per model; Terra follows the profile, Luna and the tuned Qwen mostly do not (one run per cell, direction only). Point at the amber outlines clustered in Snacks and Bakery near checkout. Binomial(8 stops, 0.45): expected 3.6; P(X ≥ 4) = 0.52, P(X ≥ 5) = 0.26; Terra grabbed at 4 of 8 and 5 of 8 stops. Rule of three: 0 failures in n runs means rate < 3/n at 95%, so three runs show reproduction, not a rate. Predict direction first and add a null control. Do not say Terra over-buys or Luna is more realistic.' },
@@ -210,19 +175,11 @@ const slides: Slide[] = [
     </div>,
     notes: 'Terra ≈ 46 requests per trip (A 51, B 41), Luna ≈ 56 (60.7 / 51.3). Cost uses Luna ≈ $0.056 and Terra ≈ $0.46 per checkout. Idempotent IDs stop retries after ambiguous timeouts from double-charging or double-applying. JSONL per run is fine for tens of runs; hundreds need an index or columnar store. For real stores: planogram → grid, product master → catalogue, calibrate impulse on real baskets. The local tuned 7B is ≈ 0.97 s p50 with no API fee, but needs better navigation first.' },
 
-  { section: 'Scale', title: 'Future work', body: <div><h2>Future work. <small>One variable at a time.</small></h2>
-      <ol className="pz-future">
-        <li><b>Ablation:</b> model only vs model + nav_support.</li>
-        <li><b>Sensitivity grid:</b> one persona field at a time.</li>
-        <li><b>≥ 5 runs per model and layout</b> with intervals.</li></ol></div>,
-    notes: 'Each item changes one variable. Ablation removes nav_support to separate model from assist. Sensitivity grid varies one persona field at a time. More runs give intervals. Distilling Terra on non-benchmark shoppers avoids leaking the test set. Keep the replay and QLoRA slides ready for questions.' },
-  { section: 'Scale', title: 'Summary', body: <div><h2>Summary.</h2>
-      <ol className="pz-future">
-        <li><b>The rule:</b> the model suggests, Python decides, React only shows.</li>
-        <li><b>The study:</b> same 10 shoppers, four models, two layouts, every impulse buy recorded.</li>
-        <li><b>The finding:</b> Terra follows its customer profile; Luna and Qwen don't.</li>
-        <li><b>The student:</b> fine-tuned Qwen gains a lot offline, only modestly in full trips.</li>
-        <li><b>The caveat:</b> synthetic shoppers and one run per cell: directions, not proof.</li></ol></div>,
+  { section: 'Scale', title: 'Summary', body: <div><h2>Summary and future work.</h2>
+      <h3>Summary</h3>
+      <p className="pz-big">Store layout changes how shoppers behave, and so does how well the model follows its prompt.</p>
+      <h3 style={{ marginTop: 32 }}>Future work</h3>
+      <p className="pz-big">More runs on more models, behaviour checks, and a proper resource study.</p></div>,
     notes: 'Close on the one rule, then the finding. Offline step agreement 22.7% to 86.4%, but fulfilment A only 28.3% to 35.8%: per-step agreement is necessary but not sufficient. One run per model per layout, so no error bars; synthetic shoppers have chosen, not measured, impulse rates.' },
 ];
 
