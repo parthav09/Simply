@@ -87,12 +87,17 @@ export function ResultsTable() {
           {measures.map(m => data.layouts.map((l, i) => {
             const v = model.cells[l.id]?.metrics[m.id] ?? null;
             const free = m.id.includes('cost') && model.provider === 'local_mps';
-            return <td key={`${m.id}-${l.id}`} className={i === 0 ? 'pz-grp-start' : undefined}>{free ? 'no API fee' : format(v, m.unit)}</td>;
+            // Heat shade = this value relative to the largest in its column group (display geometry only; neutral, not a ranking).
+            const top = Math.max(1e-9, ...view.models.flatMap(x => data.layouts.map(y => x.cells[y.id]?.metrics[m.id] ?? 0)));
+            const heat = v === null || free ? 0 : Math.round(v / top * 100);
+            const tone = m.id === 'impulse_units_per_trip' ? 'var(--color-impulse)' : 'var(--color-accent)';
+            return <td key={`${m.id}-${l.id}`} className={i === 0 ? 'pz-grp-start' : undefined}
+              style={{ background: `color-mix(in srgb, ${tone} ${Math.round(heat * 0.42)}%, transparent)` }}>{free ? 'no API fee' : format(v, m.unit)}</td>;
           }))}
         </tr>)}
       </tbody>
     </table>
-    <p className="pz-caption">{view.label}: one run per model and layout, ten shoppers. Qwen base is the earlier Nov 3 run. A = costco_back_anchor, B = neighborhood_express. Source: evidence-dashboard.json.</p>
+    <p className="pz-caption">{view.label}: one run per model and layout, ten shoppers. Qwen base is the earlier Nov 3 run. A = costco_back_anchor, B = neighborhood_express. Shade = size within each measure, not good or bad. Source: evidence-dashboard.json.</p>
   </div>;
 }
 
@@ -358,6 +363,32 @@ export function ToolCallFlow() {
         <Tx x={957} y={306} c="e ink-out">a failed call is still logged</Tx>
       </In>
     </svg>
+  </figure>;
+}
+
+
+/* ── Field of view: what the prompt lets the agent see. Radius comes from SHELF_SIGHT_RADIUS (core/perception.py). ── */
+const FOV_RADIUS = 6;
+export function FieldOfView() {
+  const size = FOV_RADIUS * 2 + 1, cell = 15;
+  // Same diamond (steps are Manhattan distance), turned 45° so it sits as a square.
+  const mid = size * cell / 2, half = (FOV_RADIUS + 0.5) * cell / Math.SQRT2 + 2;
+  const upright = cell / Math.SQRT2 - 1.5; // fits between neighbours once the layout is turned
+  const cells: ReactNode[] = [];
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const d = Math.abs(x - FOV_RADIUS) + Math.abs(y - FOV_RADIUS);
+    if (d > FOV_RADIUS) continue;
+    const cls = d === 0 ? 'is-self' : d === 1 ? 'is-grab' : 'is-see';
+    const cx = x * cell + cell / 2, cy = y * cell + cell / 2;
+    // Each cell is turned back 45° about its own centre, so it stays upright inside the turned layout.
+    cells.push(<rect key={`${x}-${y}`} x={cx - upright / 2} y={cy - upright / 2} width={upright} height={upright} rx={1.5} transform={`rotate(-45 ${cx} ${cy})`} className={`fov-${cls}`}/>);
+  }
+  return <figure className="pz-fov">
+    <svg viewBox={`${mid - half} ${mid - half} ${half * 2} ${half * 2}`} role="img" aria-label={`Field of view: the agent sees every shelf within ${FOV_RADIUS} steps in all four directions, with no facing. It can grab only from a shelf one step away.`}><g transform={`rotate(45 ${mid} ${mid})`}>{cells}</g></svg>
+    <figcaption>
+      <span><i className="fov-sw is-see"/>Sees shelves within <b>{FOV_RADIUS} steps</b>, every direction, no facing</span>
+      <span><i className="fov-sw is-grab"/>Grabs only from a shelf <b>1 step</b> away</span>
+    </figcaption>
   </figure>;
 }
 

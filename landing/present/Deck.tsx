@@ -1,10 +1,10 @@
 'use client';
 
 import { B, DeckShell, type Slide } from './kit';
-import { AgentFlow, LiveReplay, LoraLab, LossCurve, OfflineOnline, PersonaDial, RecordSnapshot, ResultsTable, RunCheckBars, Shot, ToolCallFlow } from './widgets';
+import { AgentFlow, FieldOfView, LiveReplay, LoraLab, LossCurve, OfflineOnline, PersonaDial, ResultsTable, RunCheckBars, Shot, ToolCallFlow } from './widgets';
 
 /**
- * The presentation: one technical deck, 17 slides.
+ * The presentation: one technical deck, 15 slides.
  * Story: formulation → architecture → demo → system internals → results → fine-tuning → evals →
  * what broke → scaling. Numbers are quoted from Python-written
  * sources (evidence-dashboard.json, run-checks.json, the adapter ZIP's experiment.json and offline
@@ -17,8 +17,7 @@ const slides: Slide[] = [
   { section: 'Overview', title: 'title', body: <div className="pz-two">
       <div><p className="pz-eyebrow">Simply · technical walkthrough · Parthav Joshi</p>
         <h1>Simulating human shopping decisions with LLM agents.</h1>
-        <p className="pz-lede">A multi-agent store simulation: each shopper is an LLM agent with a persona and a list. The agent proposes its next step; Python decides what happens and records every decision.</p>
-        <div className="pz-chips"><span>Python simulation core</span><span>OpenRouter + local MPS</span><span>React replay over SSE</span><span>4 models × 2 layouts</span><span>QLoRA Qwen 7B</span><span>Guardrails + evals</span></div></div>
+        <p className="pz-lede">A multi-agent store simulation: each shopper is an LLM agent with a persona and a list. The agent proposes its next step; Python decides what happens and records every decision.</p></div>
       <Shot src="/present/layouts-compare.png" url="localhost:3000/replays · compare" alt="Replay of Terra shoppers in Layout A and Layout B side by side, with impulse pick-ups outlined in amber." caption="Real recording: the same 10 Terra shoppers in Layout A and B, decision 281."/>
     </div>,
     notes: 'Thirty-second version: personas become LLM agents, the agent proposes, Python decides, and every number can be replayed. I built all of it: core, inference, replay UI, studies, fine-tune and evals. Order: formulation, architecture and demo, internals, results, fine-tuning, evals, scaling.' },
@@ -58,34 +57,27 @@ const slides: Slide[] = [
       <AgentFlow/></div>,
     notes: 'Walk left to right. Four files: 50 personas with about 40 fields, their shopping lists, the product catalogue, and the two layouts with the frozen cohort. The persona builder turns a profile and list into prompt text; nothing about the persona changes model weights. Then the loop: Python builds the observation, the agent proposes one action, Python validates, may adjust it with nav_support, applies it, and the new state feeds the next observation. Everything lands in the run log, which drives metrics and replay. If asked: lists were trimmed to fit budget and a greedy route proved every trip finishable in 96 turns; runs store input, layout, engine and provider fingerprints. Layout A puts staples at the back and treats near the entrance; B puts daily essentials near the entrance.' },
 
-  { section: 'How it works', title: 'Tool call and scheduler', wide: true, body: <div><h2 className="pz-inline">One reply, one action. <small>The model never touches state; it proposes a call and Python decides.</small></h2>
-      <ToolCallFlow/>
-      <B at={1}><ul className="pz-sched">
+  { section: 'How it works', title: 'Tool call, validation and cost', wide: true, steps: 2, body: <div><h2 className="pz-inline">One reply, one action. <small>The model never touches state; it proposes a call and Python decides. Each call is stateless; memory lives in Python.</small></h2>
+      <div className="pz-compact-flow"><ToolCallFlow/></div>
+      <B at={1}><div className="pz-three3">
+        <div><h3>Where calls fail</h3>
+          <table className="pz-table"><thead><tr><th>Gate</th><th>Luna A / B</th><th>Tuned Qwen A / B</th></tr></thead><tbody>
+            <tr><th>invalid_decision</th><td>12 / 9</td><td>35 / 66</td></tr>
+            <tr><th>grid_rejected</th><td>1 / 0</td><td>1 / 1</td></tr>
+            <tr><th>provider_exception</th><td>0 / 0</td><td>0 / 0</td></tr></tbody></table>
+          <p className="pz-caption">Terra: zero invalid, zero rejected.</p></div>
+        <div><h3>Cost and latency</h3>
+          <table className="pz-table"><thead><tr><th>Per request</th><th>In tok</th><th>Out tok</th><th>p50 / p95</th></tr></thead><tbody>
+            <tr><th>Terra A</th><td>7,994</td><td>34.3</td><td>1.98 / 2.91 s</td></tr>
+            <tr><th>Luna A</th><td>7,769</td><td>39.4</td><td>1.24 / 1.98 s</td></tr>
+            <tr><th>Qwen tuned A</th><td>6,050</td><td>30.7</td><td>0.97 / 1.39 s</td></tr></tbody></table>
+          <p className="pz-caption">Pinned model IDs, one provider, no fallbacks. Estimate vs OpenRouter-billed tracked separately.</p></div>
+        <div><h3>Field of view</h3><FieldOfView/></div></div></B>
+      <B at={2}><ul className="pz-sched">
         <li><b>Many shoppers at once.</b> One pending request each; commit whatever is ready, so a slow call never stalls a fast one.</li>
         <li><b>Single writer.</b> Workers only return proposals, so there are no locks.</li>
         <li><b>Snapshot first.</b> The observation is frozen before the call, so the reply matches what the shopper saw.</li></ul></B></div>,
-    steps: 1,
-    notes: 'Scheduler (from the old pipeline slide): Default 10 workers; OpenRouter runs used 2 at 60 requests a minute. Threads, not asyncio: provider SDK calls block and the work is network-bound. The observation is snapshotted before submit. Shoppers are independent today (no shared stock), so commit order does not change outcomes. Shared inventory would need reservations. Tool call: This is our tool call, without a provider tool-calling API. Python lists the legal steps in the prompt, which act as the tool list. The model replies with one strict JSON call: step, product_id, reason. Python parses it and checks the step is allowed and the item reachable; failures are recorded as invalid_decision. nav_support may swap the action; we record both the original and the adjusted one. Python then executes it on the grid, and a rejected action is grid_rejected. Every outcome goes to the run log and into the next observation. The model has no side effects of its own.' },
-
-
-  { section: 'How it works', title: 'Model call: interface and cost', steps: 1, body: <div className="pz-two">
-      <div><h2>One model call: observe, propose, validate.</h2>
-        <p>Each call is stateless; the shopper’s memory lives in Python. Every turn Python rebuilds one prompt: persona, position, cart, budget, reachable products, map, plus the last 8 actions and 12 positions. Output is strict JSON, max 256 tokens, reasoning off.</p>
-        <B at={1}><table className="pz-table"><thead><tr><th>Gate</th><th>Fails as</th><th>Luna A / B</th><th>Tuned Qwen A / B</th></tr></thead><tbody>
-          <tr><th>Schema + legal step + reachable item</th><td>invalid_decision</td><td>12 / 9</td><td>35 / 66</td></tr>
-          <tr><th>Apply on the grid</th><td>grid_rejected</td><td>1 / 0</td><td>1 / 1</td></tr>
-          <tr><th>Transport / API</th><td>provider_exception</td><td>0 / 0</td><td>0 / 0</td></tr></tbody></table>
-          <p className="pz-caption">Terra: zero invalid, zero rejected. Every failure still costs a turn.</p></B></div>
-      <div><h2>Cost, latency and serving identity.</h2>
-        <table className="pz-table"><thead><tr><th>Per request</th><th>In tok</th><th>Out tok</th><th>p50 / p95</th></tr></thead><tbody>
-          <tr><th>Terra A</th><td>7,994</td><td>34.3</td><td>1.98 / 2.91 s</td></tr>
-          <tr><th>Luna A</th><td>7,769</td><td>39.4</td><td>1.24 / 1.98 s</td></tr>
-          <tr><th>Qwen tuned A</th><td>6,050</td><td>30.7</td><td>0.97 / 1.39 s</td></tr></tbody></table>
-        <B at={1}><ul><li><b>Pinned:</b> dated model IDs, one provider, no fallbacks, no plugins.</li>
-          <li><b>Two ledgers:</b> token estimate vs what OpenRouter billed.</li>
-          <li>Unknown usage is reserved, never zeroed.</li></ul></B></div>
-    </div>,
-    notes: 'Schema validity is not physical validity. Separate failure classes tell you which system failed: model, physics or infrastructure. About 8k input vs 35 output tokens means cost is driven by the observation. Cost and serving: Without pinning, a router can silently serve a different backend and change the system under test. Estimate = tokens × price snapshot frozen per run; Terra A estimate and billed both $5.1832. Simulated basket dollars never mix with API dollars. Input dominates cost, so a cached stable prefix is the first cost lever.' },
+    notes: 'Tool call: this is our tool call, without a provider tool-calling API. Python lists the legal steps in the prompt, which act as the tool list. The model replies with one strict JSON call: step, product_id, reason, max 256 tokens, reasoning off. Python parses it and checks the step is allowed and the item reachable; failures are recorded as invalid_decision. nav_support may swap the action; we record both the original and the adjusted one. Python then executes it on the grid, and a rejected action is grid_rejected. Every outcome goes to the run log and into the next observation. Each turn Python rebuilds one prompt (persona, position, cart, budget, reachable products, map, last 8 actions and 12 positions). Schema validity is not physical validity; separate failure classes tell you whether model, physics or infrastructure failed. Field of view (SHELF_SIGHT_RADIUS = 6 in core/perception.py): the prompt lists every shelf with a cell within 6 steps (Manhattan distance), with its products, in all four directions; there is no facing or orientation. Grabbing needs a shelf at distance 1. Cost: about 8k input vs 35 output tokens, so cost is driven by the observation; a cached stable prefix is the first lever. Without pinning, a router can silently serve a different backend; estimate = tokens x price snapshot frozen per run (Terra A estimate and billed both $5.1832). Scheduler: default 10 workers; OpenRouter runs used 2 at 60 requests a minute. Threads, not asyncio, because provider SDK calls block. The observation is snapshotted before submit. Shoppers are independent today (no shared stock), so commit order does not change outcomes; shared inventory would need reservations.' },
 
   { section: 'How it works', title: 'nav_support', steps: 2, body: <div className="pz-two">
       <div><h2>nav_support: fixed rules that correct bad navigation.</h2>
@@ -107,31 +99,14 @@ const slides: Slide[] = [
     </div>,
     notes: 'In code the policy id is guided_nav_v3; nav_support is the plain name. Without it, models waste their 120 actions wandering and the comparison becomes about navigation. The adjusted share is itself a quality signal: base Qwen 36-39%, Terra 6% (31 of 510). choose() keeps the proposal when it already matches, otherwise records both. Honest confound: no model-only ablation yet, so results are model + nav_support. v1 and v2 stay in code because old recordings verify against them.' },
 
-  { section: 'How it works', title: 'Recording and verification', steps: 1, body: <div className="pz-two">
-      <div><h2>The recording is the evidence, and it is re-checked.</h2>
-        <RecordSnapshot/></div>
-      <B at={1}><div className="pz-card"><p className="pz-eyebrow">How it is re-checked</p><ol className="pz-steps">
-        <li><b>Integrity:</b> SHA-256 on every file.</li>
-        <li><b>Re-check:</b> re-run nav_support on every recorded state.</li>
-        <li><b>Cross-language:</b> Python and TypeScript rebuild identical frames.</li>
-        <li><b>Replay ≠ re-inference:</b> a fresh run is a new sample.</li></ol></div></B>
-    </div>,
-    notes: 'Recompute, do not trust. Works because adjusted_action is a pure function of saved inputs. run_start stores config, layout, catalogue, shoppers, frozen pricing and fingerprints. Storing prompt and raw reply lets me re-score offline without API calls. Live SSE streams only flushed lines, so live and replay read the same bytes. No request seeds, so re-running is not replay.' },
-
-
   // ── 3 · Results ──────────────────────────────────────────────────────────
   { section: 'Results', title: 'Results', wide: true, steps: 2, body: <div><h2 className="pz-inline">Same 10 shoppers, four models, two layouts. <small>Nov 17 · each model ran once per layout</small></h2>
       <ResultsTable/>
       <B at={1}><div className="pz-two" style={{ marginTop: 12 }}>
         <p><b>Models:</b> Luna and Terra finish every trip. Terra buys more off-list (2.2 vs 1.5 per trip on A) at ≈ 8–9× Luna’s cost per checkout. A trade-off, not a ranking.</p>
         <p><b>Layouts:</b> B needs fewer requests for both (Terra 51 → 41, Luna 61 → 51) and fewer impulse buys. One run each, so directional only.</p></div></B>
-      <B at={2}><div className="pz-card" style={{ marginTop: 12 }}>
-        <p className="pz-eyebrow">Earlier study · Oct 29 · Terra via OpenAI · 10 shoppers × 2 repetitions</p>
-        <dl className="pz-kv">
-          <div><dt>Requests, B vs A</dt><dd>−19.5%<small>975 → 785</small></dd></div>
-          <div><dt>Cost / trip</dt><dd>−18.0%<small>$9.38 → $7.69 over 20 trips</small></dd></div>
-          <div><dt>Moves / shopper</dt><dd>−21.5%<small>42.0 → 33.0</small></dd></div>
-          <div><dt>Checkouts</dt><dd>20 / 20<small>both layouts</small></dd></div></dl>
+      <B at={2}><div style={{ marginTop: 14 }}>
+        <p><b>Earlier study (Oct 29, Terra, 10 shoppers × 2 runs): Layout B vs A.</b> Requests <b>−19.5%</b> (975 → 785) · cost per trip <b>−18.0%</b> ($9.38 → $7.69) · moves per shopper <b>−21.5%</b> (42.0 → 33.0) · checkouts 20 / 20 on both.</p>
         <p className="pz-caption">Not 20 people: 10 profiles × 2 runs, so compare pairs. 80 trips attempted, 70 completed; failed runs are kept. Not pooled with Nov 17: different transport and nav_support version.</p></div></B></div>,
     notes: 'Fulfilment: Luna 96/100, Terra 100/100, Qwen base 28/32, tuned 36/40. Completion: base 60/90, tuned 90/100. Impulse per trip A/B: Luna 1.5/0.4, Terra 2.2/2.0. Cost per checkout: Terra $0.52/$0.40, Luna $0.06/$0.05. Qwen base is an earlier run (Nov 3, older nav_support v2). Descriptive, no intervals, no significance claim. Earlier study (the resume result): 100 x (1 - 785/975) = 19.487%; $9.380412 vs $7.688224 is 18.04%; moves 42.00 vs 32.95 is 21.55%. Moves differ from requests because requests include grabs, checkout and invalid replies. Fulfilment 99.06% vs 100%. Planned 200 trips, attempted 80, completed 70. Estimated cost uses frozen token prices.' },
 
@@ -208,32 +183,15 @@ const slides: Slide[] = [
     notes: 'Persona dial: Each dot is one shopper in one recorded Nov 17 trip: x is the impulse_buy_probability in the profile, y is paid off-list units (Python). Terra: higher settings buy more (Isabella, 0.45, bought 12); Luna mostly stays near zero; the tuned Qwen is mostly flat, so it barely responds to the dial. The slider only highlights shoppers at or above a setting; it does not change any run. The probe on the right is the real one-field test: Isabella on Terra, Layout A, setting 0.45 gave 12 and 11 impulse units, setting 0.05 gave 0 (one completed run). One run per cell, ten shoppers: direction only, not a rate. Not a model of real customers. Guardrails: Thresholds like impulse caps and 5% / 20% are my own conventions, so a pass is not proof of realism. The impulse cap is a teacher rule the prompt may never have stated, so tripping it is only ever a review. Qwen runs fail on unfinished checkout, incomplete lists, loops and stuck shoppers.' },
 
   { section: 'Evals', title: 'Isabella', steps: 2, body: <div className="pz-two">
-      <div><h2>Debugging a surprising behaviour: Isabella.</h2>
+      <div><h2>Debugging a surprise: Isabella.</h2>
         <table className="pz-table"><thead><tr><th>Off-list units</th><th>Run 1</th><th>Run 2</th><th>Run 3</th></tr></thead><tbody>
           <tr><th>Terra</th><td>12</td><td>12</td><td>11</td></tr><tr><th>Luna</th><td>0</td><td>0</td><td>0</td></tr>
           <tr><th>Terra, p = 0.05</th><td colSpan={3}>0 (one-field probe)</td></tr></tbody></table>
-        <B at={1}><p>Per stop, Terra matches her 45% impulse rate. The volume comes from several units at one stop just before checkout.</p></B>
-        <B at={2}><p className="pz-note"><b>Eval loop:</b> reproduce → repeat (≈ 1 unit spread over 3 runs) → change one field (0.45 → 0.05 moved 12 → 0).</p></B></div>
+        <B at={1}><p>Terra matches her 45% rate per stop. The volume is several units at one stop near checkout.</p></B>
+        <B at={2}><p className="pz-note"><b>Takeaway:</b> Terra follows its customer profile; Luna and Qwen don't.</p></B></div>
       <B at={1}><Shot src="/present/isabella-trip.png" url="localhost:3000/replays · Terra · Layout A" alt="End of Isabella Rossi's Terra trip: 12 impulse items outlined in amber on the map, $111.97 spent of a $113.13 budget." caption="Real recording: Isabella’s Terra trip ends with 12 impulse items, $111.97 of $113.13."/></B>
     </div>,
-    notes: 'Debugging non-determinism story. Point at the amber outlines clustered in Snacks and Bakery near checkout. Binomial(8 stops, 0.45): expected 3.6; P(X ≥ 4) = 0.52, P(X ≥ 5) = 0.26; Terra grabbed at 4 of 8 and 5 of 8 stops. Rule of three: 0 failures in n runs means rate < 3/n at 95%, so three runs show reproduction, not a rate. Predict direction first and add a null control. Do not say Terra over-buys or Luna is more realistic.' },
-
-  { section: 'Evals', title: 'What broke', steps: 1, body: <div className="pz-two">
-      <div className="pz-card"><p className="pz-eyebrow">What broke, and the fix</p>
-        <p><b>Fine-tuning</b></p><ul>
-          <li>First adapter got lost in the store: only 60 movement examples → retrained with 250.</li>
-          <li>Adapter would not load on a Mac (NVIDIA-only 4-bit) → re-quantized the base for MPS.</li></ul>
-        <p><b>Simulation</b></p><ul>
-          <li>nav_support v1/v2 swapped out impulse grabs, the thing I measure → v3 keeps them.</li>
-          <li>Provider failures (content filter, credit ran out, model removed) → runs kept, never silently retried or swapped.</li></ul></div>
-      <B at={1}><div className="pz-card is-no"><p className="pz-eyebrow">Limits, in plain words</p><ul>
-        <li><b>One run per model per layout:</b> no error bars yet.</li>
-        <li><b>No ablation:</b> I haven’t re-run with nav_support switched off, so results are model + nav_support.</li>
-        <li><b>No seeds:</b> the APIs can’t fix their randomness, so a re-run can differ. That is why every reply is saved.</li>
-        <li><b>Synthetic shoppers:</b> impulse rates are chosen, not measured.</li>
-        <li><b>The student</b> can at best learn my rules.</li></ul></div></B>
-    </div>,
-    notes: 'Ablation means removing one component and re-running to see what it contributed; here, a model-only run without nav_support. A seed fixes the random sampling so the same input gives the same output; OpenRouter and these models do not support request seeds, so replay of the recording is exact but re-running is a new sample. Details if asked: the content filter aborted Luna B after 548 actions on an ordinary prompt and is excluded from the headline; the Qwen base endpoint returned 404 on OpenRouter, so the base row is an earlier Nov 3 run. Stating limits first is the strongest move.' },
+    notes: 'Debugging non-determinism story. Takeaway: the one-field probe is a prompt-adherence check, i.e. profile sensitivity per model; Terra follows the profile, Luna and the tuned Qwen mostly do not (one run per cell, direction only). Point at the amber outlines clustered in Snacks and Bakery near checkout. Binomial(8 stops, 0.45): expected 3.6; P(X ≥ 4) = 0.52, P(X ≥ 5) = 0.26; Terra grabbed at 4 of 8 and 5 of 8 stops. Rule of three: 0 failures in n runs means rate < 3/n at 95%, so three runs show reproduction, not a rate. Predict direction first and add a null control. Do not say Terra over-buys or Luna is more realistic.' },
 
   // ── 6 · Scale ────────────────────────────────────────────────────────────
   { section: 'Scale', title: 'Scaling', steps: 1, body: <div className="pz-two">
@@ -252,18 +210,20 @@ const slides: Slide[] = [
     </div>,
     notes: 'Terra ≈ 46 requests per trip (A 51, B 41), Luna ≈ 56 (60.7 / 51.3). Cost uses Luna ≈ $0.056 and Terra ≈ $0.46 per checkout. Idempotent IDs stop retries after ambiguous timeouts from double-charging or double-applying. JSONL per run is fine for tens of runs; hundreds need an index or columnar store. For real stores: planogram → grid, product master → catalogue, calibrate impulse on real baskets. The local tuned 7B is ≈ 0.97 s p50 with no API fee, but needs better navigation first.' },
 
-  { section: 'Scale', title: 'Close', steps: 1, body: <div className="pz-two">
-      <div><p className="pz-eyebrow">Summary</p><h1>The agent proposes. Python decides, records and verifies.</h1>
-        <p className="pz-lede">Built end to end; measured honestly; every number replayable.</p></div>
-      <B at={1}><div className="pz-card"><p className="pz-eyebrow">Next experiments, one variable each</p><ol>
+  { section: 'Scale', title: 'Future work', body: <div><h2>Future work. <small>One variable at a time.</small></h2>
+      <ol className="pz-future">
         <li><b>Ablation:</b> model only vs model + nav_support.</li>
         <li><b>Sensitivity grid:</b> one persona field at a time.</li>
-        <li><b>≥ 5 runs per model and layout</b> with intervals.</li>
-        <li><b>Distil Terra</b> on non-benchmark shoppers.</li>
-        <li><b>Better student:</b> the four steps on slide 12.</li></ol>
-        <p>Questions? Demo (slide 3) and LoRA (slide 11) are good places to go deeper.</p></div></B>
-    </div>,
-    notes: 'End on the one-line architecture and what you would do next. Keep the replay and QLoRA slides ready for questions.' },
+        <li><b>≥ 5 runs per model and layout</b> with intervals.</li></ol></div>,
+    notes: 'Each item changes one variable. Ablation removes nav_support to separate model from assist. Sensitivity grid varies one persona field at a time. More runs give intervals. Distilling Terra on non-benchmark shoppers avoids leaking the test set. Keep the replay and QLoRA slides ready for questions.' },
+  { section: 'Scale', title: 'Summary', body: <div><h2>Summary.</h2>
+      <ol className="pz-future">
+        <li><b>The rule:</b> the model suggests, Python decides, React only shows.</li>
+        <li><b>The study:</b> same 10 shoppers, four models, two layouts, every impulse buy recorded.</li>
+        <li><b>The finding:</b> Terra follows its customer profile; Luna and Qwen don't.</li>
+        <li><b>The student:</b> fine-tuned Qwen gains a lot offline, only modestly in full trips.</li>
+        <li><b>The caveat:</b> synthetic shoppers and one run per cell: directions, not proof.</li></ol></div>,
+    notes: 'Close on the one rule, then the finding. Offline step agreement 22.7% to 86.4%, but fulfilment A only 28.3% to 35.8%: per-step agreement is necessary but not sufficient. One run per model per layout, so no error bars; synthetic shoppers have chosen, not measured, impulse rates.' },
 ];
 
 export default function Deck() {
