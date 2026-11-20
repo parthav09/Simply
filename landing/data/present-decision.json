@@ -1,0 +1,46 @@
+{
+ "source": "public/replays/b0ba564da4124ed99a569e29dca0d036.source.jsonl",
+ "record": {
+  "sequence": 140,
+  "agent_id": "C0002",
+  "before": {
+   "x": 4,
+   "y": 3,
+   "cart": [
+    "Spicy Miso Ramen Bowl"
+   ],
+   "allowed_steps": [
+    "move_left",
+    "move_right",
+    "move_up",
+    "move_down",
+    "remove"
+   ],
+   "turns_used": 14
+  },
+  "raw_response": {
+   "step": "move_down",
+   "product_id": "",
+   "reason": "The ramen is collected; continue down the aisle toward checkout."
+  },
+  "navigation": {
+   "policy": "guided_nav_v3",
+   "adjustment": "head toward checkout"
+  },
+  "action": {
+   "step": "move_right"
+  },
+  "outcome": "applied",
+  "usage": {
+   "prompt_tokens": 5641,
+   "completion_tokens": 33,
+   "cost_usd": 0.0072155
+  },
+  "serving": {
+   "model": "openai/gpt-6.1-terra-20261026",
+   "provider": "OpenAI",
+   "request_seed": null
+  },
+  "api_latency_ms": 1991
+ }
+}

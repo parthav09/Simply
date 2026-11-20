@@ -51,7 +51,19 @@ function compile(file, dependencies, environment = 'development', config = {}) {
   const evals = compile('study/agent-evals.ts', { 'server-only': {} });
   const interview = compile('study/interview.ts', { 'server-only': {} });
   const numbers = compile('study/numbers.ts', { 'server-only': {} });
-  const content = compile('study/content.ts', { 'server-only': {}, './quiz-content': quizContent, './mle-interview': mle, './agent-evals': evals, './interview': interview, './numbers': numbers }).studyData;
+  const fundamentals = compile('study/fundamentals.ts', { 'server-only': {} });
+  const content = compile('study/content.ts', { 'server-only': {}, './quiz-content': quizContent, './mle-interview': mle, './agent-evals': evals, './interview': interview, './numbers': numbers, './fundamentals': fundamentals }).studyData;
+  // Every quiz question must link to the concept card or drill that teaches it.
+  const taught = new Set([...content.concepts, ...content.questions].map(item => item.id));
+  const untaught = content.quiz.filter(q => !q.teaches || !taught.has(q.teaches)).map(q => q.id);
+  assert.equal(untaught.length, 0, `Quiz questions without study material: ${untaught.join(', ')}`);
+  assert.equal(new Set(content.concepts.map(c => c.id)).size, content.concepts.length, 'Duplicate concept ids');
+  for (const c of content.concepts) {
+    assert(c.idea && c.implementation && c.tradeoff && c.source && c.question && c.trap && c.rubric.length, `${c.id}: incomplete concept card`);
+    for (const source of c.source.split(' · ').map(s => s.split(' (')[0]).filter(s => /^(simulation|landing|data|notebooks)\//.test(s))) {
+      assert(fs.existsSync(path.join(root, '..', source)), `Missing concept source: ${source}`);
+    }
+  }
   assert(interview.interviewQuiz.filter(q => q.area.startsWith('Talk')).length >= 30, 'Presentation quiz coverage is incomplete');
   assert(content.numbers.length >= 5 && content.numbers.every(g => g.rows.length && g.source), 'Numbers sheet is incomplete');
   assert(mle.mleQuestions.length >= 30, 'MLE interview coverage is incomplete');
@@ -150,5 +162,7 @@ function compile(file, dependencies, environment = 'development', config = {}) {
       assert(!script.includes(marker), `Private study code leaked into ${path.relative(root, file)}`);
     }
   }
+  const exported = require('node:child_process').spawnSync(process.execPath, [path.join(__dirname, 'export-quiz-bank.cjs'), '--check'], { encoding: 'utf8' });
+  assert.equal(exported.status, 0, exported.stderr || 'Voice quiz bank is out of date');
   console.log(`Study room passed: password/session checks, no unauthenticated private imports, logout, development-only gate, no production HTML/client content, ${content.concepts.length} concepts, ${content.quiz.length} multiple-choice questions, shuffle/score correctness and valid source paths.`);
 })().catch(error => { console.error(error); process.exitCode = 1; });

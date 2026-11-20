@@ -1,5 +1,5 @@
 import 'server-only';
-import type { Question, QuizQuestion } from './types';
+import type { Concept, Question, QuizQuestion } from './types';
 
 /**
  * Presentation quiz and "why this, not that" drills. Every number is quoted from a recorded
@@ -13,6 +13,7 @@ const ENGINEERING = 'Talk: engineering';
 const TUNING = 'Talk: fine-tuning';
 const EVALS = 'Talk: evals';
 const WHY = 'Talk: why this, not that';
+const DEPLOY = 'Talk: deployment';
 
 type Item = [id: string, area: string, title: string, prompt: string, options: [string, string, string, string], explanation: string, source: string];
 
@@ -313,6 +314,65 @@ const items: Item[] = [
     `Direct-OpenAI Terra, guided_nav_v2, ten profiles × two repetitions. $9.380412 vs $7.688224 over 20 completed trips each → 18.04% lower estimated cost per trip. It is a different collection (date, transport, assist version) from the Nov 17 OpenRouter runs.`,
     `public/replays/matrix-48ea3402….md · simulation/docs/evals.md`],
 
+  // ── Deployment (FDE) ─────────────────────────────────────────────────────
+  ['f-scoping', DEPLOY, 'Scoping the customer problem',
+    `As an FDE, what did you pin down before building?`,
+    [`The decision it supports (compare two layouts before moving anything), the constraint (no customer data, so frozen synthetic inputs) and the trust requirement (every number replayable).`,
+     `The largest model available, so results look impressive.`,
+     `A forecast of next quarter's revenue per store.`,
+     `A UI first, then decide what to measure.`],
+    `Start from the customer's decision and what they would trust. That is why the architecture centres on recorded, verifiable evidence and why the scope is "comparison tool, not forecast".`,
+    `landing/present/Deck.tsx (formulation slide)`],
+  ['f-failures', DEPLOY, 'Handling failures in the field',
+    `An OpenAI content filter aborted a Luna run after 548 actions. What did you do?`,
+    [`Kept the aborted run, excluded it from headline cells, recorded why, and ran a clean replacement.`,
+     `Deleted it so the averages look clean.`,
+     `Retried silently until it finished and reported one run.`,
+     `Switched to a different model mid-study.`],
+    `Same pattern for the provider-credit interruption and the Qwen endpoint that vanished (HTTP 404): retain the evidence, never silently retry or substitute. Selection bias comes from hiding failures.`,
+    `CLAUDE.md (Nov 17 collection) · evidence-dashboard.json`],
+  ['f-calibrate', DEPLOY, 'Calibrating to a real retailer',
+    `With a real retailer's data, how would you make the shoppers more trustworthy?`,
+    [`Map planogram to grid and product master to catalogue, derive persona and list distributions from loyalty/POS baskets, and calibrate impulse probability so simulated off-list rates match observed ones; then back-test on a past layout change.`,
+     `Fine-tune a bigger model and assume it is realistic.`,
+     `Ask the model whether it behaves like a real shopper.`,
+     `Use the same synthetic profiles and report results as forecasts.`],
+    `Calibration turns the chosen impulse probability into a measured one, and a back-test checks whether the simulator predicts the direction of a known change before anyone relies on it. Then a controlled store pilot.`,
+    `landing/present/Deck.tsx (scaling slide) · proposal, not built`],
+  ['f-throughput', DEPLOY, 'Cost and throughput at scale',
+    `About how long and how much for 1,000 Terra shoppers per layout, at the settings used here?`,
+    [`≈ 51k requests per layout; at 60 requests/min ≈ 14 hours. Cost ≈ $900 for both layouts with Terra, ≈ $110 with Luna. Rate limits, not compute, are the bottleneck.`,
+     `About 5 minutes and $5, because each run takes a few minutes.`,
+     `It cannot be estimated without running it.`,
+     `About a week and $50,000.`],
+    `From recorded per-trip figures: Terra ≈ 51 requests per trip, ≈ $0.52 / $0.40 per checkout; Luna ≈ $0.06 / $0.05. Fixes: higher rate tiers, spreading across keys, caching the stable prompt prefix, or the local model.`,
+    `evidence-dashboard.json (requests_per_trip, provider_reported_cost_per_checkout_usd)`],
+
+  ['f-mom-questions', DEPLOY, 'Asking good discovery questions',
+    `Which discovery question gives you reliable information from a retailer?`,
+    [`"Walk me through your last store reset: who decided, what did it cost, and what happened to basket size after?"`,
+     `"Would you use a tool that simulates store layouts?"`,
+     `"Do you think impulse buys matter to your business?"`,
+     `"How much would you pay for a layout simulator?"`],
+    `Mom Test principle (Rob Fitzpatrick): ask about specific past events in their life, not opinions about your idea or hypothetical future behaviour. Hypotheticals and "would you" questions invite polite compliments.`,
+    `The Mom Test (Rob Fitzpatrick) · not in the deck`],
+  ['f-mom-signal', DEPLOY, 'What counts as a real signal',
+    `After a demo, a category manager says "this looks great, we'd love to use it". What does that tell you?`,
+    [`Very little on its own; real signals are commitments such as their time, access to a past reset's POS data, or a pilot store.`,
+     `They will buy it; move to contract.`,
+     `The product is validated and needs no more discovery.`,
+     `You should add more features before following up.`],
+    `Compliments are noise. Commitment and advancement (time, reputation, money, data access) show whether the problem is real enough for them to act.`,
+    `The Mom Test (Rob Fitzpatrick) · not in the deck`],
+  ['f-stated-revealed', DEPLOY, 'Stated versus revealed behaviour in the simulator',
+    `Why does Simply score what shoppers paid for rather than what their reasons say?`,
+    [`A model's stated reason is like asking your mom: a story, not evidence. Paid off-list units are closer to revealed behaviour, and real calibration should use real baskets, not survey answers.`,
+     `Because reasons are not recorded.`,
+     `Because the reasons are always wrong.`,
+     `Because React cannot display reasons.`],
+    `The Mom Test idea applied to evaluation: trust behaviour over statements. Simply records reasons as hints but computes impulse buys from checked-out carts; a real deployment would calibrate on loyalty/POS baskets.`,
+    `landing/present/Deck.tsx (formulation slide) · evaluation/dashboard.py`],
+
   // ── Why this, not that ───────────────────────────────────────────────────
   ['w-llm-vs-rules', WHY, 'Why an LLM shopper, not a scripted bot?',
     `Why use an LLM to drive shoppers when a shortest-path planner could fetch a list?`,
@@ -396,9 +456,79 @@ const items: Item[] = [
     `lib/replay.ts · data/replay-selection.json`],
 ];
 
+/** Which concept card or drill teaches each presentation question (checked by verify-study-room.cjs). */
+const TEACHES: Record<string, string> = {
+  't-problem': 'product-question', 't-impulse-def': 'product-question', 't-persona': 'personas', 't-layouts': 'layouts-env',
+  't-trip': 'layouts-env', 't-isabella': 'persona-vs-assumption', 't-loop': 'agent', 't-authority': 'authority',
+  't-strict-json': 'validation', 't-concurrency': 'concurrency', 't-assist': 'assist', 't-v3-impulse': 'assist',
+  't-replay-verify': 'verification', 't-determinism': 'determinism', 't-cost-ledger': 'money', 't-why-tune': 'finetune-why',
+  't-teacher': 'synthetic-teacher', 't-not-distill': 'd-why-teacher', 't-split': 'group-split', 't-subset': 'group-split',
+  't-qlora': 'qlora', 't-lora-size': 'qlora', 't-answer-only': 'mask-context', 't-qlora-memory': 'qlora',
+  't-offline-eval': 'training', 't-online-gap': 'd-offline-online', 't-serving': 'finetune-why', 't-latest-table': 'results-latest',
+  't-cost-quality': 'cost-quality', 't-guardrails': 'run-checks', 't-guardrail-results': 'run-checks', 't-cap-caveat': 'run-checks',
+  't-steer-audit': 'd-why-guardrails', 't-stability': 'stability-vs-sensitivity', 't-no-claims': 'no-ground-truth', 't-older-study': 'arithmetic',
+  'w-llm-vs-rules': 'd-why-llm', 'w-one-action': 'plans', 'w-openrouter': 'providers', 'w-qwen': 'finetune-why',
+  'w-qlora-vs-lora': 'd-why-qlora', 'w-unsloth': 'finetune-why', 'w-rule-teacher': 'd-why-teacher', 'w-synthetic': 'no-ground-truth',
+  'w-grid': 'layouts-env', 'w-react': 'd-why-python',
+  'f-scoping': 'deploy-plan', 'f-failures': 'deploy-plan', 'f-calibrate': 'deploy-plan', 'f-throughput': 'deploy-plan',
+  'f-mom-questions': 'mom-test', 'f-mom-signal': 'mom-test', 'f-stated-revealed': 'mom-test',
+};
+
 export const interviewQuiz: QuizQuestion[] = items.map(([id, area, title, prompt, options, explanation, source]) => ({
-  id, area, title, prompt, options, correctIndex: 0, explanation, source,
+  id, area, title, prompt, options, correctIndex: 0, explanation, source, teaches: TEACHES[id],
 }));
+
+/** Concept cards for presentation topics no earlier card covered. */
+export const talkConcepts: Concept[] = [
+  {id: 'mom-test', area: 'Product & setup', title: 'Customer discovery with The Mom Test',
+    idea: 'The Mom Test (Rob Fitzpatrick): people lie politely about your idea, so ask about their life. Ask about specific past events, not opinions or hypotheticals; ignore compliments; treat commitment (time, data, money) as the real signal.',
+    implementation: 'I did not interview retailers for Simply; this is how I would run discovery as an FDE. Ask: "Walk me through your last store reset: who decided, what did it cost, what changed after?" Not: "Would you use a layout simulator?" The same principle shaped the evals: a model\'s stated reason is a hint, so impulse buys are computed from what shoppers paid for (off_list_units). A real deployment would calibrate on revealed behaviour (loyalty/POS baskets) and validate against a past reset.',
+    tradeoff: 'Discovery interviews do not replace a back-test or pilot; they tell you which decision and metric matter and whether the customer will commit data and time.',
+    source: 'landing/present/Deck.tsx · evaluation/dashboard.py',
+    question: 'How would you run customer discovery for Simply, and how does the same idea show up in your evals?',
+    rubric: ['Past specifics over hypotheticals.', 'Compliments are noise; commitment is signal.', 'Stated vs revealed behaviour in the simulator.', 'Calibrate on real baskets, validate on a past reset.'],
+    trap: 'Claiming you already ran customer interviews, or treating "sounds great" as validation.'},
+  {id: 'deploy-plan', area: 'Product & setup', title: 'Deploying for a real retailer (proposal) and handling failures',
+    idea: 'An FDE starts from the customer decision, integrates their data, calibrates to observed behaviour, validates before anyone acts, and keeps every failure visible. None of the deployment steps below is built yet.',
+    implementation: 'Scoping: decision = compare layouts before moving shelves; constraint = no customer data; trust = replayable evidence. Failures handled in the project: assist erased impulse grabs (fixed in guided_nav_v3), content filter aborted Luna B at 548 actions (kept, re-run), provider credit ran out (kept), Qwen endpoint 404 (kept, no substitution), first adapter navigated badly (retrained with 250 move rows). Deployment proposal: planogram → grid, product master → catalogue, loyalty/POS → persona and list distributions, calibrate impulse probability to observed off-list rates, back-test on a past reset, then a store pilot. Scale estimate: 1,000 shoppers × 2 layouts ≈ $110 (Luna) or ≈ $900 (Terra); Terra ≈ 51k requests per layout ≈ 14 h at 60 req/min.',
+    tradeoff: 'Calibration and a back-test are needed before results inform real decisions. Rate limits dominate run time. Sensitive data should stay in the customer environment, where the local model helps.',
+    source: 'landing/present/Deck.tsx · evidence-dashboard.json',
+    question: 'How would you take Simply to a real retailer, and how did you handle failures so far?',
+    rubric: ['Start from the decision and trust requirement.', 'Data integration and calibration.', 'Back-test then pilot.', 'Cost/throughput estimate and failure handling.'],
+    trap: 'Presenting the deployment plan as already built, or hiding failed runs.'},
+  {id: 'product-question', area: 'Product & setup', title: 'The product question and the impulse metric',
+    idea: 'Simply asks how a store layout changes what shoppers buy, before anyone moves a shelf. It compares the same synthetic shoppers on two layouts and several models. The headline outcome is impulse buys.',
+    implementation: 'An impulse buy is Python\'s off_list_units: a paid unit of a product not on the shopper\'s list, counted only for checked-out carts. Impulse per trip = Σ off_list_units / trips. React may highlight off-list grabs for display, but totals come from evaluation/dashboard.py. Latest: Luna 1.5 / 0.4, Terra 2.2 / 2.0, Qwen base 0 / 0, Qwen tuned 0.3 / 0.5 per trip (A / B).',
+    tradeoff: 'It records an unplanned purchase and the model\'s stated reason, not a verified psychological impulse. It is not a forecast of real customers.',
+    source: 'evaluation/dashboard.py · core/metrics.py · evidence-dashboard.json',
+    question: 'What does Simply measure, and how exactly is an impulse buy counted?',
+    rubric: ['Layout question before moving shelves.', 'off_list_units, paid only.', 'Python computes, React displays.', 'Not a real-customer forecast.'],
+    trap: 'Counting items still in an unpaid cart, or calling the simulation a demand forecast.'},
+  {id: 'layouts-env', area: 'Product & setup', title: 'Layouts, grid and trip rules',
+    idea: 'A grid store makes movement, reachability and adjacency exact, so every action can be validated and replayed. Only department placement differs between the two layouts.',
+    implementation: 'Both layouts are 22 × 14 with 15 shelf groups and the same 303 products. Layout A (costco_back_anchor, "anchor loop") puts staples at the back with snacks and bakery near the entrance; Layout B (neighborhood_express) puts daily essentials near the entrance. Grab only from a cell next to a shelf group. unique_single_checkout_v1: one unit per SKU, duplicates rejected, one-action checkout. 120 actions per shopper. Stock replenished; no queues or crowding.',
+    tradeoff: 'Exact and checkable, but far simpler than a real store. The planned product-level visibility rule must be a new frozen rule version so older runs still verify.',
+    source: 'simulation/core/grid.py · run_start.config',
+    question: 'What is held fixed between Layout A and B, and what are the trip rules?',
+    rubric: ['Same grid, catalogue, shoppers, limits.', 'Name the placement difference.', 'State the shopping rules.', 'Why a grid.'],
+    trap: 'Saying B has a different catalogue, model or prompt.'},
+  {id: 'finetune-why', area: 'Training', title: 'Why fine-tune Qwen2.5 7B, and how it is served',
+    idea: 'Luna and Terra cost money per call. A small open model could run locally with no API fee. The question is whether it can learn the shopping and impulse policy from the prompt.',
+    implementation: 'The untuned Qwen2.5 7B Instruct (Nov 3, OpenRouter/Phala) finished 60% / 90% of trips and bought 28% / 32% of the list. Qwen2.5 7B was chosen because a 7B model fits QLoRA on one 40 GB A100 with 16k-token rows and has a hosted baseline. Unsloth wraps PEFT/TRL with faster kernels and a ready 4-bit checkpoint. The headline tuned run was served 4-bit on the same Colab A100 setup; Mac runs (MPS Quanto int4, MLX) are separate model identities.',
+    tradeoff: 'An adapter is tied to the base weights it was trained against, so a different quantization is a different deployment. Hardware and electricity cost were not metered, so "no API fee" is not "free".',
+    source: 'evidence-dashboard.json · experiment.json · AGENTS.md (local Qwen serving)',
+    question: 'Why fine-tune, why this model and library, and why are the Mac runs separate?',
+    rubric: ['Cost motive and weak baseline numbers.', 'Why 7B and Unsloth.', 'Adapter tied to base weights.', 'No API fee ≠ free.'],
+    trap: 'Saying the adapter is a standalone model that runs identically anywhere.'},
+  {id: 'results-latest', area: 'Product & setup', title: 'Reading the latest results',
+    idea: 'One run per model and layout, ten shoppers, guided_nav_v3, via OpenRouter on Nov 17. Read it as description, not significance.',
+    implementation: 'Completion A / B: Luna 100 / 100%, Terra 100 / 100%, Qwen base 60 / 90%, tuned 90 / 100%. Fulfilment: Luna 96 / 100%, Terra 100 / 100%, base 28 / 32%, tuned 36 / 40%. Requests per trip: Luna 60.7 / 51.3, Terra 51.0 / 41.0. Reported cost per checkout: Luna $0.060 / $0.051, Terra $0.518 / $0.395. The Qwen base row is an earlier run (Nov 3, guided_nav_v2).',
+    tradeoff: 'n = 1 per cell, no intervals. The Qwen base row differs in date and assist version. Different behaviour (Isabella 12 vs 0) means cheaper is not a drop-in replacement.',
+    source: 'landing/public/replays/evidence-dashboard.json (view openrouter_v3)',
+    question: 'Summarise the latest results in four numbers and two caveats.',
+    rubric: ['Completion and fulfilment by model.', 'Impulse and cost differences.', 'n = 1 per cell.', 'Qwen base is a mismatched earlier run.'],
+    trap: 'Claiming a significant layout or model effect from one run per cell.'},
+];
 
 /** Spoken-answer drills for "why this tool / why this method" questions. */
 export const whyDrills: Question[] = [

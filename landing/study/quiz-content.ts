@@ -69,7 +69,7 @@ const conceptQuestions: QuizQuestion[] = [
       "Retraining the tokenizer on each store layout."
     ],
     "correctIndex": 0,
-    "explanation": "Inference uses existing weights to produce a response. Persona instructions change the context, not the weights. Simply supplies observations during each decision; its separate Qwen training workflow remains preparation rather than a completed trained-model result.",
+    "explanation": "Inference uses existing weights to produce a response. Persona instructions change the context, not the weights. Every run decision is inference; the Qwen QLoRA adapter was trained separately, once, and then loaded for inference in its own runs.",
     "source": "simulation/agents/prompts.py · simulation/agents/openai_provider.py"
   },
   {
@@ -324,7 +324,7 @@ const conceptQuestions: QuizQuestion[] = [
       "Automatic human preference optimization without feedback."
     ],
     "correctIndex": 0,
-    "explanation": "SFT trains against target responses; reinforcement learning optimizes a reward-driven objective through a distinct learning setup. Simply prepares synthetic action demonstrations for SFT, which does not establish learned human preferences or a completed reinforcement-learning system.",
+    "explanation": "SFT trains against target responses; reinforcement learning optimizes a reward through rollouts. The Qwen adapter is SFT (behaviour cloning) on 745 rule-teacher prompt → action rows with answer-only loss. No reward was optimized.",
     "source": "data/finetuning_demo/README.md · data/finetuning/README.md"
   },
   {
@@ -339,7 +339,7 @@ const conceptQuestions: QuizQuestion[] = [
       "A four-bit base guarantees higher shopping accuracy."
     ],
     "correctIndex": 0,
-    "explanation": "LoRA parameterizes a comparatively small update; quantization stores the frozen base at reduced precision. These reduce training resource needs without guaranteeing task quality. Simply has a prepared QLoRA workflow; trained-model and rollout results remain pending.",
+    "explanation": "LoRA trains a small low-rank update; quantization stores the frozen base at reduced precision. Simply's adapter: rank 16 on all seven projections (~40.4M params) over a 4-bit NF4 Qwen2.5 7B base. It improved offline agreement a lot (22.7% → 86.4%) but full-trip fulfilment only modestly (28%/32% → 36%/40%), so memory savings do not guarantee task quality.",
     "source": "data/finetuning/README.md"
   },
   {
@@ -354,7 +354,7 @@ const conceptQuestions: QuizQuestion[] = [
       "Keeping missions grouped proves performance on every unseen store."
     ],
     "correctIndex": 0,
-    "explanation": "Leakage occurs when evaluation benefits from information too close to training or tuning inputs. Grouping related routes reduces this risk, but shared layouts and few missions still limit generalization. Simply groups both layouts of each mission and still requires held-out full-trip evaluation.",
+    "explanation": "Leakage occurs when evaluation benefits from information too close to training. impulse_v3 splits by base shopper and excludes the benchmark shoppers; shared layouts still limit generalization. Distribution shift appears online: the model visits its own states, so 86% offline agreement became 36%/40% trip fulfilment.",
     "source": "data/finetuning_demo/README.md · data/finetuning/README.md"
   }
 ];

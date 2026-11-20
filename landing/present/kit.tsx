@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
 /**
@@ -22,9 +21,7 @@ export function Code({ file, children }: { file: string; children: string }) {
   return <figure className="pz-code"><figcaption>{file}</figcaption><pre><code>{children.replace(/^\n/, '')}</code></pre></figure>;
 }
 
-const DRAFTS = [['/present', 'Overview'], ['/present/technical', 'Technical']] as const;
-
-export function DeckShell({ slides, draft, dense = false }: { slides: Slide[]; draft: string; dense?: boolean }) {
+export function DeckShell({ slides, dense = false }: { slides: Slide[]; dense?: boolean }) {
   const [index, setIndex] = useState(0);
   const [step, setStep] = useState(0);
   const [notes, setNotes] = useState(false);
@@ -64,7 +61,6 @@ export function DeckShell({ slides, draft, dense = false }: { slides: Slide[]; d
   return <main className="pz-deck" id="main-content">
     <header className="pz-top"><span className="pz-brand">simply<span>.</span></span>
       <nav aria-label="Sections">{sections.map(s => <button key={s} aria-current={s === slide.section ? 'step' : undefined} onClick={() => go(slides.findIndex(x => x.section === s))}>{s}</button>)}</nav>
-      <span className="pz-drafts">{DRAFTS.map(([href, label]) => <Link key={href} href={href} aria-current={label === draft ? 'page' : undefined}>{label}</Link>)}</span>
     </header>
     <StepContext.Provider value={step}>
       <section key={index} className={`pz-slide ${slide.wide ? 'is-wide' : ''} ${dense ? 'is-dense' : ''}`} aria-roledescription="slide" aria-label={`${index + 1} of ${slides.length}`}>{slide.body}</section>

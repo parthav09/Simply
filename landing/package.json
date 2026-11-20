@@ -19,7 +19,8 @@
     "verify:live-session": "node scripts/verify-live-session.cjs",
     "verify:study": "node scripts/verify-study.cjs",
     "verify:matrix": "node scripts/verify-matrix.cjs",
-    "verify:dashboard": "node scripts/verify-dashboard.cjs"
+    "verify:dashboard": "node scripts/verify-dashboard.cjs",
+    "study:export": "node scripts/export-quiz-bank.cjs"
   },
   "dependencies": {
     "next": "16.4.6",

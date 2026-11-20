@@ -1,0 +1,409 @@
+{
+ "source": "landing/public/replays/evidence-dashboard.json (runs[].points: per-shopper impulse buys, completed openrouter_v3 and qwen_v3 runs, Nov 17) joined with data/customer_profiles_50.csv (impulse_buy_probability, first_name). Probe: simulation/docs/ideas.md and simulation/runs/probes/.",
+ "models": [
+  {
+   "id": "gpt-6-luna",
+   "label": "GPT-6 Luna",
+   "layouts": {
+    "A": [
+     {
+      "id": "C0011",
+      "name": "Olivia",
+      "p": 0.08,
+      "n": 0
+     },
+     {
+      "id": "C0002",
+      "name": "Mia",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0025",
+      "name": "Chloe",
+      "p": 0.14,
+      "n": 1
+     },
+     {
+      "id": "C0014",
+      "name": "Elena",
+      "p": 0.23,
+      "n": 0
+     },
+     {
+      "id": "C0024",
+      "name": "Nina",
+      "p": 0.27,
+      "n": 0
+     },
+     {
+      "id": "C0034",
+      "name": "Ruth",
+      "p": 0.27,
+      "n": 7
+     },
+     {
+      "id": "C0007",
+      "name": "Isabella",
+      "p": 0.45,
+      "n": 0
+     },
+     {
+      "id": "C0026",
+      "name": "Sofia",
+      "p": 0.47,
+      "n": 1
+     },
+     {
+      "id": "C0008",
+      "name": "Ananya",
+      "p": 0.48,
+      "n": 5
+     },
+     {
+      "id": "C0040",
+      "name": "Hugo",
+      "p": 0.66,
+      "n": 1
+     }
+    ],
+    "B": [
+     {
+      "id": "C0011",
+      "name": "Olivia",
+      "p": 0.08,
+      "n": 0
+     },
+     {
+      "id": "C0002",
+      "name": "Mia",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0025",
+      "name": "Chloe",
+      "p": 0.14,
+      "n": 1
+     },
+     {
+      "id": "C0014",
+      "name": "Elena",
+      "p": 0.23,
+      "n": 0
+     },
+     {
+      "id": "C0024",
+      "name": "Nina",
+      "p": 0.27,
+      "n": 0
+     },
+     {
+      "id": "C0034",
+      "name": "Ruth",
+      "p": 0.27,
+      "n": 1
+     },
+     {
+      "id": "C0007",
+      "name": "Isabella",
+      "p": 0.45,
+      "n": 0
+     },
+     {
+      "id": "C0026",
+      "name": "Sofia",
+      "p": 0.47,
+      "n": 0
+     },
+     {
+      "id": "C0008",
+      "name": "Ananya",
+      "p": 0.48,
+      "n": 1
+     },
+     {
+      "id": "C0040",
+      "name": "Hugo",
+      "p": 0.66,
+      "n": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "gpt-6.1-terra",
+   "label": "GPT-6.1 Terra",
+   "layouts": {
+    "A": [
+     {
+      "id": "C0011",
+      "name": "Olivia",
+      "p": 0.08,
+      "n": 0
+     },
+     {
+      "id": "C0002",
+      "name": "Mia",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0025",
+      "name": "Chloe",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0014",
+      "name": "Elena",
+      "p": 0.23,
+      "n": 2
+     },
+     {
+      "id": "C0024",
+      "name": "Nina",
+      "p": 0.27,
+      "n": 0
+     },
+     {
+      "id": "C0034",
+      "name": "Ruth",
+      "p": 0.27,
+      "n": 1
+     },
+     {
+      "id": "C0007",
+      "name": "Isabella",
+      "p": 0.45,
+      "n": 12
+     },
+     {
+      "id": "C0026",
+      "name": "Sofia",
+      "p": 0.47,
+      "n": 2
+     },
+     {
+      "id": "C0008",
+      "name": "Ananya",
+      "p": 0.48,
+      "n": 3
+     },
+     {
+      "id": "C0040",
+      "name": "Hugo",
+      "p": 0.66,
+      "n": 2
+     }
+    ],
+    "B": [
+     {
+      "id": "C0011",
+      "name": "Olivia",
+      "p": 0.08,
+      "n": 0
+     },
+     {
+      "id": "C0002",
+      "name": "Mia",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0025",
+      "name": "Chloe",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0014",
+      "name": "Elena",
+      "p": 0.23,
+      "n": 0
+     },
+     {
+      "id": "C0024",
+      "name": "Nina",
+      "p": 0.27,
+      "n": 1
+     },
+     {
+      "id": "C0034",
+      "name": "Ruth",
+      "p": 0.27,
+      "n": 1
+     },
+     {
+      "id": "C0007",
+      "name": "Isabella",
+      "p": 0.45,
+      "n": 12
+     },
+     {
+      "id": "C0026",
+      "name": "Sofia",
+      "p": 0.47,
+      "n": 2
+     },
+     {
+      "id": "C0008",
+      "name": "Ananya",
+      "p": 0.48,
+      "n": 2
+     },
+     {
+      "id": "C0040",
+      "name": "Hugo",
+      "p": 0.66,
+      "n": 2
+     }
+    ]
+   }
+  },
+  {
+   "id": "qwen2.5-7b-impulse-v3-cuda",
+   "label": "Qwen2.5 7B tuned",
+   "layouts": {
+    "A": [
+     {
+      "id": "C0011",
+      "name": "Olivia",
+      "p": 0.08,
+      "n": 0
+     },
+     {
+      "id": "C0002",
+      "name": "Mia",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0025",
+      "name": "Chloe",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0014",
+      "name": "Elena",
+      "p": 0.23,
+      "n": 0
+     },
+     {
+      "id": "C0024",
+      "name": "Nina",
+      "p": 0.27,
+      "n": 0
+     },
+     {
+      "id": "C0034",
+      "name": "Ruth",
+      "p": 0.27,
+      "n": 0
+     },
+     {
+      "id": "C0007",
+      "name": "Isabella",
+      "p": 0.45,
+      "n": 0
+     },
+     {
+      "id": "C0026",
+      "name": "Sofia",
+      "p": 0.47,
+      "n": 3
+     },
+     {
+      "id": "C0008",
+      "name": "Ananya",
+      "p": 0.48,
+      "n": 0
+     },
+     {
+      "id": "C0040",
+      "name": "Hugo",
+      "p": 0.66,
+      "n": 0
+     }
+    ],
+    "B": [
+     {
+      "id": "C0011",
+      "name": "Olivia",
+      "p": 0.08,
+      "n": 0
+     },
+     {
+      "id": "C0002",
+      "name": "Mia",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0025",
+      "name": "Chloe",
+      "p": 0.14,
+      "n": 0
+     },
+     {
+      "id": "C0014",
+      "name": "Elena",
+      "p": 0.23,
+      "n": 5
+     },
+     {
+      "id": "C0024",
+      "name": "Nina",
+      "p": 0.27,
+      "n": 0
+     },
+     {
+      "id": "C0034",
+      "name": "Ruth",
+      "p": 0.27,
+      "n": 0
+     },
+     {
+      "id": "C0007",
+      "name": "Isabella",
+      "p": 0.45,
+      "n": 0
+     },
+     {
+      "id": "C0026",
+      "name": "Sofia",
+      "p": 0.47,
+      "n": 0
+     },
+     {
+      "id": "C0008",
+      "name": "Ananya",
+      "p": 0.48,
+      "n": 0
+     },
+     {
+      "id": "C0040",
+      "name": "Hugo",
+      "p": 0.66,
+      "n": 0
+     }
+    ]
+   }
+  }
+ ],
+ "probe": {
+  "shopper": "Isabella Rossi",
+  "model": "GPT-6.1 Terra \u00b7 Layout A",
+  "before": {
+   "p": 0.45,
+   "units": 12,
+   "note": "recorded Nov 17: 12 and 11 impulse units in two runs"
+  },
+  "after": {
+   "p": 0.05,
+   "units": 0,
+   "note": "one-field probe, one completed run: 0 impulse units"
+  }
+ }
+}
